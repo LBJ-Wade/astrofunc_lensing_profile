@@ -1,1 +1,2 @@
 wheel>=0.22
+-e git://github.com/sibirrer/fastell4py.git#egg=fastell4py
