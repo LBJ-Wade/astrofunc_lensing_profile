@@ -123,7 +123,7 @@ class CheckFootprint(FootprintUtil):
         decFoot = np.array(y1)
         return raFoot,decFoot
 
-    def check_footprint(self,ra,dec,surveyname = 'DES'):
+    def check_footprint(self, ra, dec, surveyname='DES'):
         """
         main function which returns True, when coordinate is within the survey and False otherwise
         """
