@@ -575,6 +575,21 @@ class Util_class(object):
         dec_coords_sub = image2array(dec_array_new)
         return ra_coords_sub, dec_coords_sub
 
+    def re_size(self, grid, numPix):
+        """
+        smooths a given grid to larger pixels
+        """
+        numGrid = len(grid)
+
+        if numGrid == numPix: #if the grid has the same size as the pixelized image
+            return grid
+        else:
+            numAverage = numGrid/numPix
+            if int(numAverage) == numAverage:
+                return averaging(grid, numGrid, numPix)
+            else:
+                raise ValueError("grid size = %f is not a integer factor of pixel size = %f " % (numGrid, numPix))
+
     def fftconvolve(self, in1, in2, int2_fft, mode="same"):
         """
 

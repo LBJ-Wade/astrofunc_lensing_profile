@@ -126,6 +126,7 @@ def test_image2array():
     array = Util.image2array(image)
     assert array[12] == 1
 
+
 def test_get_axes():
     numPix = 10
     deltapix = 0.1
@@ -139,6 +140,7 @@ def test_get_axes():
     x_axes, y_axes = Util.get_axes(x_grid, y_grid)
     assert x_axes[0] == 0.5
     assert y_axes[0] == -0.5
+
 
 def test_symmetry():
     array = np.linspace(0,10,100)
@@ -215,6 +217,7 @@ def test_mk_array():
     output = Util.mk_array(variable)
     assert output[0] == 1
 
+
 def test_get_distance():
     x_mins = Util.mk_array(1.)
     y_mins = Util.mk_array(1.)
@@ -244,6 +247,7 @@ def test_get_distance():
     dist = Util.get_distance(x_mins, y_mins, x_true, y_true)
     assert dist == 2
 
+
 def test_phi_gamma_ellipticity():
     phi = -1.
     gamma = 0.1
@@ -253,6 +257,7 @@ def test_phi_gamma_ellipticity():
     assert phi == phi_out
     assert gamma == gamma_out
 
+
 def test_selectBest():
     array = np.array([4,3,6,1,3])
     select = np.array([2,4,7,3,3])
@@ -261,11 +266,13 @@ def test_selectBest():
     assert array_select[0] == 6
     assert array_select[3] == 1
 
+
 def test_add_background():
     image = np.ones((10, 10))
     sigma_bkgd = 1.
     image_noisy = Util.add_background(image, sigma_bkgd)
     assert abs(np.sum(image_noisy)) < np.sqrt(np.sum(image)*sigma_bkgd)*3
+
 
 def test_add_poisson():
     image = np.ones((10, 10))
@@ -300,6 +307,12 @@ class Test_Util(object):
 
         x_sub_grid_new, y_sub_grid_new = self.util_class.make_subgrid(x_grid, y_grid, subgrid_res=4)
         assert x_sub_grid_new[0] == -50.375
+
+    def test_re_size(self):
+        kwargs = {'numPix': 50}
+        grid = np.ones((100, 100))
+        grid_smoothed = self.util_class.re_size(grid, **kwargs)
+        assert grid_smoothed[0][0] == 1
 
 if __name__ == '__main__':
     pytest.main()
