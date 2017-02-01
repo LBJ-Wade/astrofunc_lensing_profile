@@ -3,7 +3,8 @@ __author__ = 'sibirrer'
 import numpy as np
 import numpy.polynomial.hermite as hermite
 import math
-import scipy.interpolate as interpolate
+
+import astrofunc.util as util
 
 class Shapelets(object):
     """
@@ -103,3 +104,31 @@ class Shapelets(object):
             H_x[n] = hermite.hermval(x_/beta, n_array) * prefactor * np.exp(-(x_/beta)**2/2.)
             H_y[n] = hermite.hermval(y_/beta, n_array) * prefactor * np.exp(-(y_/beta)**2/2.)
         return H_x, H_y
+
+    def get_shapelet_set(self, num_order, beta, numPix):
+        """
+
+        :param num_order: max shapelet order
+        :param beta: shapelet scale
+        :param numPix: number of pixel of the grid
+        :return: list of shapelets drawn on pixel grid, centered.
+        """
+        num_param = (num_order+2)*(num_order+1)/2
+        kernel_list = []
+        x_grid, y_grid = util.make_grid(numPix, deltapix=1, subgrid_res=1)
+        n1 = 0
+        n2 = 0
+        H_x, H_y = self.pre_calc(x_grid, y_grid, beta, num_order, center_x=0, center_y=0)
+        for i in range(num_param):
+            if True: # n1 % 2 == 0 and n2 % 2 == 0:
+                kwargs_source_shapelet = {'center_x': 0, 'center_y': 0, 'n1': n1, 'n2': n2, 'beta': beta, 'amp': 1}
+                kernel = self.function(H_x, H_y, **kwargs_source_shapelet)
+                kernel = util.array2image(kernel)
+                kernel_list.append(kernel)
+            if n1 == 0:
+                n1 = n2 + 1
+                n2 = 0
+            else:
+                n1 -= 1
+                n2 += 1
+        return kernel_list
