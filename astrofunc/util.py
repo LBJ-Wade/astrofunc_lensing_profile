@@ -238,9 +238,17 @@ def cut_edges(image, numPix):
     if nx < numPix or ny < numPix:
         print('WARNING: image can not be resized.')
         return image
-    dx = int((nx-numPix)/2)
-    dy = int((ny-numPix)/2)
-    resized = image[dx:nx-dx, dy:ny-dy]
+    if nx % 2 == 0 or ny % 2 == 0 or numPix % 2 == 0:
+        print("WARNING: image or cutout side are even number. This routine only works for odd numbers %s %s %s"
+                         % (nx, ny, numPix))
+    cx = int((nx-1)/2)
+    cy = int((ny-1)/2)
+    d = int((numPix-1)/2)
+    if nx % 2 == 0:
+        cx += 1
+    if ny % 2 == 0:
+        cy += 1
+    resized = image[cx-d:cx+d+1, cy-d:cy+d+1]
     return resized
 
 
