@@ -590,6 +590,17 @@ class Util_class(object):
             else:
                 raise ValueError("grid size = %f is not a integer factor of pixel size = %f " % (numGrid, numPix))
 
+    def cut_psf(self, psf_data, psf_size):
+        """
+        cut the psf properly
+        :param psf_data: image of PSF
+        :param psf_size: size of psf
+        :return: re-sized and re-normalized PSF
+        """
+        kernel = cut_edges(psf_data, psf_size)
+        kernel = kernel_norm(kernel)
+        return kernel
+
     def fftconvolve(self, in1, in2, int2_fft, mode="same"):
         """
 
