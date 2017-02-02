@@ -279,16 +279,17 @@ def test_add_poisson():
     exp_time = 100.
     poisson = Util.add_poisson(image, exp_time)
     assert abs(np.sum(poisson)) < np.sqrt(np.sum(image)/exp_time)*3
-"""
-def test_grid():
-    np.random.seed(42)
-    x = np.random.rand(10)
-    y = np.random.rand(10)
-    z = np.random.rand(10)
-    X, Y, Z = Util.grid(x, y, z)
-    assert X[5][5] == 0.10316597046323565
 
-"""
+
+def test_neighborSelect():
+    a = np.ones(100)
+    a[41] = 0
+    x = np.linspace(0,99,100)
+    y = np.linspace(0,99,100)
+    x_mins, y_mins, values = Util.neighborSelect(a, x, y)
+    assert x_mins[0] == 41
+    assert y_mins[0] == 41
+    assert values[0] == 0
 
 
 class Test_Util(object):

@@ -549,6 +549,50 @@ def points_on_circle(radius, points):
     return x_coord, y_coord
 
 
+def neighborSelect(a, x, y):
+    """
+    finds (local) minima in a 2d grid
+
+    :param a: 1d array of displacements from the source positions
+    :type a: numpy array with length numPix**2 in float
+    :returns:  array of indices of local minima, values of those minima
+    :raises: AttributeError, KeyError
+    """
+    dim = int(np.sqrt(len(a)))
+    values = []
+    x_mins = []
+    y_mins = []
+    for i in range(dim+1,len(a)-dim-1):
+        if (a[i] < a[i-1]
+            and a[i] < a[i+1]
+            and a[i] < a[i-dim]
+            and a[i] < a[i+dim]
+            and a[i] < a[i-(dim-1)]
+            and a[i] < a[i-(dim+1)]
+            and a[i] < a[i+(dim-1)]
+            and a[i] < a[i+(dim+1)]):
+                if(a[i] < a[(i-2*dim-1)%dim**2]
+                    and a[i] < a[(i-2*dim+1)%dim**2]
+                    and a[i] < a[(i-dim-2)%dim**2]
+                    and a[i] < a[(i-dim+2)%dim**2]
+                    and a[i] < a[(i+dim-2)%dim**2]
+                    and a[i] < a[(i+dim+2)%dim**2]
+                    and a[i] < a[(i+2*dim-1)%dim**2]
+                    and a[i] < a[(i+2*dim+1)%dim**2]):
+                    if(a[i] < a[(i-3*dim-1)%dim**2]
+                        and a[i] < a[(i-3*dim+1)%dim**2]
+                        and a[i] < a[(i-dim-3)%dim**2]
+                        and a[i] < a[(i-dim+3)%dim**2]
+                        and a[i] < a[(i+dim-3)%dim**2]
+                        and a[i] < a[(i+dim+3)%dim**2]
+                        and a[i] < a[(i+3*dim-1)%dim**2]
+                        and a[i] < a[(i+3*dim+1)%dim**2]):
+                        x_mins.append(x[i])
+                        y_mins.append(y[i])
+                        values.append(a[i])
+    return x_mins, y_mins, values
+
+
 class Util_class(object):
     """
     util class which relies on util functions
