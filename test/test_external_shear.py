@@ -3,7 +3,6 @@ __author__ = 'sibirrer'
 
 
 from astrofunc.LensingProfiles.external_shear import ExternalShear
-import lenstronomy.util as util
 
 import numpy as np
 import numpy.testing as npt

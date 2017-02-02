@@ -5,9 +5,9 @@ class SPEP_SPP(object):
     combination of SPEP and SPP profile
     """
     def __init__(self, type='SPEP'):
-        from lenstronomy.FunctionSet.ellipse import Ellipse
+        from astrofunc.LensingProfiles.ellipse import Ellipse
         self.spep = Ellipse(type)
-        from lenstronomy.FunctionSet.spp import SPP
+        from astrofunc.LensingProfiles.spp import SPP
         self.spp = SPP()
 
     def function(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp):

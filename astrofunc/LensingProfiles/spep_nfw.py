@@ -6,9 +6,9 @@ class SPEP_NFW(object):
     combination of SPEP and NFW profile
     """
     def __init__(self, type='SPEP'):
-        from lenstronomy.FunctionSet.ellipse import Ellipse
+        from astrofunc.LensingProfiles.ellipse import Ellipse
         self.spep = Ellipse(type)
-        from lenstronomy.FunctionSet.nfw import NFW
+        from astrofunc.LensingProfiles.nfw import NFW
         self.nfw = NFW()
 
     def function(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, Rs, rho0, r200, center_x_nfw, center_y_nfw):

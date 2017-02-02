@@ -3,7 +3,7 @@ __author__ = 'sibirrer'
 import scipy.interpolate
 import numpy as np
 
-import lenstronomy.util as util
+import astrofunc.util as util
 
 class Interpol_func(object):
     """

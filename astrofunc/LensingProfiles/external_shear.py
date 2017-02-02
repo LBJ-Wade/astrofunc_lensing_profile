@@ -1,6 +1,6 @@
 __author__ = 'sibirrer'
 
-import lenstronomy.util as util
+import astrofunc.util as util
 import numpy as np
 
 class ExternalShear_old(object):

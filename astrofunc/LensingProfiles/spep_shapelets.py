@@ -6,9 +6,9 @@ class SPEP_Shapelets(object):
     combination of polar shapelets and SPEP profile
     """
     def __init__(self, type='SPEP'):
-        from lenstronomy.FunctionSet.ellipse import Ellipse
+        from astrofunc.LensingProfiles.ellipse import Ellipse
         self.spep = Ellipse(type)
-        from lenstronomy.FunctionSet.shapelet_pot_2 import CartShapelets
+        from astrofunc.LensingProfiles.shapelet_pot_2 import CartShapelets
         self.cartShapelets = CartShapelets()
 
     def function(self, x, y, phi_E, gamma, q, phi_G, coeffs, beta, center_x=0, center_y=0, center_x_shape=0, center_y_shape=0):

@@ -5,11 +5,11 @@ class SPEP_SPP_Dipole(object):
     combination of SPEP and SPP profile
     """
     def __init__(self, type='SPEP'):
-        from lenstronomy.FunctionSet.ellipse import Ellipse
+        from astrofunc.LensingProfiles.ellipse import Ellipse
         self.spep = Ellipse(type)
-        from lenstronomy.FunctionSet.spp import SPP
+        from astrofunc.LensingProfiles.spp import SPP
         self.spp = SPP()
-        from lenstronomy.FunctionSet.dipole import Dipole, Dipole_util
+        from astrofunc.LensingProfiles.dipole import Dipole, Dipole_util
         self.dipole = Dipole()
         self.dipole_util = Dipole_util()
 
@@ -52,7 +52,7 @@ class SPEP_SPP_Dipole_Shapelets(object):
     """
     def __init__(self, type='SPEP'):
         self.spep_spp_dipole = SPEP_SPP_Dipole(type)
-        from lenstronomy.FunctionSet.shapelet_pot_2 import CartShapelets
+        from astrofunc.LensingProfiles.shapelet_pot_2 import CartShapelets
         self.cartShapelets = CartShapelets()
 
     def function(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):

@@ -6,9 +6,9 @@ class SPEP_SIS(object):
     combination of SPEP and NFW profile
     """
     def __init__(self, type='SPEP'):
-        from lenstronomy.FunctionSet.ellipse import Ellipse
+        from astrofunc.LensingProfiles.ellipse import Ellipse
         self.spep = Ellipse(type)
-        from lenstronomy.FunctionSet.sis import SIS
+        from astrofunc.LensingProfiles.sis import SIS
         self.sis = SIS()
 
     def function(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_sis, center_x_sis, center_y_sis):
