@@ -55,22 +55,22 @@ class SPEP_SPP_Dipole_Shapelets(object):
         from astrofunc.LensingProfiles.shapelet_pot_2 import CartShapelets
         self.cartShapelets = CartShapelets()
 
-    def function(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
-        f_spep_spp_dipole = self.spep_spp_dipole.function(x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
+    def function(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
+        f_spep_spp_dipole = self.spep_spp_dipole.function(x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
         f_shape = self.cartShapelets.function(x, y, coeffs, beta, center_x=center_x_shape, center_y=center_y_shape)
         return f_spep_spp_dipole + f_shape
 
-    def derivatives(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
-        f_x_spep_spp, f_y_spep_spp = self.spep_spp_dipole.derivatives(x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
+    def derivatives(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
+        f_x_spep_spp, f_y_spep_spp = self.spep_spp_dipole.derivatives(x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
         f_x_shape, f_y_shape = self.cartShapelets.derivatives(x, y, coeffs, beta, center_x=center_x_shape, center_y=center_y_shape)
         return f_x_spep_spp + f_x_shape, f_y_spep_spp + f_y_shape
 
-    def hessian(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
-        f_xx_spep_spp, f_yy_spep_spp, f_xy_spep_spp = self.spep_spp_dipole.hessian(x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
+    def hessian(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
+        f_xx_spep_spp, f_yy_spep_spp, f_xy_spep_spp = self.spep_spp_dipole.hessian(x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
         f_xx_shape, f_yy_shape, f_xy_shape = self.cartShapelets.hessian(x, y, coeffs, beta, center_x=center_x_shape, center_y=center_y_shape)
         return f_xx_spep_spp + f_xx_shape, f_yy_spep_spp + f_yy_shape, f_xy_spep_spp + f_xy_shape
 
-    def all(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
-        f_spep_spp, f_x_spep_spp, f_y_spep_spp, f_xx_spep_spp, f_yy_spep_spp, f_xy_spep_spp = self.spep_spp_dipole.all(x, y, phi_E, gamma, q, phi_G, center_x, center_y, phi_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
+    def all(self, x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole, coeffs, beta, center_x_shape=0, center_y_shape=0):
+        f_spep_spp, f_x_spep_spp, f_y_spep_spp, f_xx_spep_spp, f_yy_spep_spp, f_xy_spep_spp = self.spep_spp_dipole.all(x, y, phi_E, gamma, q, phi_G, center_x, center_y, theta_E_spp, gamma_spp, center_x_spp, center_y_spp, coupling, phi_dipole)
         f_shape, f_x_shape, f_y_shape, f_xx_shape, f_yy_shape, f_xy_shape = self.cartShapelets.all(x, y, coeffs, beta, center_x=center_x_shape, center_y=center_y_shape)
         return f_spep_spp + f_shape, f_x_spep_spp + f_x_shape, f_y_spep_spp + f_y_shape, f_xx_spep_spp + f_xx_shape, f_yy_spep_spp + f_yy_shape, f_xy_spep_spp + f_xy_shape
