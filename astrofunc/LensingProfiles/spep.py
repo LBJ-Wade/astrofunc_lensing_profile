@@ -8,12 +8,12 @@ class SPEP(object):
     class for Softened power-law elliptical potential (SPEP)
     """
 
-    def function(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def function(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         """
         :param x: set of x-coordinates
         :type x: array of size (n)
-        :param phi_E: Einstein radius of lense
-        :type phi_E: float.
+        :param theta_E: Einstein radius of lense
+        :type theta_E: float.
         :param gamma: power law slope of mass profifle
         :type gamma: <2 float
         :param q: Axis ratio
@@ -29,10 +29,10 @@ class SPEP(object):
             gamma = 2.9
         if q < 0.3:
             q = 0.3
-        phi_E *= q
+        theta_E *= q
         x_shift = x - center_x
         y_shift = y - center_y
-        E = phi_E / (((3-gamma)/2.)**(1./(1-gamma))*np.sqrt(q))
+        E = theta_E / (((3 - gamma) / 2.) ** (1. / (1 - gamma)) * np.sqrt(q))
         #E = phi_E
         eta = -gamma+3
         xt1 = np.cos(phi_G)*x_shift+np.sin(phi_G)*y_shift
@@ -41,7 +41,7 @@ class SPEP(object):
         s2 = 0. # softening
         return 2 * E**2/eta**2 * ((p2 + s2)/E**2)**(eta/2)
 
-    def derivatives(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def derivatives(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
 
         # # @hope.jit
         # def xy_prime(dx, dy, eta, a, E, xt1, xt2, q):
@@ -54,7 +54,7 @@ class SPEP(object):
             gamma = 2.9
         if q < 0.3:
             q = 0.3
-        phi_E_new = phi_E * q
+        phi_E_new = theta_E * q
         x_shift = x - center_x
         y_shift = y - center_y
         E = phi_E_new / (((3-gamma)/2.)**(1./(1-gamma))*np.sqrt(q))
@@ -82,14 +82,14 @@ class SPEP(object):
         f_y = sin_phi*f_x_prim+cos_phi*f_y_prim
         return f_x, f_y
 
-    def hessian(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
         if gamma > 2.9:
             gamma = 2.9
         if q < 0.3:
             q = 0.3
-        phi_E_new = phi_E * q
+        phi_E_new = theta_E * q
         x_shift = x - center_x
         y_shift = y - center_y
         E = phi_E_new / (((3-gamma)/2.)**(1./(1-gamma))*np.sqrt(q))
@@ -118,14 +118,14 @@ class SPEP(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def all(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
         if gamma > 2.9:
             gamma = 2.9
         if q < 0.3:
             q = 0.3
-        phi_E_new = phi_E * q
+        phi_E_new = theta_E * q
         x_shift = x - center_x
         y_shift = y - center_y
         E = phi_E_new / (((3-gamma)/2.)**(1./(1-gamma))*np.sqrt(q))

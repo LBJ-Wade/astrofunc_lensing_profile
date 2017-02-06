@@ -13,7 +13,7 @@ class TestInterpol(object):
         deltaPix = 0.1
         x_grid_interp, y_grid_interp = util.make_grid(numPix,deltaPix)
         sis = SIS()
-        kwargs_SIS = {'phi_E_sis':1., 'center_x_sis':0.5, 'center_y_sis':-0.5}
+        kwargs_SIS = {'theta_E_sis':1., 'center_x_sis':0.5, 'center_y_sis':-0.5}
         f_sis, f_x_sis, f_y_sis, f_xx_sis, f_yy_sis, f_xy_sis = sis.all(x_grid_interp, y_grid_interp, **kwargs_SIS)
         x_axes, y_axes = util.get_axes(x_grid_interp, y_grid_interp)
         interp_func = Interpol_func()

@@ -10,7 +10,7 @@ class SPEMD(object):
     def __init__(self):
         self.s2 = 0.01
 
-    def function(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def function(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
         if gamma > 2.9:
@@ -21,7 +21,7 @@ class SPEMD(object):
             q = 1.
         x_shift = x - center_x
         y_shift = y - center_y
-        q_fastell, gam = self.convert_params(phi_E, gamma, q)
+        q_fastell, gam = self.convert_params(theta_E, gamma, q)
 
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
@@ -32,7 +32,7 @@ class SPEMD(object):
         potential = fastell4py.ellipphi(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
         return potential
 
-    def derivatives(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def derivatives(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
         if gamma > 2.9:
@@ -43,7 +43,7 @@ class SPEMD(object):
             q = 1.
         x_shift = x - center_x
         y_shift = y - center_y
-        q_fastell, gam = self.convert_params(phi_E, gamma, q)
+        q_fastell, gam = self.convert_params(theta_E, gamma, q)
 
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
@@ -56,7 +56,7 @@ class SPEMD(object):
         f_y = sin_phi*f_x_prim + cos_phi*f_y_prim
         return f_x, f_y
 
-    def hessian(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
         if gamma > 2.9:
@@ -67,7 +67,7 @@ class SPEMD(object):
             q = 1.
         x_shift = x - center_x
         y_shift = y - center_y
-        q_fastell, gam = self.convert_params(phi_E, gamma, q)
+        q_fastell, gam = self.convert_params(theta_E, gamma, q)
 
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
@@ -89,7 +89,7 @@ class SPEMD(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def all(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
         if gamma > 2.9:
@@ -100,7 +100,7 @@ class SPEMD(object):
             q = 1.
         x_shift = x - center_x
         y_shift = y - center_y
-        q_fastell, gam = self.convert_params(phi_E, gamma, q)
+        q_fastell, gam = self.convert_params(theta_E, gamma, q)
 
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
@@ -124,15 +124,15 @@ class SPEMD(object):
         f_xy = gamma2
         return f_, f_x, f_y, f_xx, f_yy, f_xy
 
-    def convert_params(self, phi_E, gamma, q):
+    def convert_params(self, theta_E, gamma, q):
         """
 
-        :param phi_E: Einstein radius
+        :param theta_E: Einstein radius
         :param gamma: power law slope
         :param q: axis ratio
         :return:   prefactor to SPEMP profile for FASTELL
         """
         gam = (gamma-1)/2.
         # gam = gamma
-        q_fastell = (3-gamma)/2. * (phi_E**2/q)**gam
+        q_fastell = (3-gamma)/2. * (theta_E ** 2 / q) ** gam
         return q_fastell, gam

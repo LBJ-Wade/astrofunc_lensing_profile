@@ -14,11 +14,11 @@ class SPEMD(BarkanaIntegrals):
     def function(self, x, y, phi_E, gamma, q, phi_G, center_x = 0, center_y = 0):
         return np.zeros_like(x)
 
-    def derivatives(self, x, y, phi_E, gamma, q, phi_G, center_x = 0, center_y = 0):
+    def derivatives(self, x, y, theta_E, gamma, q, phi_G, center_x = 0, center_y = 0):
 
         x_shift = x - center_x
         y_shift = y - center_y
-        E = phi_E / (((3-gamma)/2.)**(1./1-gamma)*np.sqrt(q))
+        E = theta_E / (((3 - gamma) / 2.) ** (1. / 1 - gamma) * np.sqrt(q))
         eta = -gamma+3
         s = 0.00001
         delta = 0.000001
@@ -43,12 +43,12 @@ class SPEMD(BarkanaIntegrals):
         f_y = sin_phi*f_x_prim + cos_phi*f_y_prim
         return f_x, f_y
 
-    def hessian(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         """
         computes the entire hessian matrix
         :param x:
         :param y:
-        :param phi_E:
+        :param theta_E:
         :param gamma:
         :param q:
         :param phi_G:
@@ -60,7 +60,7 @@ class SPEMD(BarkanaIntegrals):
             q = 0.999  # to avoid to divide to zero
         x_shift = x - center_x
         y_shift = y - center_y
-        E = phi_E / (((3-gamma)/2.)**(1./1-gamma)*np.sqrt(q))
+        E = theta_E / (((3 - gamma) / 2.) ** (1. / 1 - gamma) * np.sqrt(q))
         eta = -gamma+3
         s = 0.00001
         delta = 0.000001
@@ -108,7 +108,7 @@ class SPEMD(BarkanaIntegrals):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def hessian_old(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def hessian_old(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         """
         only compute kappa = 1/2 * f_xx + f_yy
         :param x:
@@ -121,7 +121,7 @@ class SPEMD(BarkanaIntegrals):
         """
         if q == 1:
             q = 0.999  # to avoid to divide to zero
-        E = phi_E / (((3-gamma)/2.)**(1./1-gamma)*np.sqrt(q))
+        E = theta_E / (((3 - gamma) / 2.) ** (1. / 1 - gamma) * np.sqrt(q))
         eta = -gamma+3
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
@@ -140,12 +140,12 @@ class SPEMD(BarkanaIntegrals):
         return f_xx, f_yy, f_xy
 
 
-    def all(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
+    def all(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if q == 1:
             q = 0.999  # to avoid to divide to zero
         x_shift = x - center_x
         y_shift = y - center_y
-        E = phi_E / (((3-gamma)/2.)**(1./1-gamma)*np.sqrt(q))
+        E = theta_E / (((3 - gamma) / 2.) ** (1. / 1 - gamma) * np.sqrt(q))
         eta = -gamma+3
         s = 0.00001
         delta = 0.000001
@@ -194,7 +194,7 @@ class SPEMD(BarkanaIntegrals):
         f_xx = kappa + gamma1
         f_yy = kappa - gamma1
         f_xy = gamma2
-        f_ = self.function(x, y, phi_E, gamma, q, phi_G, center_x, center_y)
+        f_ = self.function(x, y, theta_E, gamma, q, phi_G, center_x, center_y)
         return f_, f_x, f_y, f_xx, f_yy, f_xy
 
 

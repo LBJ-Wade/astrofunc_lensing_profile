@@ -12,14 +12,14 @@ class Ellipse(object):
             from astrofunc.LensingProfiles.spemd import SPEMD
             self.model = SPEMD()
 
-    def function(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
-        return self.model.function(x, y, phi_E, gamma, q, phi_G, center_x, center_y)
+    def function(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
+        return self.model.function(x, y, theta_E, gamma, q, phi_G, center_x, center_y)
 
-    def derivatives(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
-        return self.model.derivatives(x, y, phi_E, gamma, q, phi_G, center_x, center_y)
+    def derivatives(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
+        return self.model.derivatives(x, y, theta_E, gamma, q, phi_G, center_x, center_y)
 
-    def hessian(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
-        return self.model.hessian(x, y, phi_E, gamma, q, phi_G, center_x, center_y)
+    def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
+        return self.model.hessian(x, y, theta_E, gamma, q, phi_G, center_x, center_y)
 
-    def all(self, x, y, phi_E, gamma, q, phi_G, center_x=0, center_y=0):
-        return self.model.all(x, y, phi_E, gamma, q, phi_G, center_x, center_y)
+    def all(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
+        return self.model.all(x, y, theta_E, gamma, q, phi_G, center_x, center_y)
