@@ -10,7 +10,8 @@ import scipy.ndimage.interpolation as interp
 import scipy.signal.signaltools as signaltools
 import scipy
 from numpy import linspace, meshgrid
-#
+from PIL import Image
+
 
 def dictionary_to_namedtuple(dictionary):
     dictionary.pop("__name__", None)
@@ -146,6 +147,21 @@ def averaging(grid, numGrid, numPix):
     small = grid.reshape([Nsmall, Nbig/Nsmall, Nsmall, Nbig/Nsmall]).mean(3).mean(1)
     return small
 
+def averaging2(grid, numGrid, numPix):
+    """
+
+    :param grid:
+    :param numGrid:
+    :param numPix:
+    :return:
+    """
+    width_org, height_org = grid.shape
+    factor = numPix/float(numGrid)
+    width = int(width_org * factor)
+    height = int(height_org * factor)
+    im = Image.fromarray(grid)
+    img_anti = im.resize((width, height), Image.ANTIALIAS)
+    return np.array(img_anti)
 
 def phi_gamma_ellipticity(phi, gamma):
     """

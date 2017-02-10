@@ -101,10 +101,11 @@ class CoreSersic(SersicUtil):
     this class contains the Core-Sersic function introduced by e.g Trujillo et al. 2004
     """
 
-    def function(self, x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y, alpha=3.):
+    def function(self, x, y, I0_sersic, R_sersic, Re, n, gamma, phi_G, q, center_x, center_y, alpha=3.):
         """
         returns Core-Sersic function
         """
+        Rb = R_sersic
         x_shift = x - center_x
         y_shift = y - center_y
 
@@ -125,7 +126,7 @@ class CoreSersic(SersicUtil):
             R[R_ > 0.01] = _R
 
         k, bn = self.k_bn(n, Re)
-        return I0 * (1 + (Rb/R)**alpha)**(gamma/alpha) * np.exp(-bn*(((R**alpha+Rb**alpha)/Re**alpha)**(1./(alpha*n))-1.))
+        return I0_sersic * (1 + (Rb/R)**alpha)**(gamma/alpha) * np.exp(-bn*(((R**alpha+Rb**alpha)/Re**alpha)**(1./(alpha*n))-1.))
 
 class DoubleSersic(object):
     """
@@ -163,7 +164,7 @@ class DoubleCoreSersic(object):
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x_2, center_y_2)
         return core_ellipse, spherical
 
-class TripleSersic(object):
+class TrippleSersic(object):
     """
     this class contains functions to evaluate an elliptical and a spherical sersic function at once
     """
@@ -181,4 +182,4 @@ class TripleSersic(object):
         ellipse1 = self.sersic_ellipse.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y)
         ellipse2 = self.sersic_ellipse.function(x, y, I0_3, R_3, n_3, phi_G, q, center_x, center_y)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x_2, center_y_2)
-        return ellipse1, ellipse2, spherical
+        return ellipse1, spherical, ellipse2

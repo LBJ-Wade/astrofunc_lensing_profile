@@ -291,6 +291,10 @@ def test_neighborSelect():
     assert y_mins[0] == 41
     assert values[0] == 0
 
+def test_averaging2():
+    grid = np.ones((100, 100))
+    grid_smoothed = Util.averaging2(grid, numGrid=100, numPix=50)
+    assert grid_smoothed[0][0] == 1
 
 class Test_Util(object):
 
@@ -314,6 +318,8 @@ class Test_Util(object):
         grid = np.ones((100, 100))
         grid_smoothed = self.util_class.re_size(grid, **kwargs)
         assert grid_smoothed[0][0] == 1
+
+
 
 if __name__ == '__main__':
     pytest.main()
