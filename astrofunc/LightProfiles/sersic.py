@@ -101,7 +101,7 @@ class CoreSersic(SersicUtil):
     this class contains the Core-Sersic function introduced by e.g Trujillo et al. 2004
     """
 
-    def function(self, x, y, I0_sersic, R_sersic, Re, n, gamma, phi_G, q, center_x, center_y, alpha=3.):
+    def function(self, x, y, I0_sersic, R_sersic, Re, n_sersic, gamma, phi_G, q, center_x, center_y, alpha=3.):
         """
         returns Core-Sersic function
         """
@@ -125,8 +125,8 @@ class CoreSersic(SersicUtil):
             R[R_ <= 0.01] = 0.01
             R[R_ > 0.01] = _R
 
-        k, bn = self.k_bn(n, Re)
-        return I0_sersic * (1 + (Rb/R)**alpha)**(gamma/alpha) * np.exp(-bn*(((R**alpha+Rb**alpha)/Re**alpha)**(1./(alpha*n))-1.))
+        k, bn = self.k_bn(n_sersic, Re)
+        return I0_sersic * (1 + (Rb/R)**alpha)**(gamma/alpha) * np.exp(-bn*(((R**alpha+Rb**alpha)/Re**alpha)**(1./(alpha*n_sersic))-1.))
 
 class DoubleSersic(object):
     """
