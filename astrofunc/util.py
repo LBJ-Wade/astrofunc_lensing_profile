@@ -285,7 +285,7 @@ def displaceAbs(x, y, sourcePos_x, sourcePos_y):
     return absmapped
 
 
-def add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=1):
+def add_layer2image(grid2d, x_pos, y_pos, kernel, order=1):
     """
     makes a point source on a grid with shifted PSF
     :param x_pos:
@@ -293,17 +293,17 @@ def add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=1):
     :return:
     """
     numPix = len(grid2d)
-    x_int = int(round(x_pos/deltapix))
-    y_int = int(round(y_pos/deltapix))
-    shift_x = x_int - x_pos/deltapix
-    shift_y = y_int - y_pos/deltapix
+    x_int = int(round(x_pos))
+    y_int = int(round(y_pos))
+    shift_x = x_int - x_pos
+    shift_y = y_int - y_pos
     kernel_shifted = interp.shift(kernel, [-shift_y, -shift_x], order=order)
     kernel_l2 = int((len(kernel)-1)/2)
 
     min_x = np.maximum(0, x_int-kernel_l2)
     min_y = np.maximum(0, y_int-kernel_l2)
-    max_x = np.minimum(len(grid2d), x_int+kernel_l2 + 1)
-    max_y = np.minimum(len(grid2d), y_int+kernel_l2 + 1)
+    max_x = np.minimum(numPix, x_int+kernel_l2 + 1)
+    max_y = np.minimum(numPix, y_int+kernel_l2 + 1)
 
     min_xk = np.maximum(0, -x_int + kernel_l2)
     min_yk = np.maximum(0, -y_int + kernel_l2)

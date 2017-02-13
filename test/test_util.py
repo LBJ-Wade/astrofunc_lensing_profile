@@ -173,39 +173,38 @@ def test_add_layer2image_odd_odd():
     grid2d = np.zeros((101, 101))
     kernel = np.zeros((21, 21))
     kernel[10, 10] = 1
-    deltapix = 1
     x_pos = 50
     y_pos = 50
-    added = Util.add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=0)
+    added = Util.add_layer2image(grid2d, x_pos, y_pos, kernel, order=0)
     #print added[45:56, 45:56]
     assert added[50, 50] == 1
     assert added[49, 49] == 0
 
     x_pos = 70
     y_pos = 95
-    added = Util.add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=0)
+    added = Util.add_layer2image(grid2d, x_pos, y_pos, kernel, order=0)
 
     assert added[95, 70] == 1
 
     x_pos = 20
     y_pos = 45
-    added = Util.add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=0)
+    added = Util.add_layer2image(grid2d, x_pos, y_pos, kernel, order=0)
     assert added[45, 20] == 1
 
     x_pos = 45
     y_pos = 20
-    added = Util.add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=0)
+    added = Util.add_layer2image(grid2d, x_pos, y_pos, kernel, order=0)
     assert added[20, 45] == 1
 
     x_pos = 20
     y_pos = 55
-    added = Util.add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=0)
+    added = Util.add_layer2image(grid2d, x_pos, y_pos, kernel, order=0)
     print added[50:61, 15:26]
     assert added[55, 20] == 1
 
     x_pos = 20
     y_pos = 100
-    added = Util.add_layer2image(grid2d, x_pos, y_pos, deltapix, kernel, order=0)
+    added = Util.add_layer2image(grid2d, x_pos, y_pos, kernel, order=0)
     assert added[100,20] == 1
 
 
