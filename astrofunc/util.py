@@ -10,7 +10,7 @@ import scipy.ndimage.interpolation as interp
 import scipy.signal.signaltools as signaltools
 import scipy
 from numpy import linspace, meshgrid
-from PIL import Image
+
 
 
 def dictionary_to_namedtuple(dictionary):
@@ -155,6 +155,7 @@ def averaging2(grid, numGrid, numPix):
     :param numPix:
     :return:
     """
+    from PIL import Image
     width_org, height_org = grid.shape
     factor = numPix/float(numGrid)
     width = int(width_org * factor)
