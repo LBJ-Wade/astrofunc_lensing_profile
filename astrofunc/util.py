@@ -10,6 +10,7 @@ import scipy.ndimage.interpolation as interp
 import scipy.signal.signaltools as signaltools
 import scipy
 from numpy import linspace, meshgrid
+import copy
 
 
 
@@ -266,7 +267,7 @@ def cut_edges(image, numPix):
     if ny % 2 == 0:
         cy += 1
     resized = image[cx-d:cx+d+1, cy-d:cy+d+1]
-    return resized
+    return copy.deepcopy(resized)
 
 
 def displaceAbs(x, y, sourcePos_x, sourcePos_y):
