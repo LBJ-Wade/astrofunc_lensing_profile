@@ -208,6 +208,14 @@ def test_add_layer2image_odd_odd():
     assert added[100,20] == 1
 
 
+def test_cutout_source():
+    grid2d = np.zeros((20, 20))
+    grid2d[7:9,7:9] = 1
+    kernel = Util.cutout_source(x_pos=7.5, y_pos=7.5, image=grid2d, kernelsize=5)
+    print kernel
+    assert kernel[2, 2] == 1
+
+
 def test_mk_array():
     variable = 1.
     output = Util.mk_array(variable)

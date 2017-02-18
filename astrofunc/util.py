@@ -293,23 +293,25 @@ def add_layer2image(grid2d, x_pos, y_pos, kernel, order=1):
     :param y_pos:
     :return:
     """
-    numPix = len(grid2d)
+    num_x, num_y = np.shape(grid2d)
     x_int = int(round(x_pos))
     y_int = int(round(y_pos))
     shift_x = x_int - x_pos
     shift_y = y_int - y_pos
     kernel_shifted = interp.shift(kernel, [-shift_y, -shift_x], order=order)
-    kernel_l2 = int((len(kernel)-1)/2)
+    k_x, k_y = np.shape(kernel)
+    k_l2_x = int((k_x - 1) / 2)
+    k_l2_y = int((k_y - 1) / 2)
 
-    min_x = np.maximum(0, x_int-kernel_l2)
-    min_y = np.maximum(0, y_int-kernel_l2)
-    max_x = np.minimum(numPix, x_int+kernel_l2 + 1)
-    max_y = np.minimum(numPix, y_int+kernel_l2 + 1)
+    min_x = np.maximum(0, x_int-k_l2_x)
+    min_y = np.maximum(0, y_int-k_l2_y)
+    max_x = np.minimum(num_x, x_int+k_l2_x + 1)
+    max_y = np.minimum(num_y, y_int+k_l2_y + 1)
 
-    min_xk = np.maximum(0, -x_int + kernel_l2)
-    min_yk = np.maximum(0, -y_int + kernel_l2)
-    max_xk = np.minimum(len(kernel), -x_int + kernel_l2 + numPix)
-    max_yk = np.minimum(len(kernel), -y_int + kernel_l2 + numPix)
+    min_xk = np.maximum(0, -x_int + k_l2_x)
+    min_yk = np.maximum(0, -y_int + k_l2_y)
+    max_xk = np.minimum(k_x, -x_int + k_l2_x + num_x)
+    max_yk = np.minimum(k_y, -y_int + k_l2_y + num_y)
     if min_x >= max_x or min_y >= max_y or min_xk >= max_xk or min_yk >= max_yk or (max_x-min_x != max_xk-min_xk) or (max_y-min_y != max_yk-min_yk):
         return grid2d
     kernel_re_sized = kernel_shifted[min_yk:max_yk, min_xk:max_xk]
@@ -317,6 +319,32 @@ def add_layer2image(grid2d, x_pos, y_pos, kernel, order=1):
 
     new[min_y:max_y, min_x:max_x] += kernel_re_sized
     return new
+
+
+def cutout_source(x_pos, y_pos, image, kernelsize):
+    """
+    cuts out point source (e.g. PSF estimate) out of image and shift it to the center of a pixel
+    :param x_pos:
+    :param y_pos:
+    :param image:
+    :param kernelsize:
+    :return:
+    """
+    if kernelsize%2 == 0:
+        raise ValueError("even pixel number kernel size not supported!")
+    x_int = int(round(x_pos))
+    y_int = int(round(y_pos))
+    n = len(image)
+    d = (kernelsize - 1)/2
+    x_max = np.minimum(x_int + d + 1, n)
+    x_min = np.maximum(x_int - d, 0)
+    y_max = np.minimum(y_int + d + 1, n)
+    y_min = np.maximum(y_int - d, 0)
+    image_cut = image[y_min:y_max, x_min:x_max]
+    shift_x = x_int - x_pos
+    shift_y = y_int - y_pos
+    kernel_shifted = interp.shift(image_cut, [shift_y, shift_x], order=1)
+    return kernel_shifted
 
 
 def kernel_norm(kernel):
