@@ -717,6 +717,20 @@ class Util_class(object):
         kernel = kernel_norm(kernel)
         return kernel
 
+    def symmetry_average(self, image, symmetry):
+        """
+        symmetry averaged image
+        :param image:
+        :param symmetry:
+        :return:
+        """
+        img_sym = np.zeros_like(image)
+        angle = 360./symmetry
+        for i in range(symmetry):
+            img_sym += rotateImage(image, angle*i)
+        img_sym /= symmetry
+        return img_sym
+
     def fftconvolve(self, in1, in2, int2_fft, mode="same"):
         """
 

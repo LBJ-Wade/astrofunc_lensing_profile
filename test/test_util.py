@@ -339,6 +339,7 @@ def test_averaging2():
     grid_smoothed = Util.averaging2(grid, numGrid=100, numPix=50)
     assert grid_smoothed[0][0] == 1
 
+
 class Test_Util(object):
 
     def setup(self):
@@ -361,6 +362,13 @@ class Test_Util(object):
         grid = np.ones((100, 100))
         grid_smoothed = self.util_class.re_size(grid, **kwargs)
         assert grid_smoothed[0][0] == 1
+
+    def test_symmetry_average(self):
+        image = np.zeros((5,5))
+        image[2, 3] = 1
+        symmetry = 2
+        img_sym = self.util_class.symmetry_average(image, symmetry)
+        npt.assert_almost_equal(img_sym[2, 1], 0.5, decimal=10)
 
 
 if __name__ == '__main__':
