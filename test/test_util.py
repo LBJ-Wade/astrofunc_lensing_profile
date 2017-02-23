@@ -4,7 +4,7 @@ import astrofunc.util as Util
 from astrofunc.util import Util_class
 import numpy as np
 import pytest
-#from lenstronomy.unit_manager import UnitManager
+import numpy.testing as npt
 
 def test_map_coord2pix():
     ra = 0
@@ -288,6 +288,42 @@ def test_add_poisson():
     assert abs(np.sum(poisson)) < np.sqrt(np.sum(image)/exp_time)*3
 
 
+def test_rotateImage():
+    img = np.zeros((5, 5))
+    img[2, 2] = 1
+    img[1, 2] = 0.5
+
+    angle = 360
+    im_rot = Util.rotateImage(img, angle)
+    npt.assert_almost_equal(im_rot[1, 2], 0.5, decimal=10)
+    npt.assert_almost_equal(im_rot[2, 2], 1., decimal=10)
+    npt.assert_almost_equal(im_rot[2, 1], 0., decimal=10)
+
+    angle = 360./2
+    im_rot = Util.rotateImage(img, angle)
+    print img
+    print im_rot
+    npt.assert_almost_equal(im_rot[1, 2], 0., decimal=10)
+    npt.assert_almost_equal(im_rot[2, 2], 1., decimal=10)
+    npt.assert_almost_equal(im_rot[3, 2], 0.5, decimal=10)
+
+    angle = 360./4
+    im_rot = Util.rotateImage(img, angle)
+    print img
+    print im_rot
+    npt.assert_almost_equal(im_rot[1, 2], 0., decimal=10)
+    npt.assert_almost_equal(im_rot[2, 2], 1., decimal=10)
+    npt.assert_almost_equal(im_rot[2, 1], 0.5, decimal=10)
+
+    angle = 360./8
+    im_rot = Util.rotateImage(img, angle)
+    print img
+    print im_rot
+    npt.assert_almost_equal(im_rot[1, 2], 0.23931518624017051, decimal=10)
+    npt.assert_almost_equal(im_rot[2, 2], 1., decimal=10)
+    npt.assert_almost_equal(im_rot[2, 1], 0.23931518624017073, decimal=10)
+
+
 def test_neighborSelect():
     a = np.ones(100)
     a[41] = 0
@@ -325,7 +361,6 @@ class Test_Util(object):
         grid = np.ones((100, 100))
         grid_smoothed = self.util_class.re_size(grid, **kwargs)
         assert grid_smoothed[0][0] == 1
-
 
 
 if __name__ == '__main__':

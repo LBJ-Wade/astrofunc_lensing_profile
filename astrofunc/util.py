@@ -98,7 +98,7 @@ def image2array(image):
     return imgh
 
 
-def make_grid(numPix, deltapix, subgrid_res=1):
+def make_grid(numPix, deltapix, subgrid_res=1, left_lower=False):
     """
 
     :param numPix: number of pixels per axis
@@ -111,8 +111,12 @@ def make_grid(numPix, deltapix, subgrid_res=1):
     deltapix_eff = deltapix/float(subgrid_res)
     a = np.arange(numPix_eff)
     matrix = np.dstack(np.meshgrid(a, a)).reshape(-1, 2)
-    x_grid = (matrix[:, 0] - numPix_eff/2.)*deltapix_eff
-    y_grid = (matrix[:, 1] - numPix_eff/2.)*deltapix_eff
+    if left_lower is True:
+        x_grid = matrix[:, 0]*deltapix
+        y_grid = matrix[:, 1]*deltapix
+    else:
+        x_grid = (matrix[:, 0] - numPix_eff/2.)*deltapix_eff
+        y_grid = (matrix[:, 1] - numPix_eff/2.)*deltapix_eff
     shift = (subgrid_res-1)/(2.*subgrid_res)*deltapix
     return x_grid - shift, y_grid - shift
 
@@ -148,6 +152,7 @@ def averaging(grid, numGrid, numPix):
     small = grid.reshape([Nsmall, Nbig/Nsmall, Nsmall, Nbig/Nsmall]).mean(3).mean(1)
     return small
 
+
 def averaging2(grid, numGrid, numPix):
     """
 
@@ -164,6 +169,7 @@ def averaging2(grid, numGrid, numPix):
     im = Image.fromarray(grid)
     img_anti = im.resize((width, height), Image.ANTIALIAS)
     return np.array(img_anti)
+
 
 def phi_gamma_ellipticity(phi, gamma):
     """
@@ -229,6 +235,18 @@ def get_mask(center_x, center_y, r, x, y):
     n = np.sqrt(len(x))
     mask_2d = mask.reshape(n,n)
     return mask_2d
+
+
+def rotateImage(img, angle):
+    """
+
+
+    :param img:
+    :param angle:
+    :return:
+    """
+    imgR = scipy.ndimage.rotate(img, angle, reshape=False)
+    return imgR
 
 
 def compare(model, data, sigma, poisson):
