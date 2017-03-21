@@ -79,7 +79,7 @@ class TestGaussian(object):
         center_y = 1.
         sigma_x = 1.
         sigma_y = 1.
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.Gaussian.all( x, y, amp, center_x, center_y, sigma_x, sigma_y)
+        f_, f_x, f_y, f_xx, f_yy, f_xy = self.Gaussian.all(x, y, amp, center_x, center_y, sigma_x, sigma_y)
         assert f_ == np.exp(-1./2)
         assert f_x == 0.
         assert f_y == -np.exp(-1./2)

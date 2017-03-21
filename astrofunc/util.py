@@ -115,8 +115,8 @@ def make_grid(numPix, deltapix, subgrid_res=1, left_lower=False):
         x_grid = matrix[:, 0]*deltapix
         y_grid = matrix[:, 1]*deltapix
     else:
-        x_grid = (matrix[:, 0] - numPix_eff/2.)*deltapix_eff
-        y_grid = (matrix[:, 1] - numPix_eff/2.)*deltapix_eff
+        x_grid = (matrix[:, 0] - (numPix_eff-1)/2.)*deltapix_eff
+        y_grid = (matrix[:, 1] - (numPix_eff-1)/2.)*deltapix_eff
     shift = (subgrid_res-1)/(2.*subgrid_res)*deltapix
     return x_grid - shift, y_grid - shift
 
@@ -598,6 +598,22 @@ def grid(x, y, z, resX=100, resY=100):
     Z = griddata(x, y, z, xi, yi, interp="linear")
     X, Y = meshgrid(xi, yi)
     return X, Y, Z
+
+
+def circle(x, y, center_x, center_y, radius):
+    """
+    uniform density circle
+    :param x: x-coordinates
+    :param y: y-coordinates
+    :param center_x: center of x-coordinates
+    :param center_y: center of y-coordinates
+    :param radius: radius of circle
+    :return:
+    """
+    r = np.sqrt((x - center_x)**2 + (y - center_y)**2)
+    circle_draw = np.zeros_like(r)
+    circle_draw[r < radius] = 1
+    return circle_draw
 
 
 def points_on_circle(radius, points):

@@ -9,7 +9,7 @@ from astrofunc.LensingProfiles.interpol import Interpol_func
 class TestInterpol(object):
 
     def test_do_interpol(self):
-        numPix = 100
+        numPix = 101
         deltaPix = 0.1
         x_grid_interp, y_grid_interp = util.make_grid(numPix,deltaPix)
         sis = SIS()

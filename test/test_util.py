@@ -103,14 +103,12 @@ def test_get_mask():
 
 
 def test_make_grid():
-    numPix = 10
+    numPix = 11
     deltapix = 1
-    grid = Util.make_grid(numPix,deltapix)
+    grid = Util.make_grid(numPix, deltapix)
     assert grid[0][0] == -5
-    subgrid_res = 2
-    x_grid, y_grid = Util.make_grid(numPix,deltapix, subgrid_res=2.)
-    print x_grid
-    assert x_grid[0] == -5.25
+    x_grid, y_grid = Util.make_grid(numPix, deltapix, subgrid_res=2.)
+    assert x_grid[0] == -5.5
 
 
 def test_array2image():
@@ -128,7 +126,7 @@ def test_image2array():
 
 
 def test_get_axes():
-    numPix = 10
+    numPix = 11
     deltapix = 0.1
     x_grid, y_grid = Util.make_grid(numPix,deltapix)
     x_axes, y_axes = Util.get_axes(x_grid, y_grid)
@@ -346,11 +344,11 @@ class Test_Util(object):
         self.util_class = Util_class()
 
     def test_make_subgrid(self):
-        numPix = 100
-        deltapix=1
-        x_grid, y_grid = Util.make_grid(numPix,deltapix, subgrid_res=1)
+        numPix = 101
+        deltapix = 1
+        x_grid, y_grid = Util.make_grid(numPix, deltapix, subgrid_res=1)
         x_sub_grid, y_sub_grid = self.util_class.make_subgrid(x_grid, y_grid, subgrid_res=2)
-
+        assert np.sum(x_grid) == 0
         assert x_sub_grid[0] == -50.25
         assert y_sub_grid[17] == -50.25
 
