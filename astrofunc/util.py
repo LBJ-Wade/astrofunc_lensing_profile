@@ -232,8 +232,8 @@ def get_mask(center_x, center_y, r, x, y):
     mask = np.empty_like(R)
     mask[R > r] = 1
     mask[R <= r] = 0
-    n = np.sqrt(len(x))
-    mask_2d = mask.reshape(n,n)
+    n = int(np.sqrt(len(x)))
+    mask_2d = mask.reshape(n, n)
     return mask_2d
 
 
@@ -671,6 +671,28 @@ def neighborSelect(a, x, y):
                         y_mins.append(y[i])
                         values.append(a[i])
     return x_mins, y_mins, values
+
+
+def half_light_radius(lens_light, x_grid, y_grid, center_x=0, center_y=0):
+    """
+
+    :param lens_light: array of surface brightness
+    :param x_grid: x-axis coordinates
+    :param y_gird: y-axis coordinates
+    :param center_x: center of light
+    :param center_y: center of light
+    :return:
+    """
+    total_flux_2 = np.sum(lens_light)/2.
+    lens_light_img = array2image(lens_light)
+    r_max = np.max(np.sqrt(x_grid**2 + y_grid**2))
+    for i in range(1000):
+        r = i/500. * r_max
+        mask = 1. - get_mask(center_x, center_y, r, x_grid, y_grid)
+        flux_enclosed = np.sum(np.array(lens_light_img)*mask)
+        if flux_enclosed > total_flux_2:
+            return r
+    return -1
 
 
 class Util_class(object):
