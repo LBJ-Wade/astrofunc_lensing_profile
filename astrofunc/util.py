@@ -695,6 +695,46 @@ def half_light_radius(lens_light, x_grid, y_grid, center_x=0, center_y=0):
     return -1
 
 
+def radial_profile(light_grid, x_grid, y_grid, center_x=0, center_y=0, n=20):
+    """
+
+    :param light_grid: array of surface brightness
+    :param x_grid: x-axis coordinates
+    :param y_gird: y-axis coordinates
+    :param center_x: center of light
+    :param center_y: center of light
+    :param n: number of discrete steps
+    :return:
+    """
+    light_img = array2image(light_grid)
+    r_max = np.max(np.sqrt(x_grid**2 + y_grid**2))
+    I_r = np.zeros(n)
+    I_enclosed = 0
+    r = np.linspace(1./n*r_max, r_max, n)
+    for i, r_i in enumerate(r):
+        mask = 1. - get_mask(center_x, center_y, r_i, x_grid, y_grid)
+        flux_enclosed = np.sum(np.array(light_img)*mask)
+        I_r[i] = flux_enclosed - I_enclosed
+        I_enclosed = flux_enclosed
+    return I_r, r
+
+
+def re_size_array(x_in, y_in, input_values, x_out, y_out):
+    """
+    resizes 2d array (i.e. image) to new coordinates. So far only works with square output aligned with coordinate axis.
+    :param x_in:
+    :param y_in:
+    :param input_values:
+    :param x_out:
+    :param y_out:
+    :return:
+    """
+    print len(x_in), np.shape(input_values)
+    interp_2d = scipy.interpolate.RectBivariateSpline(x_in, y_in, input_values)
+    out_values = interp_2d.__call__(x_out, y_out)
+    return out_values
+
+
 class Util_class(object):
     """
     util class which relies on util functions
