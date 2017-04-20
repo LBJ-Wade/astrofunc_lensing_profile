@@ -68,7 +68,7 @@ def polar2cart(r, phi, center):
     return x - center[0], y - center[1]
 
 
-def array2image(array):
+def array2image(array, nx=0, ny=0):
     """
     returns the information contained in a 1d array into an n*n 2d array (only works when lenght of array is n**2)
 
@@ -77,10 +77,12 @@ def array2image(array):
     :returns:  2d array
     :raises: AttributeError, KeyError
     """
-    n=int(np.sqrt(len(array)))
-    if n**2 != len(array):
-        raise ValueError("lenght of input array given as %s is not square of integer number!" %(len(array)))
-    image = array.reshape(n, n)
+    if nx == 0 or ny == 0:
+        n=int(np.sqrt(len(array)))
+        if n**2 != len(array):
+            raise ValueError("lenght of input array given as %s is not square of integer number!" %(len(array)))
+        nx, ny = n, n
+    image = array.reshape(nx, ny)
     return image
 
 
@@ -340,7 +342,7 @@ def add_layer2image(grid2d, x_pos, y_pos, kernel, order=1):
     return new
 
 
-def cutout_source(x_pos, y_pos, image, kernelsize):
+def cutout_source(x_pos, y_pos, image, kernelsize, order=5):
     """
     cuts out point source (e.g. PSF estimate) out of image and shift it to the center of a pixel
     :param x_pos:
@@ -362,7 +364,7 @@ def cutout_source(x_pos, y_pos, image, kernelsize):
     image_cut = image[y_min:y_max, x_min:x_max]
     shift_x = x_int - x_pos
     shift_y = y_int - y_pos
-    kernel_shifted = interp.shift(image_cut, [shift_y, shift_x], order=1)
+    kernel_shifted = interp.shift(image_cut, [shift_y, shift_x], order=order)
     return kernel_shifted
 
 

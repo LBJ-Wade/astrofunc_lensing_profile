@@ -112,7 +112,7 @@ def test_make_grid():
 
 
 def test_array2image():
-    array = np.linspace(1,100,100)
+    array = np.linspace(1, 100, 100)
     image = Util.array2image(array)
     assert image[9][9] == 100
     assert image[0][9] == 10
@@ -123,6 +123,15 @@ def test_image2array():
     image[1,2] = 1
     array = Util.image2array(image)
     assert array[12] == 1
+
+
+def test_image2array2image():
+    image = np.zeros((20, 10))
+    nx, ny = np.shape(image)
+    image[1, 2] = 1
+    array = Util.image2array(image)
+    image_new = Util.array2image(array, nx, ny)
+    assert image_new[1, 2] == image[1, 2]
 
 
 def test_get_axes():
@@ -209,7 +218,7 @@ def test_add_layer2image_odd_odd():
 def test_cutout_source():
     grid2d = np.zeros((20, 20))
     grid2d[7:9,7:9] = 1
-    kernel = Util.cutout_source(x_pos=7.5, y_pos=7.5, image=grid2d, kernelsize=5)
+    kernel = Util.cutout_source(x_pos=7.5, y_pos=7.5, image=grid2d, kernelsize=5, order=1)
     print kernel
     assert kernel[2, 2] == 1
 
