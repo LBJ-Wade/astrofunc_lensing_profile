@@ -364,11 +364,17 @@ class Test_Util(object):
         x_sub_grid_new, y_sub_grid_new = self.util_class.make_subgrid(x_grid, y_grid, subgrid_res=4)
         assert x_sub_grid_new[0] == -50.375
 
-    def test_re_size(self):
+    def test_re_size2(self):
         kwargs = {'numPix': 50}
         grid = np.ones((100, 100))
-        grid_smoothed = self.util_class.re_size(grid, **kwargs)
+        grid_smoothed = self.util_class.re_size2(grid, **kwargs)
         assert grid_smoothed[0][0] == 1
+
+    def test_re_size(self):
+        grid = np.zeros((200, 100))
+        grid[100, 50] = 4
+        grid_small = self.util_class.re_size(grid, factor=2)
+        assert grid_small[50][25] == 1
 
     def test_symmetry_average(self):
         image = np.zeros((5,5))

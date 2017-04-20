@@ -771,7 +771,7 @@ class Util_class(object):
         dec_coords_sub = image2array(dec_array_new)
         return ra_coords_sub, dec_coords_sub
 
-    def re_size(self, grid, numPix):
+    def re_size2(self, grid, numPix):
         """
         smooths a given grid to larger pixels
         """
@@ -785,6 +785,23 @@ class Util_class(object):
                 return averaging(grid, numGrid, numPix)
             else:
                 raise ValueError("grid size = %f is not a integer factor of pixel size = %f " % (numGrid, numPix))
+
+    def re_size(self, image, factor=1):
+        """
+        resizes image with nx x ny to nx/factor x ny/factor
+        :param image: 2d image with shape (nx,ny)
+        :param factor: integer >=1
+        :return:
+        """
+        if factor < 1:
+            raise ValueError('scaling factor in re-sizing %s < 1' %factor)
+        f = int(factor)
+        nx, ny = np.shape(image)
+        if int(nx/f) == nx/f and int(ny/f) == ny/f:
+            small = image.reshape([nx/f, f, ny/f, f]).mean(3).mean(1)
+            return small
+        else:
+            raise ValueError("scaling with factor %s is not possible with grid size %s, %s" %(f, nx, ny))
 
     def cut_psf(self, psf_data, psf_size):
         """
