@@ -367,7 +367,7 @@ class Test_Util(object):
     def test_re_size2(self):
         kwargs = {'numPix': 50}
         grid = np.ones((100, 100))
-        grid_smoothed = self.util_class.re_size2(grid, **kwargs)
+        grid_smoothed = self.util_class.re_size_grid(grid, **kwargs)
         assert grid_smoothed[0][0] == 1
 
     def test_re_size(self):
