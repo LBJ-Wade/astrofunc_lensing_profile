@@ -12,7 +12,7 @@ class NFW(object):
     relation are: R_200 = c * Rs
     """
 
-    def function(self, x, y, Rs, rho0, r200=100, center_x_nfw=0, center_y_nfw=0, angle=False):
+    def function(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
         """
         returns double integral of NFW profile
         """
@@ -22,13 +22,13 @@ class NFW(object):
             rho0_input = rho0
         if Rs < 0.0001:
             Rs = 0.0001
-        x_ = x - center_x_nfw
-        y_ = y - center_y_nfw
+        x_ = x - center_x
+        y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
         f_ = self.nfwPot(R, Rs, rho0_input, r200)
         return f_
 
-    def derivatives(self, x, y, Rs, rho0, r200=100, center_x_nfw=0, center_y_nfw=0, angle=False):
+    def derivatives(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
         """
         returns df/dx and df/dy of the function (integral of NFW)
         """
@@ -38,13 +38,13 @@ class NFW(object):
             rho0_input = rho0
         if Rs < 0.0001:
             Rs = 0.0001
-        x_ = x - center_x_nfw
-        y_ = y - center_y_nfw
+        x_ = x - center_x
+        y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
         f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, r200, x_, y_)
         return f_x, f_y
 
-    def hessian(self, x, y, Rs, rho0, r200=100, center_x_nfw=0, center_y_nfw=0, angle=False):
+    def hessian(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
@@ -54,8 +54,8 @@ class NFW(object):
             rho0_input = rho0
         if Rs < 0.0001:
             Rs = 0.0001
-        x_ = x - center_x_nfw
-        y_ = y - center_y_nfw
+        x_ = x - center_x
+        y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
         kappa = self.nfw2D(R, Rs, rho0_input, r200)
         gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, r200, x_, y_)
@@ -64,7 +64,7 @@ class NFW(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, Rs, rho0, r200=100, center_x_nfw=0, center_y_nfw=0, angle=False):
+    def all(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
@@ -74,8 +74,8 @@ class NFW(object):
             rho0_input = rho0
         if Rs < 0.0001:
             Rs = 0.0001
-        x_ = x - center_x_nfw
-        y_ = y - center_y_nfw
+        x_ = x - center_x
+        y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
         f_ = self.nfwPot(R, Rs, rho0_input, r200)
         f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, r200, x_, y_)

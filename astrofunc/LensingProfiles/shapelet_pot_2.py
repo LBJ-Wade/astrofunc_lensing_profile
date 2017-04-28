@@ -5,7 +5,6 @@ __author__ = 'sibirrer'
 import numpy as np
 import math
 import numpy.polynomial.hermite as hermite
-import lenstronomy.util as util
 
 
 class CartShapelets(object):

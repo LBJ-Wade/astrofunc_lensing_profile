@@ -6,7 +6,7 @@ import numpy as np
 import scipy.special
 import math
 
-import lenstronomy.util as util
+import astrofunc.util as util
 
 class PolarShapelets(object):
     """

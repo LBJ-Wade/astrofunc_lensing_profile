@@ -8,12 +8,12 @@ class SPP(object):
     class for Softened power-law elliptical potential (SPEP)
     """
 
-    def function(self, x, y, phi_E_spp, gamma_spp, center_x_spp=0, center_y_spp=0):
+    def function(self, x, y, theta_E, gamma, center_x=0, center_y=0):
         """
         :param x: set of x-coordinates
         :type x: array of size (n)
-        :param phi_E: Einstein radius of lense
-        :type phi_E: float.
+        :param theta_E: Einstein radius of lense
+        :type theta_E: float.
         :param gamma: power law slope of mass profifle
         :type gamma: <2 float
         :param q: Axis ratio
@@ -23,38 +23,38 @@ class SPP(object):
         :returns:  function
         :raises: AttributeError, KeyError
         """
-        if gamma_spp < 1.6:
-            gamma_spp = 1.6
-        if gamma_spp > 2.9:
-            gamma_spp = 2.9
+        if gamma < 1.6:
+            gamma = 1.6
+        if gamma > 2.9:
+            gamma = 2.9
 
-        x_ = x - center_x_spp
-        y_ = y - center_y_spp
-        E = phi_E_spp / ((3-gamma_spp)/2.)**(1./(1-gamma_spp))
+        x_ = x - center_x
+        y_ = y - center_y
+        E = theta_E / ((3 - gamma) / 2.) ** (1. / (1 - gamma))
         # E = phi_E_spp
-        eta=-gamma_spp+3
+        eta= -gamma + 3
 
         p2 = x_**2+y_**2
         s2 = 0. # softening
         return 2 * E**2/eta**2 * ((p2 + s2)/E**2)**(eta/2)
 
-    def derivatives(self, x, y, phi_E_spp, gamma_spp, center_x_spp=0., center_y_spp=0.):
+    def derivatives(self, x, y, theta_E, gamma, center_x=0., center_y=0.):
 
         # # @hope.jit
         # def xy_prime(dx, dy, eta, a, E, xt1, xt2, q):
         #     fac = 1./eta*(a/(E*E))**(eta/2-1)*2
         #     dx[:] = fac*xt1
         #     dy[:] = fac*xt2/(q*q)
-        if gamma_spp < 1.6:
-            gamma_spp = 1.6
-        if gamma_spp > 2.9:
-            gamma_spp = 2.9
+        if gamma < 1.6:
+            gamma = 1.6
+        if gamma > 2.9:
+            gamma = 2.9
 
-        xt1 = x - center_x_spp
-        xt2 = y - center_y_spp
-        E = phi_E_spp / ((3-gamma_spp)/2.)**(1./(1-gamma_spp))
+        xt1 = x - center_x
+        xt2 = y - center_y
+        E = theta_E / ((3 - gamma) / 2.) ** (1. / (1 - gamma))
         # E = phi_E_spp
-        eta = -gamma_spp+3
+        eta = -gamma + 3
 
         P2=xt1*xt1+xt2*xt2
         if isinstance(P2, int) or isinstance(P2, float):
@@ -70,17 +70,17 @@ class SPP(object):
         f_y = fac*xt2
         return f_x, f_y
 
-    def hessian(self, x, y, phi_E_spp, gamma_spp, center_x_spp=0., center_y_spp=0.):
-        if gamma_spp < 1.6:
-            gamma_spp = 1.6
-        if gamma_spp > 2.9:
-            gamma_spp = 2.9
+    def hessian(self, x, y, theta_E, gamma, center_x=0., center_y=0.):
+        if gamma < 1.6:
+            gamma = 1.6
+        if gamma > 2.9:
+            gamma = 2.9
 
-        xt1 = x - center_x_spp
-        xt2 = y - center_y_spp
-        E = phi_E_spp / ((3-gamma_spp)/2.)**(1./(1-gamma_spp))
+        xt1 = x - center_x
+        xt2 = y - center_y
+        E = theta_E / ((3 - gamma) / 2.) ** (1. / (1 - gamma))
         # E = phi_E_spp
-        eta = -gamma_spp+3
+        eta = -gamma + 3
 
         P2 = xt1**2+xt2**2
         if isinstance(P2, int) or isinstance(P2, float):
@@ -101,17 +101,17 @@ class SPP(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, phi_E_spp, gamma_spp, center_x_spp=0., center_y_spp=0.):
-        if gamma_spp < 1.6:
-            gamma_spp = 1.6
-        if gamma_spp > 2.9:
-            gamma_spp = 2.9
+    def all(self, x, y, theta_E, gamma, center_x=0., center_y=0.):
+        if gamma < 1.6:
+            gamma = 1.6
+        if gamma > 2.9:
+            gamma = 2.9
 
-        xt1 = x -center_x_spp
-        xt2 = y -center_y_spp
-        E = phi_E_spp / ((3-gamma_spp)/2.)**(1./(1-gamma_spp))
+        xt1 = x - center_x
+        xt2 = y - center_y
+        E = theta_E / ((3 - gamma) / 2.) ** (1. / (1 - gamma))
         # E = phi_E_spp
-        eta = -gamma_spp+3
+        eta = -gamma + 3
         P2 = xt1**2+xt2**2
 
         if isinstance(P2, int) or isinstance(P2, float):

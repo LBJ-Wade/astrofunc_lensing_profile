@@ -1,5 +1,7 @@
 __author__ = 'sibirrer'
 
+#TODO: get rid of it
+
 class Ellipse(object):
     """
     class for choosing an elliptical lens model (SPEP or SPEMD)

@@ -6,9 +6,9 @@ class SIS_truncate(object):
     """
     this class contains the function and the derivatives of the Singular Isothermal Sphere
     """
-    def function(self, x, y, theta_E_trunc, r_trunc, center_x_trunc=0, center_y_trunc=0):
-        x_shift = x - center_x_trunc
-        y_shift = y - center_y_trunc
+    def function(self, x, y, theta_E_trunc, r_trunc, center_x=0, center_y=0):
+        x_shift = x - center_x
+        y_shift = y - center_y
         r = np.sqrt(x_shift*x_shift + y_shift*y_shift)
         if isinstance(r, int) or isinstance(r, float):
             if r < r_trunc:
@@ -25,12 +25,12 @@ class SIS_truncate(object):
             f_[r > 2*r_trunc] = 3./2 * theta_E_trunc * r_trunc
         return f_
 
-    def derivatives(self, x, y, theta_E_trunc, r_trunc, center_x_trunc=0, center_y_trunc=0):
+    def derivatives(self, x, y, theta_E_trunc, r_trunc, center_x=0, center_y=0):
         """
         returns df/dx and df/dy of the function
         """
-        x_shift = x - center_x_trunc
-        y_shift = y - center_y_trunc
+        x_shift = x - center_x
+        y_shift = y - center_y
 
         dphi_dr = self._dphi_dr(x_shift, y_shift, theta_E_trunc, r_trunc)
         dr_dx, dr_dy = self._dr_dx(x_shift, y_shift)
@@ -38,12 +38,12 @@ class SIS_truncate(object):
         f_y = dphi_dr * dr_dy
         return f_x, f_y
 
-    def hessian(self, x, y, theta_E_trunc, r_trunc, center_x_trunc=0, center_y_trunc=0):
+    def hessian(self, x, y, theta_E_trunc, r_trunc, center_x=0, center_y=0):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
-        x_shift = x - center_x_trunc
-        y_shift = y - center_y_trunc
+        x_shift = x - center_x
+        y_shift = y - center_y
         dphi_dr = self._dphi_dr(x_shift, y_shift, theta_E_trunc, r_trunc)
         d2phi_dr2 = self._d2phi_dr2(x_shift, y_shift, theta_E_trunc, r_trunc)
         dr_dx, dr_dy = self._dr_dx(x, y)
@@ -53,12 +53,12 @@ class SIS_truncate(object):
         f_xy = d2r_dxy*dphi_dr + dr_dx*dr_dy*d2phi_dr2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, theta_E_trunc, r_trunc, center_x_trunc=0, center_y_trunc=0):
+    def all(self, x, y, theta_E_trunc, r_trunc, center_x=0, center_y=0):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
-        x_shift = x - center_x_trunc
-        y_shift = y - center_y_trunc
+        x_shift = x - center_x
+        y_shift = y - center_y
         r = np.sqrt(x_shift*x_shift + y_shift*y_shift)
         if isinstance(r, int) or isinstance(r, float):
             if r < r_trunc:

@@ -6,18 +6,18 @@ class SIS(object):
     """
     this class contains the function and the derivatives of the Singular Isothermal Sphere
     """
-    def function(self, x, y, theta_E_sis, center_x_sis=0, center_y_sis=0):
-        x_shift = x - center_x_sis
-        y_shift = y - center_y_sis
+    def function(self, x, y, theta_E_sis, center_x=0, center_y=0):
+        x_shift = x - center_x
+        y_shift = y - center_y
         f_ = theta_E_sis * np.sqrt(x_shift*x_shift + y_shift*y_shift)
         return f_
 
-    def derivatives(self, x, y, theta_E_sis, center_x_sis=0, center_y_sis=0):
+    def derivatives(self, x, y, theta_E_sis, center_x=0, center_y=0):
         """
         returns df/dx and df/dy of the function
         """
-        x_shift = x - center_x_sis
-        y_shift = y - center_y_sis
+        x_shift = x - center_x
+        y_shift = y - center_y
         R = np.sqrt(x_shift*x_shift + y_shift*y_shift)
         if isinstance(R, int) or isinstance(R, float):
             a = theta_E_sis/max(0.000001,R)
@@ -30,12 +30,12 @@ class SIS(object):
         f_y = a * y_shift
         return f_x, f_y
 
-    def hessian(self, x, y, theta_E_sis, center_x_sis=0, center_y_sis=0):
+    def hessian(self, x, y, theta_E_sis, center_x=0, center_y=0):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
-        x_shift = x - center_x_sis
-        y_shift = y - center_y_sis
+        x_shift = x - center_x
+        y_shift = y - center_y
         R = (x_shift*x_shift + y_shift*y_shift)**(3./2)
         if isinstance(R, int) or isinstance(R, float):
             prefac = theta_E_sis/max(0.000001,R)
@@ -50,12 +50,12 @@ class SIS(object):
         f_xy = -x_shift*y_shift * prefac
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, theta_E_sis, center_x_sis=0, center_y_sis=0):
+    def all(self, x, y, theta_E_sis, center_x=0, center_y=0):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
-        x_shift = x - center_x_sis
-        y_shift = y - center_y_sis
+        x_shift = x - center_x
+        y_shift = y - center_y
         R = np.sqrt(x_shift*x_shift + y_shift*y_shift)
         if isinstance(R, int) or isinstance(R, float):
             a = theta_E_sis/max(0.000001,R)
