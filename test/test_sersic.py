@@ -104,19 +104,19 @@ class TestSersic(object):
         center_y_2 = 2
         center_x = 0
         center_y = 0
-        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2, center_x_2, center_y_2)
-        assert values[0] == 4.0562500804662704
+        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
+        assert values[0] == 0.20696127414703369
         x = np.array([0])
         y = np.array([0])
-        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2, center_x_2, center_y_2)
-        assert values[0] == 5.40434230864048
+        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
+        assert values[0] == 9.2536311149597168
 
         x = np.array([2,3,4])
         y = np.array([1,1,1])
-        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2, center_x_2, center_y_2)
-        npt.assert_almost_equal(values[0], 0.29242342710494995, decimal=8)
-        npt.assert_almost_equal(values[1], 0.10219623707234859, decimal=8)
-        npt.assert_almost_equal(values[2], 0.042591148350819084, decimal=8)
+        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
+        npt.assert_almost_equal(values[0], 0.19409038126468658, decimal=8)
+        npt.assert_almost_equal(values[1], 0.060052098706364632, decimal=8)
+        npt.assert_almost_equal(values[2], 0.023917484330013394, decimal=8)
 
 if __name__ == '__main__':
     pytest.main()
