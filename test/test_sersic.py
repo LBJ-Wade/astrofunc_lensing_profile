@@ -100,8 +100,6 @@ class TestSersic(object):
         I0_2 = 0.1
         R_2 = 2
         n_2 = 2
-        center_x_2 = 1
-        center_y_2 = 2
         center_x = 0
         center_y = 0
         values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
