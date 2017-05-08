@@ -11,7 +11,7 @@ class ExternalShear_old(object):
     def function(self, x, y, gamma_ext, psi_ext):
         # change to polar coordinates
         theta, phi = util.cart2polar(x, y)
-        f_ = 1./2 * gamma_ext * theta * np.cos(2*(phi - psi_ext))
+        f_ = 1./2 * gamma_ext * theta**2 * np.cos(2*(phi - psi_ext))
         return f_
 
     def derivatives(self, x, y, gamma_ext, psi_ext):
