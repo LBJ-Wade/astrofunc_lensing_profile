@@ -154,32 +154,12 @@ class DoubleCoreSersic(object):
         self.sersic = Sersic()
         self.sersic_core = CoreSersic()
 
-    def function(self, x, y, I0_sersic, Rb, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, I0_2, R_2, n_2):
-        core_ellipse = self.sersic_core.function(x, y, I0_sersic, Rb, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y)
+    def function(self, x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, I0_2, R_2, n_2):
+        core_ellipse = self.sersic_core.function(x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x, center_y)
         return core_ellipse + spherical
 
-    def function_split(self, x, y, I0_sersic, Rb, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, I0_2, R_2, n_2):
-        core_ellipse = self.sersic_core.function(x, y, I0_sersic, Rb, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y)
+    def function_split(self, x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, I0_2, R_2, n_2):
+        core_ellipse = self.sersic_core.function(x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x, center_y)
         return core_ellipse, spherical
-
-class TrippleSersic(object):
-    """
-    this class contains functions to evaluate an elliptical and a spherical sersic function at once
-    """
-    def __init__(self):
-        self.sersic = Sersic()
-        self.sersic_ellipse = Sersic_elliptic()
-
-    def function(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2, center_x_2, center_y_2, I0_3, R_3, n_3):
-        ellipse1 = self.sersic_ellipse.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y)
-        ellipse2 = self.sersic_ellipse.function(x, y, I0_3, R_3, n_3, phi_G, q, center_x, center_y)
-        spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x_2, center_y_2)
-        return ellipse1 + ellipse2 + spherical
-
-    def function_split(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2, center_x_2, center_y_2, I0_3, R_3, n_3):
-        ellipse1 = self.sersic_ellipse.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y)
-        ellipse2 = self.sersic_ellipse.function(x, y, I0_3, R_3, n_3, phi_G, q, center_x, center_y)
-        spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x_2, center_y_2)
-        return ellipse1, spherical, ellipse2

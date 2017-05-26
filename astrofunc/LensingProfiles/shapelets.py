@@ -132,3 +132,54 @@ class Shapelets(object):
                 n1 -= 1
                 n2 += 1
         return kernel_list
+
+class ShapeletSet(object):
+    """
+    class to operate on entire shapelet set
+    """
+    def __init__(self):
+        self.shapelets = Shapelets()
+
+    def function(self, x, y, amp, n_max, beta, center_x=0, center_y=0):
+        """
+
+        :param x:
+        :param y:
+        :param amp:
+        :param beta:
+        :param center_x:
+        :param center_y:
+        :return:
+        """
+        num_param = (n_max+1)*(n_max+2)/2
+        f_ = np.zeros_like(x)
+        n1 = 0
+        n2 = 0
+        H_x, H_y = self.shapelets.pre_calc(x, y, beta, n_max, center_x, center_y)
+        for i in range(num_param):
+            kwargs_source_shapelet = {'center_x': center_x, 'center_y': center_y, 'n1': n1, 'n2': n2, 'beta': beta, 'amp': amp[i]}
+            f_ += self.shapelets.function(H_x, H_y, **kwargs_source_shapelet)
+            if n1 == 0:
+                n1 = n2 + 1
+                n2 = 0
+            else:
+                n1 -= 1
+                n2 += 1
+        return f_
+
+    def function_split(self, x, y, amp, n_max, beta, center_x=0, center_y=0):
+        num_param = (n_max+1)*(n_max+2)/2
+        A = []
+        n1 = 0
+        n2 = 0
+        H_x, H_y = self.shapelets.pre_calc(x, y, beta, n_max, center_x, center_y)
+        for i in range(num_param):
+            kwargs_source_shapelet = {'center_x': center_x, 'center_y': center_y, 'n1': n1, 'n2': n2, 'beta': beta, 'amp': amp[i]}
+            A.append(self.shapelets.function(H_x, H_y, **kwargs_source_shapelet))
+            if n1 == 0:
+                n1 = n2 + 1
+                n2 = 0
+            else:
+                n1 -= 1
+                n2 += 1
+        return A
