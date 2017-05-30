@@ -3,6 +3,7 @@ import astrofunc.util as util
 
 import numpy.testing as npt
 import pytest
+import numpy as np
 
 
 class TestShapelet(object):
@@ -33,7 +34,7 @@ class TestShapelet(object):
         n_max = 2
         beta = 10.
         deltaPix = 0.1
-        amp = [1,1,1,1,1,1]
+        amp = np.array([1,1,1,1,1,1])
         x, y = util.make_grid(1000, deltaPix, 1)
         input = self.shapeletSet.function(x, y, amp, n_max, beta, center_x=0, center_y=0)
         amp_out = self.shapeletSet.decomposition(input, x, y, n_max, beta, deltaPix, center_x=0, center_y=0)
