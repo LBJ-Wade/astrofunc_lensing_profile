@@ -183,3 +183,34 @@ class ShapeletSet(object):
                 n1 -= 1
                 n2 += 1
         return A
+
+    def decomposition(self, image, x, y, n_max, beta, deltaPix, center_x=0, center_y=0):
+        """
+        decomposes an image into the shapelet coefficients in same order as for the function call
+        :param image:
+        :param x:
+        :param y:
+        :param n_max:
+        :param beta:
+        :param center_x:
+        :param center_y:
+        :return:
+        """
+        num_param = (n_max+1)*(n_max+2)/2
+        param_list = np.zeros(num_param)
+        amp_norm = 1./beta**2*deltaPix**2
+        n1 = 0
+        n2 = 0
+        H_x, H_y = self.shapelets.pre_calc(x, y, beta, n_max, center_x, center_y)
+        for i in range(num_param):
+            kwargs_source_shapelet = {'center_x': center_x, 'center_y': center_y, 'n1': n1, 'n2': n2, 'beta': beta, 'amp': amp_norm}
+            base = self.shapelets.function(H_x, H_y, **kwargs_source_shapelet)
+            param = np.sum(image*base)
+            param_list[i] = param
+            if n1 == 0:
+                n1 = n2 + 1
+                n2 = 0
+            else:
+                n1 -= 1
+                n2 += 1
+        return param_list
