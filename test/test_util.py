@@ -111,6 +111,42 @@ def test_make_grid():
     assert x_grid[0] == -5.5
 
 
+def test_grid_with_coords():
+    numPix = 11
+    deltaPix = 1.
+    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    ra = 0
+    dec = 0
+    x, y = Util.map_coord2pix(ra, dec, ra_0, dec_0, Matrix)
+    assert x == 5
+    assert y == 5
+
+    numPix = 11
+    deltaPix = .1
+    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    ra = 0
+    dec = 0
+    x, y = Util.map_coord2pix(ra, dec, ra_0, dec_0, Matrix)
+    assert x == 5
+    assert y == 5
+
+    numPix = 11
+    deltaPix = 1.
+    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    x_, y_ = 0, 0
+    ra, dec = Util.map_coord2pix(x_, y_, x_0, y_0, Matrix_inv)
+    assert ra == -5
+    assert dec == -5
+
+    numPix = 11
+    deltaPix = .1
+    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    x_, y_ = 0, 0
+    ra, dec = Util.map_coord2pix(x_, y_, x_0, y_0, Matrix_inv)
+    assert ra == -.5
+    assert dec == -.5
+
+
 def test_array2image():
     array = np.linspace(1, 100, 100)
     image = Util.array2image(array)

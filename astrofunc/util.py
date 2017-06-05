@@ -123,6 +123,37 @@ def make_grid(numPix, deltapix, subgrid_res=1, left_lower=False):
     return x_grid - shift, y_grid - shift
 
 
+def make_grid_with_coordtransform(numPix, deltapix, subgrid_res=1, left_lower=False):
+    """
+    same as make_grid routine, but returns the transformaton matrix and shift between coordinates and pixel
+    :param numPix:
+    :param deltapix:
+    :param subgrid_res:
+    :param left_lower:
+    :return:
+    """
+    numPix_eff = numPix*subgrid_res
+    deltapix_eff = deltapix/float(subgrid_res)
+    a = np.arange(numPix_eff)
+    matrix = np.dstack(np.meshgrid(a, a)).reshape(-1, 2)
+    if left_lower is True:
+        x_grid = matrix[:, 0]*deltapix
+        y_grid = matrix[:, 1]*deltapix
+    else:
+        x_grid = (matrix[:, 0] - (numPix_eff-1)/2.)*deltapix_eff
+        y_grid = (matrix[:, 1] - (numPix_eff-1)/2.)*deltapix_eff
+    shift = (subgrid_res-1)/(2.*subgrid_res)*deltapix
+    x_grid -= shift
+    y_grid -= shift
+    x_0 = x_grid[0]
+    y_0 = y_grid[0]
+    ra_0 = (numPix_eff-1)/2.
+    dec_0 = (numPix_eff - 1) / 2.
+    Matrix = np.array([[deltapix_eff, 0],[0, deltapix_eff]])
+    Matrix_inv = np.linalg.inv(Matrix)
+    return x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv
+
+
 def get_axes(x, y):
     """
     computes the axis x and y of a given 2d grid
