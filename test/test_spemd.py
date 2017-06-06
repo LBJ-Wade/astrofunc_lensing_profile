@@ -22,7 +22,7 @@ class TestSPEP(object):
         x = np.array([1])
         y = np.array([2])
         values = self.SPEMD.function(x, y, phi_E, gamma, q, phi_G)
-        assert values[0] == 1.911701618701235
+        assert values == 1.911701618701235
 
         x = np.array([2, 3, 4])
         y = np.array([1, 1, 1])
@@ -73,9 +73,9 @@ class TestSPEP(object):
         q = 0.9
         phi_G = 1.
         f_xx, f_yy,f_xy = self.SPEMD.hessian(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(f_xx[0], 0.40902479080999932, decimal=7)
-        npt.assert_almost_equal(f_yy[0], 0.1488504387799334, decimal=7)
-        npt.assert_almost_equal(f_xy[0], -0.17413533543756601, decimal=7)
+        npt.assert_almost_equal(f_xx, 0.40902479080999932, decimal=7)
+        npt.assert_almost_equal(f_yy, 0.1488504387799334, decimal=7)
+        npt.assert_almost_equal(f_xy, -0.17413533543756601, decimal=7)
         x = np.array([1,3,4])
         y = np.array([2,1,1])
         values = self.SPEMD.hessian(x, y, phi_E, gamma, q, phi_G)
