@@ -814,6 +814,16 @@ def re_size_array(x_in, y_in, input_values, x_out, y_out):
     return out_values
 
 
+def fwhm2sigma(fwhm):
+    """
+
+    :param fwhm: full-widt-half-max value
+    :return: gaussian sigma (sqrt(var))
+    """
+    sigma = fwhm/ (2 * np.sqrt(2 * np.log(2)))
+    return sigma
+
+
 class Util_class(object):
     """
     util class which relies on util functions

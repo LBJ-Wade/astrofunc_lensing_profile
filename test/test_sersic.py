@@ -103,7 +103,7 @@ class TestSersic(object):
         center_x = 0
         center_y = 0
         values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
-        assert values[0] == 0.20696127414703369
+        assert values[0] == 0.20675084739923477
         x = np.array([0])
         y = np.array([0])
         values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
@@ -112,9 +112,9 @@ class TestSersic(object):
         x = np.array([2,3,4])
         y = np.array([1,1,1])
         values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
-        npt.assert_almost_equal(values[0], 0.19409038126468658, decimal=8)
-        npt.assert_almost_equal(values[1], 0.060052098706364632, decimal=8)
-        npt.assert_almost_equal(values[2], 0.023917484330013394, decimal=8)
+        npt.assert_almost_equal(values[0], 0.18951603025197983, decimal=8)
+        npt.assert_almost_equal(values[1], 0.056245995685458183, decimal=8)
+        npt.assert_almost_equal(values[2], 0.021287990035489202, decimal=8)
 
 if __name__ == '__main__':
     pytest.main()

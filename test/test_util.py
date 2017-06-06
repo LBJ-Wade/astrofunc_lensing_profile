@@ -419,6 +419,11 @@ class Test_Util(object):
         img_sym = self.util_class.symmetry_average(image, symmetry)
         npt.assert_almost_equal(img_sym[2, 1], 0.5, decimal=10)
 
+    def test_fwhm2sigma(self):
+        fwhm = 0.5
+        sigma = Util.fwhm2sigma(fwhm)
+        assert sigma == fwhm/ (2 * np.sqrt(2 * np.log(2)))
+
 
 if __name__ == '__main__':
     pytest.main()
