@@ -15,14 +15,14 @@ class TestSPEP(object):
         self.SPEP = SPEP()
 
     def test_function(self):
-        x = np.array([1])
-        y = np.array([2])
+        x = 1
+        y = 2
         phi_E = 1.
         gamma = 1.9
         q = 0.9
         phi_G = 1.
         values = self.SPEP.function(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(values[0], 2.104213947346917, decimal=7)
+        npt.assert_almost_equal(values, 2.104213947346917, decimal=7)
         x = np.array([0])
         y = np.array([0])
         values = self.SPEP.function(x, y, phi_E, gamma, q, phi_G)

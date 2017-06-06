@@ -107,7 +107,7 @@ class SPEMD(object):
 
         x1 = cos_phi*x_shift+sin_phi*y_shift
         x2 = -sin_phi*x_shift+cos_phi*y_shift
-        f_ = fastell4py.ellipphi(x1, x2, q_fastell, gamma, arat=q, s2=0)
+        f_ = fastell4py.ellipphi(x1, x2, q_fastell, gam, arat=q, s2=0)
         f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = fastell4py.fastellmag(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
         f_x = cos_phi*f_x_prim - sin_phi*f_y_prim
         f_y = sin_phi*f_x_prim + cos_phi*f_y_prim
