@@ -30,7 +30,7 @@ setup(
     author_email='sibirrer@gmail.com',
     url='https://github.com/sibirrer/astrofunc',
     packages=[
-        'astrofunc',
+        'astrofunc', 'astrofunc.LensingProfiles', 'astrofunc.LightProfiles', 'astrofunc.Footprint'
     ],
     package_dir={'astrofunc': 'astrofunc'},
     include_package_data=True,
