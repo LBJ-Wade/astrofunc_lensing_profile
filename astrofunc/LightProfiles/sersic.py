@@ -146,6 +146,7 @@ class DoubleSersic(object):
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y)
         return ellipse, spherical
 
+
 class DoubleCoreSersic(object):
     """
     this class contains functions to evaluate an elliptical core sersic and a spherical sersic function at once
@@ -163,3 +164,23 @@ class DoubleCoreSersic(object):
         core_ellipse = self.sersic_core.function(x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y)
         return core_ellipse, spherical
+
+
+class BuldgeDisk(object):
+    """
+    this class handles a buldge-to-disk decomposition model
+    """
+    def __init__(self):
+        self.sersic = Sersic_elliptic()
+        self.n_buldge = 4
+        self.n_disk = 1
+
+    def function(self, x, y, I0_b, R_b, phi_G_b, q_b, I0_d, R_d, phi_G_d, q_d, center_x, center_y):
+        buldge = self.sersic.function(x, y, I0_b, R_b, self.n_buldge, phi_G_b, q_b, center_x, center_y)
+        disk = self.sersic.function(x, y, I0_d, R_d, self.n_disk, phi_G_d, q_d, center_x, center_y)
+        return buldge + disk
+
+    def function_split(self, x, y, I0_b, R_b, phi_G_b, q_b, I0_d, R_d, phi_G_d, q_d, center_x, center_y):
+        buldge = self.sersic.function(x, y, I0_b, R_b, self.n_buldge, phi_G_b, q_b, center_x, center_y)
+        disk = self.sersic.function(x, y, I0_d, R_d, self.n_disk, phi_G_d, q_d, center_x, center_y)
+        return buldge, disk
