@@ -13,12 +13,16 @@ class SPEMD(object):
     def function(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
+            theta_E = 0
         if gamma > 2.9:
             gamma = 2.9
-        if q < 0.3:
-            q = 0.3
+            theta_E = 0
+        if q < 0.5:
+            q = 0.5
+            theta_E = 0
         if q > 1:
             q = 1.
+            theta_E = 0
         x_shift = x - center_x
         y_shift = y - center_y
         q_fastell, gam = self.convert_params(theta_E, gamma, q)
@@ -37,12 +41,16 @@ class SPEMD(object):
     def derivatives(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
+            theta_E = 0
         if gamma > 2.9:
             gamma = 2.9
-        if q < 0.3:
-            q = 0.3
+            theta_E = 0
+        if q < 0.5:
+            q = 0.5
+            theta_E = 0
         if q > 1:
             q = 1.
+            theta_E = 0
         x_shift = x - center_x
         y_shift = y - center_y
         q_fastell, gam = self.convert_params(theta_E, gamma, q)
@@ -61,12 +69,16 @@ class SPEMD(object):
     def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
+            theta_E = 0
         if gamma > 2.9:
             gamma = 2.9
-        if q < 0.3:
-            q = 0.3
+            theta_E = 0
+        if q < 0.5:
+            q = 0.5
+            theta_E = 0
         if q > 1:
             q = 1.
+            theta_E = 0
         x_shift = x - center_x
         y_shift = y - center_y
         q_fastell, gam = self.convert_params(theta_E, gamma, q)
@@ -95,12 +107,16 @@ class SPEMD(object):
     def all(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
             gamma = 1.4
+            theta_E = 0
         if gamma > 2.9:
             gamma = 2.9
+            theta_E = 0
         if q < 0.3:
             q = 0.3
+            theta_E = 0
         if q > 1:
             q = 1.
+            theta_E = 0
         x_shift = x - center_x
         y_shift = y - center_y
         q_fastell, gam = self.convert_params(theta_E, gamma, q)

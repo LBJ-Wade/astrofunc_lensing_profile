@@ -90,6 +90,18 @@ def test_elliptisity2phi_q_symmetry():
     assert phi == phi_new
     assert q == q_new
 
+    e1, e2 = 0.1, -0.1
+    phi, q = Util.elliptisity2phi_q(e1, e2)
+    e1_new, e2_new = Util.phi_q2_elliptisity(phi,q)
+    npt.assert_almost_equal(e1, e1_new, decimal=10)
+    npt.assert_almost_equal(e2, e2_new, decimal=10)
+
+    e1, e2 = 2.8, -0.8
+    phi, q = Util.elliptisity2phi_q(e1, e2)
+    e1_new, e2_new = Util.phi_q2_elliptisity(phi,q)
+    npt.assert_almost_equal(e1, e1_new, decimal=10)
+    npt.assert_almost_equal(e2, e2_new, decimal=10)
+
 
 def test_get_mask():
     x=np.linspace(0,10,100)
