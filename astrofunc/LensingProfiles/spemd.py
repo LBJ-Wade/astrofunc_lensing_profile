@@ -8,7 +8,7 @@ class SPEMD(object):
     class for smooth power law ellipse mass density profile
     """
     def __init__(self):
-        self.s2 = 0.01
+        self.s2 = 0.00000001
 
     def function(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
@@ -152,6 +152,6 @@ class SPEMD(object):
         :return:   prefactor to SPEMP profile for FASTELL
         """
         gam = (gamma-1)/2.
-        # gam = gamma
         q_fastell = (3-gamma)/2. * (theta_E ** 2 / q) ** gam
+
         return q_fastell, gam

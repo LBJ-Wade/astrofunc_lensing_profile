@@ -2,6 +2,7 @@ __author__ = 'sibirrer'
 
 
 from astrofunc.LensingProfiles.spemd import SPEMD
+from astrofunc.LensingProfiles.spep import SPEP
 
 import numpy as np
 import pytest
@@ -13,6 +14,7 @@ class TestSPEP(object):
     """
     def setup(self):
         self.SPEMD = SPEMD()
+        self.SPEP = SPEP()
 
     def test_function(self):
         phi_E = 1.
@@ -22,14 +24,15 @@ class TestSPEP(object):
         x = np.array([1])
         y = np.array([2])
         values = self.SPEMD.function(x, y, phi_E, gamma, q, phi_G)
-        assert values == 1.911701618701235
+        assert values == 2.1567297115381039
 
         x = np.array([2, 3, 4])
         y = np.array([1, 1, 1])
         values = self.SPEMD.function(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(values[0], 1.93472805144388, decimal=7)
-        npt.assert_almost_equal(values[1], 2.9389573854207987, decimal=7)
-        npt.assert_almost_equal(values[2], 4.0207564579911459, decimal=7)
+        npt.assert_almost_equal(values[0], 2.1798076611034141, decimal=7)
+        npt.assert_almost_equal(values[1], 3.209319798597186
+, decimal=7)
+        npt.assert_almost_equal(values[2], 4.3105937398856398, decimal=7)
 
     def test_derivatives(self):
         x = np.array([1])
@@ -39,16 +42,16 @@ class TestSPEP(object):
         q = 0.9
         phi_G = 1.
         f_x, f_y = self.SPEMD.derivatives(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(f_x[0], 0.45213064585508395, decimal=7)
-        npt.assert_almost_equal(f_y[0], 0.92402362693408957, decimal=7)
+        npt.assert_almost_equal(f_x[0], 0.46663367437984204, decimal=7)
+        npt.assert_almost_equal(f_y[0], 0.95307422686028065, decimal=7)
 
         x = np.array([1, 3, 4])
         y = np.array([2, 1, 1])
         values = self.SPEMD.derivatives(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(values[0][0], 0.45213064585508395, decimal=7)
-        npt.assert_almost_equal(values[1][0], 0.92402362693408957, decimal=7)
-        npt.assert_almost_equal(values[0][1], 1.0502477692714798, decimal=7)
-        npt.assert_almost_equal(values[1][1], 0.30672878119865871, decimal=7)
+        npt.assert_almost_equal(values[0][0], 0.46663367437984204, decimal=7)
+        npt.assert_almost_equal(values[1][0], 0.95307422686028065, decimal=7)
+        npt.assert_almost_equal(values[0][1], 1.0722152681324291, decimal=7)
+        npt.assert_almost_equal(values[1][1], 0.31400298272329669, decimal=7)
 
         x = 1
         y = 2
@@ -57,8 +60,8 @@ class TestSPEP(object):
         q = 0.9
         phi_G = 1.
         f_x, f_y = self.SPEMD.derivatives(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(f_x, 0.45213064585508395, decimal=7)
-        npt.assert_almost_equal(f_y, 0.92402362693408957, decimal=7)
+        npt.assert_almost_equal(f_x, 0.46663367437984204, decimal=7)
+        npt.assert_almost_equal(f_y, 0.95307422686028065, decimal=7)
         x = 0
         y = 0
         f_x, f_y = self.SPEMD.derivatives(x, y, phi_E, gamma, q, phi_G)
@@ -73,18 +76,18 @@ class TestSPEP(object):
         q = 0.9
         phi_G = 1.
         f_xx, f_yy,f_xy = self.SPEMD.hessian(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(f_xx, 0.40902479080999932, decimal=7)
-        npt.assert_almost_equal(f_yy, 0.1488504387799334, decimal=7)
-        npt.assert_almost_equal(f_xy, -0.17413533543756601, decimal=7)
+        npt.assert_almost_equal(f_xx, 0.41789957732890953, decimal=7)
+        npt.assert_almost_equal(f_yy, 0.14047593655054141, decimal=7)
+        npt.assert_almost_equal(f_xy, -0.18560737698052343, decimal=7)
         x = np.array([1,3,4])
         y = np.array([2,1,1])
         values = self.SPEMD.hessian(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(values[0][0], 0.40902479080999932, decimal=7)
-        npt.assert_almost_equal(values[1][0], 0.1488504387799334, decimal=7)
-        npt.assert_almost_equal(values[2][0], -0.17413533543756601, decimal=7)
-        npt.assert_almost_equal(values[0][1], 0.074088256439004602, decimal=7)
-        npt.assert_almost_equal(values[1][1], 0.3190504949856876, decimal=7)
-        npt.assert_almost_equal(values[2][1], -0.09352224663857206, decimal=7)
+        npt.assert_almost_equal(values[0][0], 0.41789957732890953, decimal=7)
+        npt.assert_almost_equal(values[1][0], 0.14047593655054141, decimal=7)
+        npt.assert_almost_equal(values[2][0], -0.18560737698052343, decimal=7)
+        npt.assert_almost_equal(values[0][1], 0.068359818958208918, decimal=7)
+        npt.assert_almost_equal(values[1][1], 0.32494089371516482, decimal=7)
+        npt.assert_almost_equal(values[2][1], -0.097845438684594374, decimal=7)
 
     def test_all(self):
         x = np.array([1])
@@ -95,11 +98,30 @@ class TestSPEP(object):
         phi_G = 1.
         f_, f_x, f_y, f_xx, f_yy, f_xy = self.SPEMD.all(x, y, phi_E, gamma, q, phi_G)
         npt.assert_almost_equal(f_[0], 2.1571109390326626, decimal=7)
-        npt.assert_almost_equal(f_x[0], 0.45213064585508395, decimal=7)
-        npt.assert_almost_equal(f_y[0], 0.92402362693408957, decimal=7)
-        npt.assert_almost_equal(f_xx[0], 0.40902479080999932, decimal=7)
-        npt.assert_almost_equal(f_yy[0], 0.1488504387799334, decimal=7)
-        npt.assert_almost_equal(f_xy[0], -0.17413533543756601, decimal=7)
+        npt.assert_almost_equal(f_x[0], 0.46663367437984204, decimal=7)
+        npt.assert_almost_equal(f_y[0], 0.95307422686028065, decimal=7)
+        npt.assert_almost_equal(f_xx[0], 0.41789957732890953, decimal=7)
+        npt.assert_almost_equal(f_yy[0], 0.14047593655054141, decimal=7)
+        npt.assert_almost_equal(f_xy[0], -0.18560737698052343, decimal=7)
+
+    def test_spep_spemd(self):
+        x = np.array([1])
+        y = np.array([0])
+        phi_E = 1.
+        gamma = 2.
+        q = 1.
+        phi_G = 1.
+        f_x, f_y = self.SPEMD.derivatives(x, y, phi_E, gamma, q, phi_G)
+        f_x_spep, f_y_spep = self.SPEP.derivatives(x, y, phi_E, gamma, q, phi_G)
+        npt.assert_almost_equal(f_x[0], f_x_spep[0], decimal=2)
+
+        theta_E = 2.
+        gamma = 2.
+        q = 1.
+        phi_G = 1.
+        f_x, f_y = self.SPEMD.derivatives(x, y, theta_E, gamma, q, phi_G)
+        f_x_spep, f_y_spep = self.SPEP.derivatives(x, y, theta_E, gamma, q, phi_G)
+        npt.assert_almost_equal(f_x[0], f_x_spep[0], decimal=2)
 
 if __name__ == '__main__':
    pytest.main()
