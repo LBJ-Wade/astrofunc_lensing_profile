@@ -28,7 +28,7 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         f_ = self.nfw.nfwPot(R_, Rs, rho0_input)
@@ -46,7 +46,7 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         f_x_prim, f_y_prim = self.nfw.nfwAlpha(R_, Rs, rho0_input, xt1, xt2)
@@ -69,7 +69,7 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         kappa = self.nfw.nfw2D(R_, Rs, rho0_input)
@@ -94,7 +94,7 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
 

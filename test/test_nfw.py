@@ -1,7 +1,7 @@
 __author__ = 'sibirrer'
 
 
-from astrofunc.LensingProfiles.nfw import NFW, HaloParam
+from astrofunc.LensingProfiles.nfw import NFW
 from astrofunc.LensingProfiles.nfw_ellipse import NFW_ELLIPSE
 
 import numpy as np
@@ -21,14 +21,14 @@ class TestNFW(object):
         y = np.array([2])
         Rs = 1.
         rho0 = 1
-        theta_Rs = self.nfw.rho02alpha(rho0, Rs)
+        theta_Rs = self.nfw._rho02alpha(rho0, Rs)
         values = self.nfw.function(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(values[0], 2.4764530888727556, decimal=5)
         x = np.array([0])
         y = np.array([0])
         Rs = 1.
         rho0 = 1
-        theta_Rs = self.nfw.rho02alpha(rho0, Rs)
+        theta_Rs = self.nfw._rho02alpha(rho0, Rs)
         values = self.nfw.function(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(values[0], 0, decimal=4)
 
@@ -45,7 +45,7 @@ class TestNFW(object):
         y = np.array([2])
         Rs = 1.
         rho0 = 1
-        theta_Rs = self.nfw.rho02alpha(rho0, Rs)
+        theta_Rs = self.nfw._rho02alpha(rho0, Rs)
         f_x, f_y = self.nfw.derivatives(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(f_x[0], 0.53211690764331998, decimal=5)
         npt.assert_almost_equal(f_y[0], 1.06423381528664, decimal=5)
@@ -59,7 +59,7 @@ class TestNFW(object):
         x = np.array([1,3,4])
         y = np.array([2,1,1])
         rho0 = 1
-        theta_Rs = self.nfw.rho02alpha(rho0, Rs)
+        theta_Rs = self.nfw._rho02alpha(rho0, Rs)
         values = self.nfw.derivatives(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(values[0][0], 0.53211690764331998, decimal=5)
         npt.assert_almost_equal(values[1][0], 1.06423381528664, decimal=5)
@@ -71,7 +71,7 @@ class TestNFW(object):
         y = np.array([2])
         Rs = 1.
         rho0 = 1
-        theta_Rs = self.nfw.rho02alpha(rho0, Rs)
+        theta_Rs = self.nfw._rho02alpha(rho0, Rs)
         f_xx, f_yy,f_xy = self.nfw.hessian(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(f_xx[0], 0.40855527280658294, decimal=5)
         npt.assert_almost_equal(f_yy[0], 0.037870368296371637, decimal=5)
@@ -92,7 +92,7 @@ class TestNFW(object):
         y = np.array([2])
         Rs = 1.
         rho0 = 1
-        theta_Rs = self.nfw.rho02alpha(rho0, Rs)
+        theta_Rs = self.nfw._rho02alpha(rho0, Rs)
         f_, f_x, f_y, f_xx, f_yy, f_xy = self.nfw.all(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(f_[0], 2.4764530888727556, decimal=5)
         npt.assert_almost_equal(f_x[0], 0.53211690764331998, decimal=5)
@@ -118,36 +118,24 @@ class TestMassAngleConversion(object):
     def setup(self):
         self.nfw = NFW()
         self.nfw_ellipse = NFW_ELLIPSE()
-        self.haloParam = HaloParam()
 
     def test_angle(self):
         x, y = 1, 0
         alpha1, alpha2 = self.nfw.derivatives(x, y, theta_Rs=1., Rs=1.)
         assert alpha1 == 1.
 
-    def test_profile_main(self):
-        M = 10**13
-        z = 0.5
-        r200, rho0, c, Rs = self.haloParam.profileMain(M, z)
-        print(r200, np.log10(rho0), c, Rs)
-        assert c == 3.9209051266072716
-
     def test_convertAngle2rho(self):
-        rho0 = self.nfw.alpha2rho0(theta_Rs=1., Rs=1.)
+        rho0 = self.nfw._alpha2rho0(theta_Rs=1., Rs=1.)
         assert rho0 == 0.81472283831773229
 
     def test_convertrho02angle(self):
         theta_Rs_in = 1.5
         Rs = 1.5
-        rho0 = self.nfw.alpha2rho0(theta_Rs=theta_Rs_in, Rs=Rs)
-        theta_Rs_out = self.nfw.rho02alpha(rho0, Rs)
+        rho0 = self.nfw._alpha2rho0(theta_Rs=theta_Rs_in, Rs=Rs)
+        theta_Rs_out = self.nfw._rho02alpha(rho0, Rs)
         assert theta_Rs_in == theta_Rs_out
 
-    def test_mass2angle(self):
-        M = 10**13
-        z = 0.5
-        #alpha (physical units)/ self.lensProp.sigma_crit / self.lensProp.dist_OL / constants.arcsec
-        assert 0 == 0
+
 
 if __name__ == '__main__':
     pytest.main()

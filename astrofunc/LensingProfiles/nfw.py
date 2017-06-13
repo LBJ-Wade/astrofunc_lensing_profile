@@ -23,7 +23,7 @@ class NFW(object):
         :param center_y: center of halo
         :return: 
         """
-        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
@@ -36,7 +36,7 @@ class NFW(object):
         """
         returns df/dx and df/dy of the function (integral of NFW)
         """
-        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
@@ -49,7 +49,7 @@ class NFW(object):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
-        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
@@ -66,7 +66,7 @@ class NFW(object):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
-        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
+        rho0_input = self._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
@@ -297,14 +297,14 @@ class NFW(object):
             a[X >= 1] = np.log(x/2.)**2 + np.arccos(1./x)**2
         return a
 
-    def alpha2rho0(self, theta_Rs, Rs):
+    def _alpha2rho0(self, theta_Rs, Rs):
         """
         convert angle at Rs into rho0
         """
         rho0 = theta_Rs / (4 * Rs ** 2 * (1 + np.log(1. / 2.)))
         return rho0
 
-    def rho02alpha(self, rho0, Rs):
+    def _rho02alpha(self, rho0, Rs):
         """
         convert rho0 to angle at Rs
         :param rho0:
@@ -315,68 +315,3 @@ class NFW(object):
         return theta_Rs
 
 
-class HaloParam(object):
-    """
-    class which contains a halo model parameters dependent on cosmology for NFW profile
-    all distances are given in comoving coordinates
-    """
-
-    rhoc = 2.77536627e11  # critical density [h^2 M_sun Mpc^-3]
-
-    def M200(self, Rs, rho0, c):
-        """
-        M(R_200) calculation for NFW profile
-
-        :param Rs: scale radius
-        :type Rs: float
-        :param rho0: density normalization (characteristic density)
-        :type rho0: float
-        :param c: consentration
-        :type c: float [4,40]
-        :return: M(R_200) density
-        """
-        return 4*np.pi*rho0*Rs**3*(np.log(1+c)-c/(1+c))
-
-    def r200_M(self, M):
-        """
-        computes the radius R_200 of a halo of mass M in comoving distances
-
-        :param M: halo mass in M_sun/h
-        :type M: float or numpy array
-        :return: radius R_200 in comoving Mpc/h
-        """
-        return (3*M/(4*np.pi*self.rhoc*200))**(1./3.)
-
-    def rho0_c(self, c):
-        """
-        computes density normalization as a functio of concentration parameter
-        :return: density normalization in h^2/Mpc^3 (comoving)
-        """
-        return 200./3*self.rhoc*c**3/(np.log(1+c)-c/(1+c))
-
-    def c_M_z(self, M, z):
-        """
-        fitting function of http://moriond.in2p3.fr/J08/proceedings/duffy.pdf for the mass and redshift dependence of the concentration parameter
-
-        :param M: halo mass in M_sun/h
-        :type M: float or numpy array
-        :param z: redshift
-        :type z: float >0
-        :return: concentration parameter as float
-        """
-        # fitted parameter values
-        A = 5.22
-        B = -0.072
-        C = -0.42
-        M_pivot = 2.*10**12
-        return A*(M/M_pivot)**B*(1+z)**C
-
-    def profileMain(self, M, z):
-        """
-        returns all needed parameter to draw the profile of the main halo
-        """
-        c = self.c_M_z(M,z)
-        r200 = self.r200_M(M)
-        rho0 = self.rho0_c(c)
-        Rs = r200/c
-        return r200,rho0,c,Rs
