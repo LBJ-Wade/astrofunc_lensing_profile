@@ -12,81 +12,76 @@ class NFW(object):
     relation are: R_200 = c * Rs
     """
 
-    def function(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
+    def function(self, x, y, Rs, theta_Rs, center_x=0, center_y=0):
         """
-        returns double integral of NFW profile
+        
+        :param x: angular position
+        :param y: angular position
+        :param Rs: angular turn over point 
+        :param theta_Rs: deflection at Rs
+        :param center_x: center of halo
+        :param center_y: center of halo
+        :return: 
         """
-        if angle is True:
-            rho0_input = self.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
         y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
-        f_ = self.nfwPot(R, Rs, rho0_input, r200)
+        f_ = self.nfwPot(R, Rs, rho0_input)
         return f_
 
-    def derivatives(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
+    def derivatives(self, x, y, Rs, theta_Rs, center_x=0, center_y=0):
         """
         returns df/dx and df/dy of the function (integral of NFW)
         """
-        if angle is True:
-            rho0_input = self.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
         y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
-        f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, r200, x_, y_)
+        f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, x_, y_)
         return f_x, f_y
 
-    def hessian(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
+    def hessian(self, x, y, Rs, theta_Rs, center_x=0, center_y=0):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
-        if angle is True:
-            rho0_input = self.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
         y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
-        kappa = self.nfw2D(R, Rs, rho0_input, r200)
-        gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, r200, x_, y_)
+        kappa = self.nfw2D(R, Rs, rho0_input)
+        gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, x_, y_)
         f_xx = kappa + gamma1
         f_yy = kappa - gamma1
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, Rs, rho0, r200=100, center_x=0, center_y=0, angle=False):
+    def all(self, x, y, Rs, theta_Rs, center_x=0, center_y=0):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
-        if angle is True:
-            rho0_input = self.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         x_ = x - center_x
         y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
-        f_ = self.nfwPot(R, Rs, rho0_input, r200)
-        f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, r200, x_, y_)
-        kappa = self.nfw2D(R, Rs, rho0_input, r200)
-        gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, r200, x_, y_)
+        f_ = self.nfwPot(R, Rs, rho0_input)
+        f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, x_, y_)
+        kappa = self.nfw2D(R, Rs, rho0_input)
+        gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, x_, y_)
         f_xx = kappa + gamma1
         f_yy = kappa - gamma1
         f_xy = gamma2
         return f_, f_x, f_y, f_xx, f_yy, f_xy
 
-    def nfw3D(self,R,Rs,rho0):
+    def nfw3D(self, R, Rs, rho0):
         """
         three dimenstional NFW profile
 
@@ -100,7 +95,7 @@ class NFW(object):
         """
         return rho0/(R/Rs*(1+R/Rs)**2)
 
-    def nfw2D(self,R,Rs,rho0,r200=1):
+    def nfw2D(self, R, Rs, rho0):
         """
         projected two dimenstional NFW profile (kappa*Sigma_crit)
 
@@ -115,10 +110,10 @@ class NFW(object):
         :return: Epsilon(R) projected density at radius R
         """
         x = R/Rs
-        Fx = self.F(x)
+        Fx = self._F(x)
         return 2*rho0*Rs*Fx
 
-    def nfw2D_smoothed(self, R, Rs, rho0, r200, pixscale):
+    def nfw2D_smoothed(self, R, Rs, rho0, pixscale):
         """
         projected two dimenstional NFW profile with smoothing around the pixel scale
         this routine is ment to better compare outputs to N-body simulations (not ment ot do lensemodelling with it)
@@ -142,11 +137,11 @@ class NFW(object):
         upper = x_+d
         lower = x_-d
 
-        a[x > d] = 4*rho0*Rs**3*(self.g(upper)-self.g(lower))/(2*x_*Rs*pixscale)
-        a[x < d] = 4*rho0*Rs**3*self.g(d)/((pixscale/2)**2)
+        a[x > d] = 4*rho0*Rs**3*(self._g(upper) - self._g(lower)) / (2 * x_ * Rs * pixscale)
+        a[x < d] = 4*rho0*Rs**3*self._g(d) / ((pixscale / 2) ** 2)
         return a
 
-    def nfwPot(self, R, Rs, rho0, r200=1):
+    def nfwPot(self, R, Rs, rho0):
         """
         lensing potential of NFW profile (*Sigma_crit*D_OL**2)
 
@@ -161,10 +156,10 @@ class NFW(object):
         :return: Epsilon(R) projected density at radius R
         """
         x=R/Rs
-        hx=self.h(x)
+        hx=self._h(x)
         return 2*rho0*Rs**3*hx
 
-    def nfwAlpha(self, R, Rs, rho0, r200, ax_x, ax_y):
+    def nfwAlpha(self, R, Rs, rho0, ax_x, ax_y):
         """
         deflection angel of NFW profile (*Sigma_crit*D_OL) along the projection to coordinate "axis"
 
@@ -185,11 +180,11 @@ class NFW(object):
         else:
             R[R==0] = 0.00001
         x = R/Rs
-        gx = self.g(x)
+        gx = self._g(x)
         a = 4*rho0*Rs*R*gx/x**2/R
         return a*ax_x, a*ax_y
 
-    def nfwGamma(self, R, Rs, rho0, r200, ax_x, ax_y):
+    def nfwGamma(self, R, Rs, rho0, ax_x, ax_y):
         """
         shear gamma of NFW profile (*Sigma_crit) along the projection to coordinate "axis"
 
@@ -210,12 +205,12 @@ class NFW(object):
         else:
             R[R==0] = 0.001
         x = R/Rs
-        gx = self.g(x)
-        Fx = self.F(x)
+        gx = self._g(x)
+        Fx = self._F(x)
         a = 2*rho0*Rs*(2*gx/x**2 - Fx)#/x #2*rho0*Rs*(2*gx/x**2 - Fx)*axis/x
         return a*(ax_y**2-ax_x**2)/R**2, a*2*(ax_x*ax_y)/R**2
 
-    def F(self, X):
+    def _F(self, X):
         """
         analytic solution of the projection integral
 
@@ -229,7 +224,7 @@ class NFW(object):
                 a = 1./3
             elif X > 1:
                 a = 1/(X**2-1)*(1-2/np.sqrt(X**2-1)*np.arctan(np.sqrt((X-1)/(1+X))))
-            elif X == 0:
+            else:  # X == 0:
                 c = 0.0001
                 a = 1/(-1)*(1-2/np.sqrt(1)*np.arctanh(np.sqrt((1-c)/(1+c))))
 
@@ -250,7 +245,7 @@ class NFW(object):
             a[X==0] = 1/(-1)*(1-2/np.sqrt(1)*np.arctanh(np.sqrt((1-c)/(1+c))))
         return a
 
-    def g(self, X):
+    def _g(self, X):
         """
         analytic solution of integral for NFW profile to compute deflection angel and gamma
 
@@ -263,7 +258,7 @@ class NFW(object):
                 a = np.log(x/2.) + 1/np.sqrt(1-x**2)*np.arccosh(1./x)
             elif X == 1:
                 a = 1 + np.log(1./2.)
-            elif X > 1:
+            else:  # X > 1:
                 a = np.log(X/2) + 1/np.sqrt(X**2-1)*np.arccos(1./X)
 
         else:
@@ -280,7 +275,7 @@ class NFW(object):
 
         return a
 
-    def h(self, X):
+    def _h(self, X):
         """
         analytic solution of integral for NFW profile to compute the potential
 
@@ -291,7 +286,7 @@ class NFW(object):
             if X < 1:
                 x = max(0.001, X)
                 a = np.log(x/2.)**2 - np.arccosh(1./x)**2
-            elif X >= 1:
+            else:  # X >= 1:
                 a = np.log(X/2.)**2 + np.arccos(1./X)**2
         else:
             a=np.empty_like(X)
@@ -302,11 +297,22 @@ class NFW(object):
             a[X >= 1] = np.log(x/2.)**2 + np.arccos(1./x)**2
         return a
 
-    def alpha2rho0(self, phi_E, Rs):
+    def alpha2rho0(self, theta_Rs, Rs):
         """
         convert angle at Rs into rho0
         """
-        return phi_E/(4*Rs**2*(1+np.log(1./2.)))
+        rho0 = theta_Rs / (4 * Rs ** 2 * (1 + np.log(1. / 2.)))
+        return rho0
+
+    def rho02alpha(self, rho0, Rs):
+        """
+        convert rho0 to angle at Rs
+        :param rho0:
+        :param Rs:
+        :return:
+        """
+        theta_Rs = rho0 * (4 * Rs ** 2 * (1 + np.log(1. / 2.)))
+        return theta_Rs
 
 
 class HaloParam(object):
@@ -362,7 +368,7 @@ class HaloParam(object):
         A = 5.22
         B = -0.072
         C = -0.42
-        M_pivot = 2*10**12
+        M_pivot = 2.*10**12
         return A*(M/M_pivot)**B*(1+z)**C
 
     def profileMain(self, M, z):

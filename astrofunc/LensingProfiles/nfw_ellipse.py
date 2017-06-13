@@ -15,7 +15,7 @@ class NFW_ELLIPSE(object):
     def __init__(self):
         self.nfw = NFW()
 
-    def function(self, x, y, Rs, rho0, q, phi_G, r200=100, center_x=0, center_y=0, angle=False):
+    def function(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0):
         """
         returns double integral of NFW profile
         """
@@ -28,16 +28,13 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        if angle is True:
-            rho0_input = self.nfw.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
-        f_ = self.nfw.nfwPot(R_, Rs, rho0_input, r200)
+        f_ = self.nfw.nfwPot(R_, Rs, rho0_input)
         return f_
 
-    def derivatives(self, x, y, Rs, rho0, q, phi_G, r200=100, center_x=0, center_y=0, angle=False):
+    def derivatives(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0, angle=False):
         """
         returns df/dx and df/dy of the function (integral of NFW)
         """
@@ -49,20 +46,17 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        if angle is True:
-            rho0_input = self.nfw.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
-        f_x_prim, f_y_prim = self.nfw.nfwAlpha(R_, Rs, rho0_input, r200, xt1, xt2)
+        f_x_prim, f_y_prim = self.nfw.nfwAlpha(R_, Rs, rho0_input, xt1, xt2)
         f_x_prim *= np.sqrt(1 - q)
         f_y_prim *= np.sqrt(1 + q)
         f_x = cos_phi*f_x_prim-sin_phi*f_y_prim
         f_y = sin_phi*f_x_prim+cos_phi*f_y_prim
         return f_x, f_y
 
-    def hessian(self, x, y, Rs, rho0, q, phi_G, r200=100, center_x=0, center_y=0, angle=False):
+    def hessian(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0, angle=False):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
@@ -75,14 +69,11 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        if angle is True:
-            rho0_input = self.nfw.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
-        kappa = self.nfw.nfw2D(R_, Rs, rho0_input, r200)
-        gamma1_value, gamma2_value = self.nfw.nfwGamma(R_, Rs, rho0_input, r200, xt1, xt2)
+        kappa = self.nfw.nfw2D(R_, Rs, rho0_input)
+        gamma1_value, gamma2_value = self.nfw.nfwGamma(R_, Rs, rho0_input, xt1, xt2)
 
         gamma1 = np.cos(2*phi_G)*gamma1_value-np.sin(2*phi_G)*gamma2_value
         gamma2 = +np.sin(2*phi_G)*gamma1_value+np.cos(2*phi_G)*gamma2_value
@@ -91,7 +82,7 @@ class NFW_ELLIPSE(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, Rs, rho0, q, phi_G, r200=100, center_x=0, center_y=0, angle=False):
+    def all(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0, angle=False):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
@@ -103,21 +94,18 @@ class NFW_ELLIPSE(object):
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
         R_ = np.sqrt(xt1**2 + xt2**2)
-        if angle is True:
-            rho0_input = self.nfw.alpha2rho0(phi_E=rho0, Rs=Rs)
-        else:
-            rho0_input = rho0
+        rho0_input = self.nfw.alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
 
-        f_ = self.nfw.nfwPot(R_, Rs, rho0_input, r200)
-        f_x_prim, f_y_prim = self.nfw.nfwAlpha(R_, Rs, rho0_input, r200, xt1, xt2)
+        f_ = self.nfw.nfwPot(R_, Rs, rho0_input)
+        f_x_prim, f_y_prim = self.nfw.nfwAlpha(R_, Rs, rho0_input, xt1, xt2)
         f_x_prim *= np.sqrt(1 - q)
         f_y_prim *= np.sqrt(1 + q)
         f_x = cos_phi*f_x_prim-sin_phi*f_y_prim
         f_y = sin_phi*f_x_prim+cos_phi*f_y_prim
-        kappa = self.nfw.nfw2D(R_, Rs, rho0_input, r200)
-        gamma1_value, gamma2_value = self.nfw.nfwGamma(R_, Rs, rho0_input, r200, xt1, xt2)
+        kappa = self.nfw.nfw2D(R_, Rs, rho0_input)
+        gamma1_value, gamma2_value = self.nfw.nfwGamma(R_, Rs, rho0_input, xt1, xt2)
 
         gamma1 = np.cos(2*phi_G)*gamma1_value-np.sin(2*phi_G)*gamma2_value
         gamma2 = +np.sin(2*phi_G)*gamma1_value+np.cos(2*phi_G)*gamma2_value
