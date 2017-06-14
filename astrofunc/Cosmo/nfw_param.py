@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class HaloParam(object):
+class NFWParam(object):
     """
     class which contains a halo model parameters dependent on cosmology for NFW profile
     all distances are given in comoving coordinates
@@ -25,7 +25,7 @@ class HaloParam(object):
 
     def r200_M(self, M):
         """
-        computes the radius R_200 of a halo of mass M in comoving distances
+        computes the radius R_200 of a halo of mass M in comoving distances M/h
 
         :param M: halo mass in M_sun/h
         :type M: float or numpy array
@@ -33,12 +33,33 @@ class HaloParam(object):
         """
         return (3*M/(4*np.pi*self.rhoc*200))**(1./3.)
 
+    def M_r200(self, r200):
+        """
+
+        :param r200: r200 in comoving Mpc/h
+        :return: M200
+        """
+        return self.rhoc*200 * r200**3 * 4*np.pi/3.
+
     def rho0_c(self, c):
         """
-        computes density normalization as a functio of concentration parameter
+        computes density normalization as a function of concentration parameter
         :return: density normalization in h^2/Mpc^3 (comoving)
         """
         return 200./3*self.rhoc*c**3/(np.log(1+c)-c/(1+c))
+
+    def c_rho0(self, rho0):
+        """
+        computes the concentration given a comoving overdensity rho0 (inverse of function rho0_c)
+        :param rho0: density normalization in h^2/Mpc^3 (comoving)
+        :return: concentration parameter c
+        """
+        if not hasattr(self, '_c_rho0_interp'):
+            c_array = np.linspace(0.1, 10, 100)
+            rho0_array = self.rho0_c(c_array)
+            from scipy import interpolate
+            self._c_rho0_interp = interpolate.InterpolatedUnivariateSpline(rho0_array, c_array, w=None, bbox=[None, None], k=3)
+        return self._c_rho0_interp(rho0)
 
     def c_M_z(self, M, z):
         """
