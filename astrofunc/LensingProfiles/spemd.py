@@ -29,7 +29,6 @@ class SPEMD(object):
 
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-
         x1 = cos_phi*x_shift+sin_phi*y_shift
         x2 = -sin_phi*x_shift+cos_phi*y_shift
 

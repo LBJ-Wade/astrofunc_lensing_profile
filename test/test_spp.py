@@ -2,8 +2,10 @@ __author__ = 'sibirrer'
 
 from astrofunc.LensingProfiles.spep import SPEP
 from astrofunc.LensingProfiles.spp import SPP
+from astrofunc.LensingProfiles.sis import SIS
 
 import numpy as np
+import numpy.testing as npt
 import pytest
 
 class TestSPEP(object):
@@ -13,6 +15,7 @@ class TestSPEP(object):
     def setup(self):
         self.SPEP = SPEP()
         self.SPP = SPP()
+        self.SIS = SIS()
 
 
     def test_function(self):
@@ -114,6 +117,21 @@ class TestSPEP(object):
         assert f_xx_spep[0] == f_xx_spp[0]
         assert f_yy_spep[0] == f_yy_spp[0]
         assert f_xy_spep[0] == f_xy_spp[0]
+
+    def test_compare_sis(self):
+        x = np.array([1])
+        y = np.array([2])
+        theta_E = 1.
+        gamma = 2.
+        f_sis, f_x_sis, f_y_sis, f_xx_sis, f_yy_sis, f_xy_sis = self.SIS.all( x, y, theta_E)
+        f_spp, f_x_spp, f_y_spp, f_xx_spp, f_yy_spp, f_xy_spp = self.SPP.all(x, y, theta_E, gamma)
+        npt.assert_almost_equal(f_sis[0],f_spp[0], decimal=7)
+        npt.assert_almost_equal(f_x_sis[0], f_x_spp[0], decimal=7)
+        npt.assert_almost_equal(f_y_sis[0], f_y_spp[0], decimal=7)
+        npt.assert_almost_equal(f_xx_sis[0], f_xx_spp[0], decimal=7)
+        npt.assert_almost_equal(f_yy_sis[0], f_yy_spp[0], decimal=7)
+        npt.assert_almost_equal(f_xy_sis[0], f_xy_spp[0], decimal=7)
+
 
 if __name__ == '__main__':
    pytest.main()

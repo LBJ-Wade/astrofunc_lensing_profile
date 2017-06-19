@@ -123,5 +123,13 @@ class TestSPEP(object):
         f_x_spep, f_y_spep = self.SPEP.derivatives(x, y, theta_E, gamma, q, phi_G)
         npt.assert_almost_equal(f_x[0], f_x_spep[0], decimal=2)
 
+        theta_E = 2.
+        gamma = 1.7
+        q = 1.
+        phi_G = 1.
+        f_x, f_y = self.SPEMD.derivatives(x, y, theta_E, gamma, q, phi_G)
+        f_x_spep, f_y_spep = self.SPEP.derivatives(x, y, theta_E, gamma, q, phi_G)
+        npt.assert_almost_equal(f_x[0], f_x_spep[0], decimal=4)
+
 if __name__ == '__main__':
    pytest.main()
