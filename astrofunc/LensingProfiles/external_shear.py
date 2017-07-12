@@ -86,7 +86,7 @@ class ExternalShear(object):
         # change to polar coordinates
         psi_ext, gamma_ext = util.ellipticity2phi_gamma(e1, e2)
         theta, phi = util.cart2polar(x, y)
-        f_ = 1./2 * gamma_ext * theta * np.cos(2*(phi - psi_ext))
+        f_ = 1./2 * gamma_ext * theta**2 * np.cos(2*(phi - psi_ext))
         return f_
 
     def derivatives(self, x, y, e1, e2):

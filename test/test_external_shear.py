@@ -22,7 +22,7 @@ class TestExternalShear(object):
         x = np.array([1])
         y = np.array([2])
         values = self.extShear.function(x, y, **self.kwargs_lens)
-        npt.assert_almost_equal(values[0], 0.022360679774997925, decimal=5)
+        npt.assert_almost_equal(values[0], 0.05, decimal=5)
         x = np.array([0])
         y = np.array([0])
         values = self.extShear.function(x, y, **self.kwargs_lens)
@@ -31,8 +31,8 @@ class TestExternalShear(object):
         x = np.array([2, 3, 4])
         y = np.array([1, 1, 1])
         values = self.extShear.function(x, y, **self.kwargs_lens)
-        npt.assert_almost_equal(values[0],  0.15652475842498531, decimal=5)
-        npt.assert_almost_equal(values[1], 0.22135943621178661, decimal=5)
+        npt.assert_almost_equal(values[0],  0.35, decimal=5)
+        npt.assert_almost_equal(values[1], 0.7, decimal=5)
 
     def test_derivatives(self):
         x = np.array([1])
