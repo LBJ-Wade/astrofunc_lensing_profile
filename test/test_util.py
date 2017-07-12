@@ -389,10 +389,24 @@ def test_neighborSelect():
     assert y_mins[0] == 41
     assert values[0] == 0
 
+
 def test_averaging2():
     grid = np.ones((100, 100))
     grid_smoothed = Util.averaging2(grid, numGrid=100, numPix=50)
     assert grid_smoothed[0][0] == 1
+
+
+def test_re_size_array():
+    numPix = 9
+    kernel = np.zeros((numPix, numPix))
+    kernel[(numPix-1)/2, (numPix-1)/2] = 1
+    subgrid_res = 2
+    input_values = kernel
+    x_in = np.linspace(0, 1, numPix)
+    x_out = np.linspace(0, 1, numPix*subgrid_res)
+    out_values = Util.re_size_array(x_in, x_in, input_values, x_out, x_out)
+    kernel_out = out_values
+    assert kernel_out[(numPix*subgrid_res-1)/2, (numPix*subgrid_res-1)/2] == 0.58477508650519028
 
 
 class Test_Util(object):
