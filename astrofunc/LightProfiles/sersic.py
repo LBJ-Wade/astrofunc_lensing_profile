@@ -28,7 +28,7 @@ class Sersic(SersicUtil):
     """
     this class contains functions to evaluate an spherical Sersic function
     """
-    def function(self, x, y, I0_sersic, R_sersic, n_sersic, center_x, center_y, smoothing=0.01):
+    def function(self, x, y, I0_sersic, R_sersic, n_sersic, center_x, center_y, smoothing=0.02):
         """
         returns Sersic profile
         """
@@ -65,7 +65,7 @@ class Sersic_elliptic(SersicUtil):
     this class contains functions to evaluate an elliptical Sersic function
     """
 
-    def function(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, smoothing=0.01):
+    def function(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, smoothing=0.02):
         """
         returns Sersic profile
         """
@@ -109,7 +109,7 @@ class CoreSersic(SersicUtil):
     this class contains the Core-Sersic function introduced by e.g Trujillo et al. 2004
     """
 
-    def function(self, x, y, I0_sersic, R_sersic, Re, n_sersic, gamma, phi_G, q, center_x, center_y, alpha=3., smoothing=0.01):
+    def function(self, x, y, I0_sersic, R_sersic, Re, n_sersic, gamma, phi_G, q, center_x, center_y, alpha=3., smoothing=0.02):
         """
         returns Core-Sersic function
         """

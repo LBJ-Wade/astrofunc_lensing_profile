@@ -30,7 +30,7 @@ class TestSersic(object):
         x = np.array([0])
         y = np.array([0])
         values = self.sersic.function( x, y, I0_sersic, R_sersic, n_sersic, center_x, center_y)
-        npt.assert_almost_equal(values[0],  5.2350636353584772, decimal=6)
+        npt.assert_almost_equal(values[0],  5.1482559148107292, decimal=2)
 
         x = np.array([2,3,4])
         y = np.array([1,1,1])
@@ -48,7 +48,7 @@ class TestSersic(object):
         center_x = 0
         center_y = 0
         values = self.sersic.function(x, y, I0_sersic, R_sersic, n_sersic, center_x, center_y)
-        npt.assert_almost_equal(values, 28.694651261088239, decimal=6)
+        npt.assert_almost_equal(values, 12.688073819377406, decimal=6)
 
     def test_sersic_elliptic(self):
         x = np.array([1])
@@ -65,7 +65,7 @@ class TestSersic(object):
         x = np.array([0])
         y = np.array([0])
         values = self.sersic_elliptic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y)
-        npt.assert_almost_equal(values[0], 5.2350630760192871, decimal=6)
+        npt.assert_almost_equal(values[0], 5.1482553482055664, decimal=2)
 
         x = np.array([2,3,4])
         y = np.array([1,1,1])
@@ -91,7 +91,7 @@ class TestSersic(object):
         x = np.array([0])
         y = np.array([0])
         values = self.core_sersic.function(x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y)
-        npt.assert_almost_equal(values[0], 2307237.2, decimal=0)
+        npt.assert_almost_equal(values[0], 288406.09, decimal=0)
 
         x = np.array([2,3,4])
         y = np.array([1,1,1])
@@ -118,7 +118,7 @@ class TestSersic(object):
         x = np.array([0])
         y = np.array([0])
         values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2)
-        assert values[0] == 8.2667372226715088
+        assert values[0] == 7.8708484172821045
 
         x = np.array([2,3,4])
         y = np.array([1,1,1])
