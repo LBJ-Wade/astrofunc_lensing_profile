@@ -9,9 +9,9 @@ class SersicUtil(object):
 
     def k_bn(self, n, Re):
         """
-        returns normalisation of the sersic profile such that Re is the half light radius given n:sersic slope
+        returns normalisation of the sersic profile such that Re is the half light radius given n_sersic slope
         """
-        bn = 1.9992*n - 0.3271
+        bn = self.b_n(n)
         k = bn*Re**(-1./n)
         return k, bn
 
@@ -19,9 +19,18 @@ class SersicUtil(object):
         """
 
         """
-        bn = 1.9992*n - 0.3271
+        bn = self.b_n(n)
         Re = (bn/k)**n
         return Re
+
+    def b_n(self, n):
+        """
+        b(n) computation
+        :param n:
+        :return:
+        """
+        bn = 1.9992 * n - 0.3271
+        return bn
 
 
 class Sersic(SersicUtil):

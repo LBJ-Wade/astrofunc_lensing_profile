@@ -11,6 +11,7 @@ import scipy.signal.signaltools as signaltools
 import scipy
 from numpy import linspace, meshgrid
 import copy
+import mpmath
 
 
 
@@ -822,6 +823,26 @@ def fwhm2sigma(fwhm):
     """
     sigma = fwhm/ (2 * np.sqrt(2 * np.log(2)))
     return sigma
+
+
+def hyper2F2_array(a, b, c, d, x):
+    """
+
+    :param a:
+    :param b:
+    :param c:
+    :param d:
+    :param x:
+    :return:
+    """
+    if isinstance(x, int) or isinstance(x, float):
+        out = mpmath.hyp2f2(a, b, c, d, x)
+    else:
+        n = len(x)
+        out = np.zeros(n)
+        for i in range(n):
+            out[i] = mpmath.hyp2f2(a, b, c, d, x[i])
+    return out
 
 
 class Util_class(object):
