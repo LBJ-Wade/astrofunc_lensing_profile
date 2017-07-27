@@ -24,9 +24,9 @@ class NFW_ELLIPSE(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-
-        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
-        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
+        e = 1 - q
+        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
+        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
         R_ = np.sqrt(xt1**2 + xt2**2)
         rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
@@ -34,7 +34,7 @@ class NFW_ELLIPSE(object):
         f_ = self.nfw.nfwPot(R_, Rs, rho0_input)
         return f_
 
-    def derivatives(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0, angle=False):
+    def derivatives(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0):
         """
         returns df/dx and df/dy of the function (integral of NFW)
         """
@@ -42,21 +42,21 @@ class NFW_ELLIPSE(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-
-        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
-        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
+        e = 1 - q
+        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
+        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
         R_ = np.sqrt(xt1**2 + xt2**2)
         rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
             Rs = 0.0001
         f_x_prim, f_y_prim = self.nfw.nfwAlpha(R_, Rs, rho0_input, xt1, xt2)
-        f_x_prim *= np.sqrt(1 - q)
-        f_y_prim *= np.sqrt(1 + q)
+        f_x_prim *= np.sqrt(1 - e)
+        f_y_prim *= np.sqrt(1 + e)
         f_x = cos_phi*f_x_prim-sin_phi*f_y_prim
         f_y = sin_phi*f_x_prim+cos_phi*f_y_prim
         return f_x, f_y
 
-    def hessian(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0, angle=False):
+    def hessian(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
@@ -65,9 +65,9 @@ class NFW_ELLIPSE(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-
-        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
-        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
+        e = 1 - q
+        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
+        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
         R_ = np.sqrt(xt1**2 + xt2**2)
         rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
@@ -82,7 +82,7 @@ class NFW_ELLIPSE(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0, angle=False):
+    def all(self, x, y, Rs, theta_Rs, q, phi_G, center_x=0, center_y=0):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
@@ -90,9 +90,9 @@ class NFW_ELLIPSE(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-
-        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - q)
-        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + q)
+        e = 1 - q
+        xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
+        xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
         R_ = np.sqrt(xt1**2 + xt2**2)
         rho0_input = self.nfw._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
         if Rs < 0.0001:
@@ -100,8 +100,8 @@ class NFW_ELLIPSE(object):
 
         f_ = self.nfw.nfwPot(R_, Rs, rho0_input)
         f_x_prim, f_y_prim = self.nfw.nfwAlpha(R_, Rs, rho0_input, xt1, xt2)
-        f_x_prim *= np.sqrt(1 - q)
-        f_y_prim *= np.sqrt(1 + q)
+        f_x_prim *= np.sqrt(1 - e)
+        f_y_prim *= np.sqrt(1 + e)
         f_x = cos_phi*f_x_prim-sin_phi*f_y_prim
         f_y = sin_phi*f_x_prim+cos_phi*f_y_prim
         kappa = self.nfw.nfw2D(R_, Rs, rho0_input)
