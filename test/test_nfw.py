@@ -102,15 +102,6 @@ class TestNFW(object):
         npt.assert_almost_equal(f_xy[0], 0.2471232696734742, decimal=5)
 
 
-class TestNFWEllipse(object):
-
-    def setup(self):
-        self.nfw = NFW()
-        self.nfw_ellipse = NFW_ELLIPSE()
-
-    def test(self):
-        pass
-
 class TestMassAngleConversion(object):
     """
     test angular to mass unit conversions
