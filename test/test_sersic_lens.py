@@ -69,18 +69,18 @@ class TestSersic(object):
         r_eff = 1.
         k_eff = 0.2
         f_xx, f_yy,f_xy = self.sersic.hessian(x, y, n_sersic, r_eff, k_eff)
-        assert f_xx[0] == -0.086355912401166718
-        npt.assert_almost_equal(f_yy[0], 0.15125869945524892, decimal=10)
-        npt.assert_almost_equal(f_xy[0], 0.15840974123761042, decimal=10)
+        assert f_xx[0] == 0.15125869945524892
+        npt.assert_almost_equal(f_yy[0], -0.086355912401166718, decimal=10)
+        npt.assert_almost_equal(f_xy[0], -0.15840974123761042, decimal=10)
         x = np.array([1,3,4])
         y = np.array([2,1,1])
         values = self.sersic.hessian(x, y, n_sersic, r_eff, k_eff)
-        assert values[0][0] == -0.086355912401166718
-        npt.assert_almost_equal(values[1][0], 0.15125869945524892, decimal=10)
-        npt.assert_almost_equal(values[2][0], 0.15840974123761042, decimal=10)
-        npt.assert_almost_equal(values[0][1], 0.094619015499099512, decimal=10)
-        npt.assert_almost_equal(values[1][1], -0.071649513200062631, decimal=10)
-        npt.assert_almost_equal(values[2][1], 0.062350698262185797, decimal=10)
+        assert values[0][0] == 0.15125869945524892
+        npt.assert_almost_equal(values[1][0], -0.086355912401166718, decimal=10)
+        npt.assert_almost_equal(values[2][0], -0.15840974123761042, decimal=10)
+        npt.assert_almost_equal(values[0][1], -0.071649513200062631, decimal=10)
+        npt.assert_almost_equal(values[1][1], 0.094619015499099512, decimal=10)
+        npt.assert_almost_equal(values[2][1], -0.062350698262185797, decimal=10)
 
     def test_all(self):
         x = np.array([1])
@@ -92,9 +92,9 @@ class TestSersic(object):
         npt.assert_almost_equal(f_[0], 1.0272982586319199, decimal=10)
         assert f_x[0] == 0.16556078301997193
         assert f_y[0] == 0.33112156603994386
-        assert f_xx[0] == -0.086355912401166718
-        npt.assert_almost_equal(f_yy[0], 0.15125869945524892, decimal=10)
-        npt.assert_almost_equal(f_xy[0], 0.15840974123761042, decimal=10)
+        assert f_xx[0] == 0.15125869945524892
+        npt.assert_almost_equal(f_yy[0], -0.086355912401166718, decimal=10)
+        npt.assert_almost_equal(f_xy[0], -0.15840974123761042, decimal=10)
 
     def test_magnificaton(self):
         """

@@ -75,17 +75,17 @@ class TestNFW(object):
         f_xx, f_yy,f_xy = self.nfw.hessian(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(f_xx[0], 0.40855527280658294, decimal=5)
         npt.assert_almost_equal(f_yy[0], 0.037870368296371637, decimal=5)
-        npt.assert_almost_equal(f_xy[0], 0.2471232696734742, decimal=5)
+        npt.assert_almost_equal(f_xy[0], -0.2471232696734742, decimal=5)
 
         x = np.array([1,3,4])
         y = np.array([2,1,1])
         values = self.nfw.hessian(x, y, Rs, theta_Rs)
         npt.assert_almost_equal(values[0][0], 0.40855527280658294, decimal=5)
         npt.assert_almost_equal(values[1][0], 0.037870368296371637, decimal=5)
-        npt.assert_almost_equal(values[2][0], 0.2471232696734742, decimal=5)
+        npt.assert_almost_equal(values[2][0], -0.2471232696734742, decimal=5)
         npt.assert_almost_equal(values[0][1], -0.046377502475445781, decimal=5)
         npt.assert_almost_equal(values[1][1], 0.30577812878681554, decimal=5)
-        npt.assert_almost_equal(values[2][1], 0.13205836172334798, decimal=5)
+        npt.assert_almost_equal(values[2][1], -0.13205836172334798, decimal=5)
 
     def test_all(self):
         x = np.array([1])
@@ -99,7 +99,7 @@ class TestNFW(object):
         npt.assert_almost_equal(f_y[0], 1.06423381528664, decimal=5)
         npt.assert_almost_equal(f_xx[0], 0.40855527280658294, decimal=5)
         npt.assert_almost_equal(f_yy[0], 0.037870368296371637, decimal=5)
-        npt.assert_almost_equal(f_xy[0], 0.2471232696734742, decimal=5)
+        npt.assert_almost_equal(f_xy[0], -0.2471232696734742, decimal=5)
 
 
 class TestMassAngleConversion(object):

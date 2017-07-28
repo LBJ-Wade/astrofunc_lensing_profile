@@ -91,10 +91,10 @@ class TestNFWELLIPSE(object):
         values = self.nfw_e.hessian(x, y, Rs, theta_Rs, q, phi_G)
         npt.assert_almost_equal(values[0][0], 0.33748229639796468, decimal=5)
         npt.assert_almost_equal(values[1][0], -0.0037773019206122915, decimal=5)
-        npt.assert_almost_equal(values[2][0], 0.16718237714153242, decimal=5)
+        npt.assert_almost_equal(values[2][0], -0.16718237714153242, decimal=5)
         npt.assert_almost_equal(values[0][1], -0.018541397632314549, decimal=5)
         npt.assert_almost_equal(values[1][1], 0.26166445917800046, decimal=5)
-        npt.assert_almost_equal(values[2][1], 0.1372722744249277, decimal=5)
+        npt.assert_almost_equal(values[2][1], -0.1372722744249277, decimal=5)
 
     def test_all(self):
         x = np.array([1])

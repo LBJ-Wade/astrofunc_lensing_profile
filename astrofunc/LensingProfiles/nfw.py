@@ -208,7 +208,7 @@ class NFW(object):
         gx = self._g(x)
         Fx = self._F(x)
         a = 2*rho0*Rs*(2*gx/x**2 - Fx)#/x #2*rho0*Rs*(2*gx/x**2 - Fx)*axis/x
-        return a*(ax_y**2-ax_x**2)/R**2, a*2*(ax_x*ax_y)/R**2
+        return a*(ax_y**2-ax_x**2)/R**2, -a*2*(ax_x*ax_y)/R**2
 
     def _F(self, X):
         """
