@@ -11,6 +11,7 @@ class SersicEllipse(object):
     """
     def __init__(self):
         self.sersic = Sersic()
+        self._diff = 0.000001
 
     def function(self, x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x=0, center_y=0):
         """
@@ -39,17 +40,16 @@ class SersicEllipse(object):
         """
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
-        # TODO: not exactly correct: see Bolse & Kneib 2002
-        x_, y_ = self._coord_transf(x, y, q, phi_G, center_x, center_y)
-        f_xx_p, f_yy_p, f_xy_p = self.sersic.hessian(x_, y_, n_sersic, r_eff, k_eff)
-        kappa = 1./2. * (f_xx_p + f_yy_p)
-        gamma1_p = 1./2 * (f_xx_p - f_yy_p)  # attention on units
-        gamma2_p = f_xy_p  # attention on units
-        gamma1 = np.cos(2*phi_G)*gamma1_p-np.sin(2*phi_G)*gamma2_p
-        gamma2 = +np.sin(2*phi_G)*gamma1_p+np.cos(2*phi_G)*gamma2_p
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
+        alpha_ra, alpha_dec = self.derivatives(x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x, center_y)
+        diff = self._diff
+        alpha_ra_dx, alpha_dec_dx = self.derivatives(x + diff, y, n_sersic, r_eff, k_eff, q, phi_G, center_x, center_y)
+        alpha_ra_dy, alpha_dec_dy = self.derivatives(x, y + diff, n_sersic, r_eff, k_eff, q, phi_G, center_x, center_y)
+
+        f_xx = (alpha_ra_dx - alpha_ra)/diff
+        f_xy = (alpha_ra_dy - alpha_ra)/diff
+        f_yx = (alpha_dec_dx - alpha_dec)/diff
+        f_yy = (alpha_dec_dy - alpha_dec)/diff
+
         return f_xx, f_yy, f_xy
 
     def all(self, x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x=0, center_y=0):

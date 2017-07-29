@@ -56,31 +56,26 @@ class TestNumerics(object):
         from astrofunc.LensingProfiles.nfw import NFW as Model
         self.assert_differentials(Model, kwargs)
 
-    """
-
-    # TODO fix test
     def test_nfw_ellipse(self):
         kwargs = {'theta_Rs': 1., 'Rs': 5., 'q': 0.9, 'phi_G': 0.}
         from astrofunc.LensingProfiles.nfw_ellipse import NFW_ELLIPSE as Model
         self.assert_differentials(Model, kwargs)
-    """
+
     def test_point_mass(self):
         kwargs = {'theta_E': 1.}
         from astrofunc.LensingProfiles.point_mass import PointMass as Model
         self.assert_differentials(Model, kwargs)
 
-    # TODO fix test
     def test_sersic(self):
         kwargs = {'n_sersic': .5, 'r_eff': 1.5, 'k_eff': 0.3}
         from astrofunc.LensingProfiles.sersic import Sersic as Model
         self.assert_differentials(Model, kwargs)
-    """
-    #TODO fix test
+
     def test_sersic_ellipse(self):
         kwargs = {'n_sersic': 2., 'r_eff': 0.5, 'k_eff': 0.3, 'q': 0.9, 'phi_G': 1.}
         from astrofunc.LensingProfiles.sersic_ellipse import SersicEllipse as Model
         self.assert_differentials(Model, kwargs)
-    """
+
     def test_shapelets_pot_2(self):
         kwargs = {'coeffs': [0, 1, 2, 3, 4, 5], 'beta': 0.3}
         from astrofunc.LensingProfiles.shapelet_pot_2 import CartShapelets as Model
