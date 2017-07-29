@@ -38,14 +38,14 @@ class TestExternalShear(object):
         x = np.array([1])
         y = np.array([2])
         f_x, f_y = self.extShear.derivatives(x, y, **self.kwargs_lens)
-        npt.assert_almost_equal(f_x[0], -0.1, decimal=5)
-        npt.assert_almost_equal(f_y[0], -0.3, decimal=5)
+        npt.assert_almost_equal(f_x[0], 0.3, decimal=5)
+        npt.assert_almost_equal(f_y[0], -0.1, decimal=5)
 
         x = np.array([1, 3, 4])
         y = np.array([2, 1, 1])
         values = self.extShear.derivatives(x, y, **self.kwargs_lens)
-        npt.assert_almost_equal(values[0][0], -0.1, decimal=5)
-        npt.assert_almost_equal(values[1][0], -0.3, decimal=5)
+        npt.assert_almost_equal(values[0][0], 0.3, decimal=5)
+        npt.assert_almost_equal(values[1][0], -0.1, decimal=5)
 
     def test_hessian(self):
         x = np.array([1])
@@ -68,8 +68,8 @@ class TestExternalShear(object):
 
         f_, f_x, f_y, f_xx, f_yy, f_xy = self.extShear.all(x, y, **self.kwargs_lens)
         npt.assert_almost_equal(f_[0], 0.022360679774997925, decimal=5)
-        npt.assert_almost_equal(f_x[0], -0.1000000000000000, decimal=5)
-        npt.assert_almost_equal(f_y[0], -0.3, decimal=5)
+        npt.assert_almost_equal(f_x[0], 0.3, decimal=5)
+        npt.assert_almost_equal(f_y[0], -0.1, decimal=5)
         npt.assert_almost_equal(f_xx, 0.1, decimal=5)
 
 if __name__ == '__main__':

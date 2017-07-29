@@ -94,9 +94,17 @@ class SersicUtil(object):
         :param center_y:
         :return:
         """
-        p = self._p(x, y, n_sersic, r_eff, k_eff, center_x, center_y)
-        q = self._q(x, y, n_sersic, r_eff, k_eff, center_x, center_y)
-        return -(p + q)
+        _dr = 0.00001
+        x_ = x - center_x
+        y_ = y - center_y
+        r = np.sqrt(x_**2 + y_**2)
+        alpha = self.alpha_abs(r, 0, n_sersic, r_eff, k_eff)
+        alpha_dr = self.alpha_abs(r+_dr, 0, n_sersic, r_eff, k_eff)
+        d_alpha_dr = (alpha_dr - alpha)/_dr
+        #p = self._p(x, y, n_sersic, r_eff, k_eff, center_x, center_y)
+        #q = self._q(x, y, n_sersic, r_eff, k_eff, center_x, center_y)
+        #return -(p + q)
+        return d_alpha_dr
 
     def _p(self, x, y, n_sersic, r_eff, k_eff, center_x=0, center_y=0):
         """

@@ -56,15 +56,16 @@ class Sersic(SersicUtil):
         else:
             r[r < self._s] = self._s
         d_alpha_dr = self.d_alpha_dr(x, y, n_sersic, r_eff, k_eff, center_x, center_y)
-        alpha = self.alpha_abs(x, y, n_sersic, r_eff, k_eff, center_x, center_y)
+        alpha = -self.alpha_abs(x, y, n_sersic, r_eff, k_eff, center_x, center_y)
 
-        #f_xx = d_alpha_dr * calc_util.d_r_dx(x_, y_) * x_/r + alpha * calc_util.d_x_diffr_dx(x_, y_)
-        #f_yy = d_alpha_dr * calc_util.d_r_dy(x_, y_) * y_/r + alpha * calc_util.d_y_diffr_dy(x_, y_)
-        #f_xy = d_alpha_dr * calc_util.d_r_dy(x_, y_) * x_/r + alpha * calc_util.d_x_diffr_dy(x_, y_)
+        #f_xx_ = d_alpha_dr * calc_util.d_r_dx(x_, y_) * x_/r + alpha * calc_util.d_x_diffr_dx(x_, y_)
+        #f_yy_ = d_alpha_dr * calc_util.d_r_dy(x_, y_) * y_/r + alpha * calc_util.d_y_diffr_dy(x_, y_)
+        #f_xy_ = d_alpha_dr * calc_util.d_r_dy(x_, y_) * x_/r + alpha * calc_util.d_x_diffr_dy(x_, y_)
 
-        f_xx = (d_alpha_dr/r - alpha/r**2) * y**2/r + alpha/r
-        f_yy = (d_alpha_dr/r - alpha/r**2) * x**2/r + alpha/r
-        f_xy = -(d_alpha_dr/r - alpha/r**2) * x*y/r
+        f_xx = -(d_alpha_dr/r + alpha/r**2) * x_**2/r + alpha/r
+        f_yy = -(d_alpha_dr/r + alpha/r**2) * y_**2/r + alpha/r
+        f_xy = -(d_alpha_dr/r + alpha/r**2) * x_*y_/r
+
         return f_xx, f_yy, f_xy
 
     def all(self, x, y, n_sersic, r_eff, k_eff, center_x=0, center_y=0):

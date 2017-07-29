@@ -91,8 +91,8 @@ class ExternalShear(object):
 
     def derivatives(self, x, y, e1, e2):
         # rotation angle
-        f_x = e1*x - e2*y
-        f_y = -e2*x - e1*y
+        f_x = e1*x + e2*y
+        f_y = +e2*x - e1*y
         return f_x, f_y
 
     def hessian(self, x, y, e1, e2):
@@ -108,8 +108,8 @@ class ExternalShear(object):
         psi_ext, gamma_ext = util.ellipticity2phi_gamma(e1, e2)
         theta, phi = util.cart2polar(x, y)
         f_ = 1./2 * gamma_ext * theta * np.cos(2*(phi - psi_ext))
-        f_x = e1*x - e2*y
-        f_y = -e2*x - e1*y
+        f_x = e1*x + e2*y
+        f_y = e2*x - e1*y
         gamma1 = e1
         gamma2 = e2
         kappa = 0
