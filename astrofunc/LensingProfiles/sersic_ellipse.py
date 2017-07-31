@@ -25,7 +25,7 @@ class SersicEllipse(object):
         """
         returns df/dx and df/dy of the function
         """
-        e = 1. - q
+        e = abs(1. - q)
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
         x_, y_ = self._coord_transf(x, y, q, phi_G, center_x, center_y)
@@ -76,7 +76,7 @@ class SersicEllipse(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-        e = 1 - q
+        e = abs(1 - q)
         x_ = (cos_phi * x_shift + sin_phi * y_shift) * np.sqrt(1 - e)
         y_ = (-sin_phi * x_shift + cos_phi * y_shift) * np.sqrt(1 + e)
         return x_, y_
