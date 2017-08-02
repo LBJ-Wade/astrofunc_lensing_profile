@@ -9,7 +9,7 @@ class PJaffe(object):
         from astrofunc.LensingProfiles.p_jaffe import PJaffe as PJaffe_lens
         self.p_Jaffe = PJaffe_lens()
 
-    def function(self, x, y, sigma0, a, s, center_x=0, center_y=0):
+    def function(self, x, y, sigma0, Ra, Rs, center_x=0, center_y=0):
         """
 
         :param x:
@@ -21,7 +21,7 @@ class PJaffe(object):
         :param center_y:
         :return:
         """
-        return self.p_Jaffe.density_2d(x, y, sigma0, a, s, center_x=0, center_y=0)
+        return self.p_Jaffe.density_2d(x, y, sigma0, Ra, Rs, center_x, center_y)
 
 class PJaffe_Ellipse(object):
     """
@@ -31,17 +31,17 @@ class PJaffe_Ellipse(object):
         from astrofunc.LensingProfiles.p_jaffe_ellipse import PJaffe_Ellipse as PJaffe_lens
         self.p_Jaffe = PJaffe_lens()
 
-    def function(self, x, y, sigma0, a, s, q, phi_G, center_x=0, center_y=0):
+    def function(self, x, y, sigma0, Ra, Rs, q, phi_G, center_x=0, center_y=0):
         """
 
         :param x:
         :param y:
         :param sigma0:
-        :param a:
-        :param s:
+        :param Ra:
+        :param Rs:
         :param center_x:
         :param center_y:
         :return:
         """
-        f_xx, f_yy, _ = self.p_Jaffe.hessian(x, y, sigma0, a, s, q, phi_G, center_x, center_y)
+        f_xx, f_yy, _ = self.p_Jaffe.hessian(x, y, sigma0, Ra, Rs, q, phi_G, center_x, center_y)
         return 1./2. * (f_xx + f_yy)
