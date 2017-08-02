@@ -15,8 +15,8 @@ class TestNumerics(object):
 
     def assert_differentials(self, Model, kwargs):
         lensModel = Model()
-        lensModelNum = NumericLens(lensModel, diff=0.000001)
-        x, y = 1., 1.
+        lensModelNum = NumericLens(lensModel, diff=0.00000001)
+        x, y = 1., 2.
         f_x, f_y = lensModel.derivatives(x, y, **kwargs)
         f_xx, f_yy, f_xy = lensModel.hessian(x, y, **kwargs)
         f_x_num, f_y_num = lensModelNum.derivatives(x, y, kwargs)
@@ -24,6 +24,7 @@ class TestNumerics(object):
         print(f_xx_num, f_xx)
         print(f_yy_num, f_yy)
         print(f_xy_num, f_xy)
+        print((f_xx - f_yy)**2/4 + f_xy**2, (f_xx_num - f_yy_num)**2/4 + f_xy_num**2)
         npt.assert_almost_equal(f_x, f_x_num, decimal=5)
         npt.assert_almost_equal(f_y, f_y_num, decimal=5)
         npt.assert_almost_equal(f_xx, f_xx_num, decimal=3)
@@ -99,6 +100,11 @@ class TestNumerics(object):
     def test_spp(self):
         kwargs = {'theta_E': 0.5, 'gamma': 1.9}
         from astrofunc.LensingProfiles.spp import SPP as Model
+        self.assert_differentials(Model, kwargs)
+
+    def test_dPIE(self):
+        kwargs = {'sigma0': 1., 'a': 0.2, 's': 2.}
+        from astrofunc.LensingProfiles.d_PIE import D_PIE as Model
         self.assert_differentials(Model, kwargs)
 
 if __name__ == '__main__':
