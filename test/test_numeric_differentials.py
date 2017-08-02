@@ -102,9 +102,14 @@ class TestNumerics(object):
         from astrofunc.LensingProfiles.spp import SPP as Model
         self.assert_differentials(Model, kwargs)
 
-    def test_dPIE(self):
+    def test_PJaffe(self):
         kwargs = {'sigma0': 1., 'a': 0.2, 's': 2.}
-        from astrofunc.LensingProfiles.d_PIE import D_PIE as Model
+        from astrofunc.LensingProfiles.p_jaffe import PJaffe as Model
+        self.assert_differentials(Model, kwargs)
+
+    def test_Hernquist(self):
+        kwargs = {'sigma0': 1., 'Rs': 1.5}
+        from astrofunc.LensingProfiles.hernquist import Hernquist as Model
         self.assert_differentials(Model, kwargs)
 
 if __name__ == '__main__':

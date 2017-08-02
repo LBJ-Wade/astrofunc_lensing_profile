@@ -1,13 +1,14 @@
 import numpy as np
 
 
-class D_PIE(object):
+class Hernquist(object):
     """
     class to compute the DUAL PSEUDO ISOTHERMAL ELLIPTICAL MASS DISTRIBUTION
     based on Eliasdottir (2013)
     """
+    _diff = 0.00001
 
-    def density(self, x, y, rho0, a, s,  center_x=0, center_y=0):
+    def density(self, x, y, rho0, Rs,  center_x=0, center_y=0):
         """
         computes the density
         :param x:
@@ -17,15 +18,13 @@ class D_PIE(object):
         :param s:
         :return:
         """
-        if a >= s:
-            a, s = s, a
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
-        rho = rho0 / ((1 + (r/a)**2) * (1 + (r/s)**2))
+        rho = rho0 / (r/Rs * (1 + (r/s))**3)
         return rho
 
-    def density_2d(self, x, y, rho0, a, s, center_x, center_y):
+    def density_2d(self, x, y, sigma0, Rs, center_x=0, center_y=0):
         """
         projected density
         :param x:
@@ -37,14 +36,46 @@ class D_PIE(object):
         :param center_y:
         :return:
         """
-        if a >= s:
-            a, s = s, a
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
-        sigma0 = self.rho2sigma(rho0, a, s)
-        sigma = sigma0 * a*s/(s-a) * (1/np.sqrt(a**2 + r**2) - 1/np.sqrt(s**2 + r**2))
+        X = r/Rs
+        sigma = sigma0 / (X**2 -1)**2 * (-3 + (2+X**2)) * self._F(X)
         return sigma
+
+    def _F(self, X):
+        """
+        function 48 in https://arxiv.org/pdf/astro-ph/0102341.pdf
+        :param X: r/rs
+        :return:
+        """
+        if isinstance(X, int) or isinstance(X, float):
+            if X < 1 and X > 0:
+                a = 1. / np.sqrt(1 - X ** 2) * np.arctanh(np.sqrt(1 - X**2))
+            elif X == 1:
+                a = 1.
+            elif X > 1:
+                a = 1. / np.sqrt(X ** 2 - 1) * np.arctan(np.sqrt(X**2 - 1))
+            else:  # X == 0:
+                c = 0.0001
+                a = 1. / np.sqrt(1 - c ** 2) * np.arctanh(np.sqrt((1 - c ** 2)))
+
+        else:
+            a = np.empty_like(X)
+            x = X[X < 1]
+            a[X < 1] = 1 / np.sqrt(1 - x ** 2) * np.arctanh(np.sqrt((1 - x**2)))
+
+            x = X[X == 1]
+            a[X == 1] = 1.
+
+            x = X[X > 1]
+            a[X > 1] = 1 / np.sqrt(x ** 2 - 1) * np.arctan(np.sqrt(x**2 - 1))
+            # a[X>y] = 0
+
+            c = 0.0001
+            x = X[X == 0]
+            a[X == 0] = 1. / np.sqrt(1 - c ** 2) * np.arctanh(np.sqrt((1 - c ** 2)))
+        return a
 
     def mass_3d(self, r, rho0, a, s):
         """
@@ -54,8 +85,8 @@ class D_PIE(object):
         :param s:
         :return:
         """
-        m_3d = 4 * np.pi * rho0 * a**2*s**2/(s**2-a**2) * (s*np.arctan(r/s) - a*np.arctan(r/a))
-        return m_3d
+        #TODO needs to be done
+        return 0
 
     def mass_2d(self, r, rho0, a, s):
         """
@@ -66,9 +97,8 @@ class D_PIE(object):
         :param s:
         :return:
         """
-        sigma0 = self.rho2sigma(rho0, a, s)
-        m_2d = 2 * np.pi * sigma0 * a*s/(s-a) * (np.sqrt(a**2 + r**2) - a - np.sqrt(s**2 + r**2) + s)
-        return m_2d
+        #TODO needs to be done
+        return 0
 
     def mass_tot(self, rho0, a, s):
         """
@@ -78,11 +108,11 @@ class D_PIE(object):
         :param s:
         :return:
         """
-        sigma0 = self.rho2sigma(rho0, a, s)
-        m_tot = 2 * np.pi * sigma0 * a*s
+        #TODO needs to be done
+        m_tot = 0
         return m_tot
 
-    def grav_pot(self, x, y, rho0, a, s,  center_x=0, center_y=0):
+    def grav_pot(self, x, y, rho0, Rs, center_x=0, center_y=0):
         """
         gravitational potential (modulo 4 pi G and rho0 in appropriate units)
         :param x:
@@ -94,18 +124,17 @@ class D_PIE(object):
         :param center_y:
         :return:
         """
-        if a >= s:
-            a, s = s, a
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
-        pot = 4 * np.pi * rho0 * a**2*s**2/(s**2-a**2) * (s/r * np.arctan(r/s) - a/r * np.arctan(r/a)
-                                                          + 1./2*np.log((s**2 + r**2)/(a**2 + r**2)))
+        X = r/Rs
+        pot = 0
+        #TODO needs to be done
         return pot
 
-    def function(self, x, y, sigma0, a, s,  center_x=0, center_y=0):
+    def function(self, x, y, sigma0, Rs, center_x=0, center_y=0):
         """
-
+        lensing potential
         :param x:
         :param y:
         :param sigma0: sigma0/sigma_crit
@@ -115,15 +144,14 @@ class D_PIE(object):
         :param center_y:
         :return:
         """
-        if a >= s:
-            a, s = s, a
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
-        f_ = -2*sigma0 * a*s/(s-a) * (np.sqrt(s**2+r**2) - np.sqrt(a**2+r**2) + a*np.log(a + np.sqrt(a**2+r**2)) - s*np.log(s + np.sqrt(s**2+r**2)))
+        X = r / Rs
+        f_ = sigma0 * Rs**2 * (np.log(X**2/4.) + 2*self._F(X))
         return f_
 
-    def derivatives(self, x, y, sigma0, a, s, center_x=0, center_y=0):
+    def derivatives(self, x, y, sigma0, Rs, center_x=0, center_y=0):
         """
 
         :param x:
@@ -135,17 +163,16 @@ class D_PIE(object):
         :param center_y:
         :return:
         """
-        if a >= s:
-            a, s = s, a
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
-        alpha_r = 2*sigma0 * a*s/(s-a) * self._f_A20(r/a, r/s)
+        X = r/Rs
+        alpha_r = 2*sigma0 * Rs * X * (1-self._F(X)) / (X**2-1)
         f_x = alpha_r * x_/r
         f_y = alpha_r * y_/r
         return f_x, f_y
 
-    def hessian(self, x, y, sigma0, a, s,  center_x=0, center_y=0):
+    def hessian(self, x, y, sigma0, Rs,  center_x=0, center_y=0):
         """
 
         :param x:
@@ -157,22 +184,16 @@ class D_PIE(object):
         :param center_y:
         :return:
         """
-        if a >= s:
-            a, s = s, a
-        x_ = x - center_x
-        y_ = y - center_y
-        r = np.sqrt(x_**2 + y_**2)
-        gamma = sigma0 * a*s/(s-a) * (2*(1./(a + np.sqrt(a**2+r**2)) - 1./(s + np.sqrt(s**2+r**2))) -
-                                     (1/np.sqrt(a**2+r**2) - 1/np.sqrt(s**2+r**2)))
-        kappa = sigma0 * a*s/(s-a) * (1/np.sqrt(a**2+r**2) - 1/np.sqrt(s**2+r**2))
-        sin_2phi = -2*x_*y_/r**2
-        cos_2phi = (y_**2 - x_**2)/r**2
-        gamma1 = cos_2phi*gamma
-        gamma2 = sin_2phi*gamma
+        alpha_ra, alpha_dec = self.derivatives(x, y, sigma0, Rs,  center_x, center_y)
+        diff = self._diff
+        alpha_ra_dx, alpha_dec_dx = self.derivatives(x + diff, y, sigma0, Rs,  center_x, center_y)
+        alpha_ra_dy, alpha_dec_dy = self.derivatives(x, y + diff, sigma0, Rs,  center_x, center_y)
 
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
+        f_xx = (alpha_ra_dx - alpha_ra)/diff
+        f_xy = (alpha_ra_dy - alpha_ra)/diff
+        #f_yx = (alpha_dec_dx - alpha_dec)/diff
+        f_yy = (alpha_dec_dy - alpha_dec)/diff
+
         return f_xx, f_yy, f_xy
 
     def _f_A20(self, r_a, r_s):
