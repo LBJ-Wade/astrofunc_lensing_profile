@@ -107,9 +107,19 @@ class TestNumerics(object):
         from astrofunc.LensingProfiles.p_jaffe import PJaffe as Model
         self.assert_differentials(Model, kwargs)
 
+    def test_PJaffe_ellipse(self):
+        kwargs = {'sigma0': 1., 'a': 0.2, 's': 2., 'q': .8, 'phi_G': 1.}
+        from astrofunc.LensingProfiles.p_jaffe_ellipse import PJaffe_Ellipse as Model
+        self.assert_differentials(Model, kwargs)
+
     def test_Hernquist(self):
         kwargs = {'sigma0': 1., 'Rs': 1.5}
         from astrofunc.LensingProfiles.hernquist import Hernquist as Model
+        self.assert_differentials(Model, kwargs)
+
+    def test_Hernquist_ellipse(self):
+        kwargs = {'sigma0': 1., 'Rs': 1.5, 'q': 0.8, 'phi_G': 1.}
+        from astrofunc.LensingProfiles.hernquist_ellipse import Hernquist_Ellipse as Model
         self.assert_differentials(Model, kwargs)
 
 if __name__ == '__main__':

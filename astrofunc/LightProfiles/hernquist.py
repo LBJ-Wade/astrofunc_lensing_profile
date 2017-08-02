@@ -1,4 +1,3 @@
-from astrofunc.LensingProfiles.hernquist import Hernquist as Hernquist_lens
 
 
 class Hernquist(object):
@@ -6,9 +5,10 @@ class Hernquist(object):
     class for pseudo Jaffe lens light (2d projected light/mass distribution
     """
     def __init__(self):
+        from astrofunc.LensingProfiles.hernquist import Hernquist as Hernquist_lens
         self.lens = Hernquist_lens()
 
-    def function(self, x, y, sigma0, Rs, center_x, center_y):
+    def function(self, x, y, sigma0, Rs, center_x=0, center_y=0):
         """
 
         :param x:
@@ -21,3 +21,27 @@ class Hernquist(object):
         :return:
         """
         return self.lens.density_2d(x, y, sigma0, Rs, center_x, center_y)
+
+
+class Hernquist_Ellipse(object):
+    """
+    class for elliptical pseudo Jaffe lens light (2d projected light/mass distribution
+    """
+    def __init__(self):
+        from astrofunc.LensingProfiles.hernquist_ellipse import Hernquist_Ellipse as Hernquist_lens
+        self.lens = Hernquist_lens()
+
+    def function(self, x, y, sigma0, Rs, q, phi_G, center_x=0, center_y=0):
+        """
+
+        :param x:
+        :param y:
+        :param sigma0:
+        :param a:
+        :param s:
+        :param center_x:
+        :param center_y:
+        :return:
+        """
+        f_xx, f_yy, _ = self.lens.hessian(x, y, sigma0, Rs, q, phi_G, center_x, center_y)
+        return 1./2. * (f_xx + f_yy)

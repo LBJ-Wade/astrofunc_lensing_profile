@@ -25,7 +25,7 @@ class PJaffe(object):
         rho = rho0 / ((1 + (r/a)**2) * (1 + (r/s)**2))
         return rho
 
-    def density_2d(self, x, y, sigma0, a, s, center_x, center_y):
+    def density_2d(self, x, y, sigma0, a, s, center_x=0, center_y=0):
         """
         projected density
         :param x:
