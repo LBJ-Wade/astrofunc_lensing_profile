@@ -7,7 +7,7 @@ class PJaffe(object):
     based on Eliasdottir (2013)
     """
 
-    def density(self, x, y, rho0, Ra, Rs, center_x=0, center_y=0):
+    def density(self, r, rho0, Ra, Rs):
         """
         computes the density
         :param x:
@@ -19,13 +19,10 @@ class PJaffe(object):
         """
         if Ra >= Rs:
             Ra, Rs = Rs, Ra
-        x_ = x - center_x
-        y_ = y - center_y
-        r = np.sqrt(x_**2 + y_**2)
         rho = rho0 / ((1 + (r / Ra) ** 2) * (1 + (r / Rs) ** 2))
         return rho
 
-    def density_2d(self, x, y, rho0, Ra, Rs, center_x=0, center_y=0):
+    def density_2d(self, r, rho0, Ra, Rs):
         """
         projected density
         :param x:
@@ -39,9 +36,6 @@ class PJaffe(object):
         """
         if Ra >= Rs:
             Ra, Rs = Rs, Ra
-        x_ = x - center_x
-        y_ = y - center_y
-        r = np.sqrt(x_**2 + y_**2)
         sigma0 = self.rho2sigma(rho0, Ra, Rs)
         sigma = sigma0 * Ra * Rs / (Rs - Ra) * (1 / np.sqrt(Ra ** 2 + r ** 2) - 1 / np.sqrt(Rs ** 2 + r ** 2))
         return sigma

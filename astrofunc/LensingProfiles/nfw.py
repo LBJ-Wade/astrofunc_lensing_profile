@@ -121,9 +121,21 @@ class NFW(object):
         :param Rs:
         :return:
         """
-        #TODO: needs to be done
-        m_3d = 0
+        m_3d = 4 * np.pi * rho0 * Rs**3 *(np.log((Rs + R)/Rs) - R/(Rs + R))
         return m_3d
+
+    def mass_2d(self, R, Rs, rho0):
+        """
+        mass enclosed a 3d sphere or radius r
+        :param r:
+        :param Ra:
+        :param Rs:
+        :return:
+        """
+        x = R/Rs
+        gx = self._g(x)
+        m_2d = 4*rho0*Rs*R**2*gx/x**2 * np.pi
+        return m_2d
 
     def nfw2D_smoothed(self, R, Rs, rho0, pixscale):
         """
