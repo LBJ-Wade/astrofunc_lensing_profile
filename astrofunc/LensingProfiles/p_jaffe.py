@@ -25,7 +25,7 @@ class PJaffe(object):
         rho = rho0 / ((1 + (r / Ra) ** 2) * (1 + (r / Rs) ** 2))
         return rho
 
-    def density_2d(self, x, y, sigma0, Ra, Rs, center_x=0, center_y=0):
+    def density_2d(self, x, y, rho0, Ra, Rs, center_x=0, center_y=0):
         """
         projected density
         :param x:
@@ -42,6 +42,7 @@ class PJaffe(object):
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
+        sigma0 = self.rho2sigma(rho0, Ra, Rs)
         sigma = sigma0 * Ra * Rs / (Rs - Ra) * (1 / np.sqrt(Ra ** 2 + r ** 2) - 1 / np.sqrt(Rs ** 2 + r ** 2))
         return sigma
 
@@ -192,3 +193,13 @@ class PJaffe(object):
         :return:
         """
         return np.pi * rho0 * Ra * Rs / (Rs + Ra)
+
+    def sigma2rho(self, sigma0, Ra, Rs):
+        """
+
+        :param sigma0:
+        :param Ra:
+        :param Rs:
+        :return:
+        """
+        return (Rs + Ra) / Ra / Rs / np.pi * sigma0

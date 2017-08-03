@@ -36,7 +36,6 @@ class TestNumerics(object):
         from astrofunc.LensingProfiles.gaussian import Gaussian as Model
         self.assert_differentials(Model, kwargs)
 
-    # TODO fix test
     def test_external_shear(self):
         kwargs = {'e1': 0.1, 'e2': -0.1}
         from astrofunc.LensingProfiles.external_shear import ExternalShear as Model
@@ -103,12 +102,12 @@ class TestNumerics(object):
         self.assert_differentials(Model, kwargs)
 
     def test_PJaffe(self):
-        kwargs = {'sigma0': 1., 'a': 0.2, 's': 2.}
+        kwargs = {'sigma0': 1., 'Ra': 0.2, 'Rs': 2.}
         from astrofunc.LensingProfiles.p_jaffe import PJaffe as Model
         self.assert_differentials(Model, kwargs)
 
     def test_PJaffe_ellipse(self):
-        kwargs = {'sigma0': 1., 'a': 0.2, 's': 2., 'q': .8, 'phi_G': 1.}
+        kwargs = {'sigma0': 1., 'Ra': 0.2, 'Rs': 2., 'q': .8, 'phi_G': 1.}
         from astrofunc.LensingProfiles.p_jaffe_ellipse import PJaffe_Ellipse as Model
         self.assert_differentials(Model, kwargs)
 

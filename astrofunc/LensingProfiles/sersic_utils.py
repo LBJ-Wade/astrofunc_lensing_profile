@@ -145,3 +145,10 @@ class SersicUtil(object):
         a_eff = self._alpha_eff(r_eff, n_sersic, k_eff)
         f_r_2 = 2 * a_eff / r_eff / n * b**(2*n) / special.gamma(2*n) * np.exp(-b*x_red)  # equation 22
         return f_r_2
+
+    def density(self, x, y, n_sersic, r_eff, k_eff, center_x=0, center_y=0):
+        """
+        de-projection of the Sersic profile based on
+        Prugniel & Simien (1997)
+        :return:
+        """
