@@ -132,6 +132,12 @@ class TestSPEP(object):
         npt.assert_almost_equal(f_yy_sis[0], f_yy_spp[0], decimal=7)
         npt.assert_almost_equal(f_xy_sis[0], f_xy_spp[0], decimal=7)
 
+    def test_unit_conversion(self):
+        theta_E = 2.
+        gamma = 2.2
+        rho0 = self.SPP.theta2rho(theta_E, gamma)
+        theta_E_out = self.SPP.rho2theta(rho0, gamma)
+        assert theta_E == theta_E_out
 
 if __name__ == '__main__':
    pytest.main()

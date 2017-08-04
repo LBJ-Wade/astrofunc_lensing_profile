@@ -2,6 +2,8 @@ __author__ = 'sibirrer'
 
 
 import numpy as np
+import scipy.special as special
+
 
 class SPP(object):
     """
@@ -136,3 +138,111 @@ class SPP(object):
         f_xy = gamma2
 
         return f_, f_x, f_y, f_xx, f_yy, f_xy
+
+    def rho2theta(self, rho0, gamma):
+        """
+        converts 3d density into 2d projected density parameter
+        :param rho0:
+        :param gamma:
+        :return:
+        """
+        fac = np.sqrt(np.pi) * special.gamma(1. / 2 * (-1 + gamma)) / special.gamma(gamma / 2.) * 2 / (3 - gamma) * rho0
+
+        #fac = theta_E**(gamma - 1)
+        theta_E = fac**(1. / (gamma - 1))
+        return theta_E
+
+    def theta2rho(self, theta_E, gamma):
+        """
+        converts projected density parameter (in units of deflection) into 3d density parameter
+        :param theta_E:
+        :param gamma:
+        :return:
+        """
+        fac1 = np.sqrt(np.pi) * special.gamma(1. / 2 * (-1 + gamma)) / special.gamma(gamma / 2.) * 2 / (3 - gamma)
+        fac2 = theta_E**(gamma - 1)
+        rho0 = fac2 / fac1
+        return rho0
+
+    def mass_3d(self, r, rho0, gamma):
+        """
+        mass enclosed a 3d sphere or radius r
+        :param r:
+        :param a:
+        :param s:
+        :return:
+        """
+        mass_3d = 4 * np.pi * rho0 /(-gamma + 3) * r ** (-gamma + 3)
+        return mass_3d
+
+    def mass_2d(self, r, rho0, gamma):
+        """
+        mass enclosed projected 2d sphere of radius r
+        :param r:
+        :param rho0:
+        :param a:
+        :param s:
+        :return:
+        """
+        alpha = np.sqrt(np.pi) * special.gamma(1. / 2 * (-1 + gamma)) / special.gamma(gamma / 2.) * r ** (2 - gamma)/(3 - gamma) *np.pi * 2 * rho0
+        mass_2d = alpha*r
+        return mass_2d
+
+    def mass_tot(self, rho0, alpha):
+        """
+        total mass within the profile
+        :param rho0:
+        :param a:
+        :param s:
+        :return:
+        """
+        # mass enclosed is infinite
+        m_tot = 0
+        return m_tot
+
+    def grav_pot(self, x, y, rho0, gamma, center_x=0, center_y=0):
+        """
+        gravitational potential (modulo 4 pi G and rho0 in appropriate units)
+        :param x:
+        :param y:
+        :param rho0:
+        :param a:
+        :param s:
+        :param center_x:
+        :param center_y:
+        :return:
+        """
+        x_ = x - center_x
+        y_ = y - center_y
+        r = np.sqrt(x_**2 + y_**2)
+        mass_3d = self.mass_3d(r, rho0, gamma)
+        pot = mass_3d/r
+        return pot
+
+    def density(self, r, rho0, gamma):
+        """
+        computes the density
+        :param x:
+        :param y:
+        :param rho0:
+        :param a:
+        :param s:
+        :return:
+        """
+        rho = rho0 / r**gamma
+        return rho
+
+    def density_2d(self, r, rho0, gamma):
+        """
+        projected density
+        :param x:
+        :param y:
+        :param rho0:
+        :param a:
+        :param s:
+        :param center_x:
+        :param center_y:
+        :return:
+        """
+        sigma = np.sqrt(np.pi) * special.gamma(1./2*(-1+gamma))/special.gamma(gamma/2.) * r**(1-gamma) * rho0
+        return sigma

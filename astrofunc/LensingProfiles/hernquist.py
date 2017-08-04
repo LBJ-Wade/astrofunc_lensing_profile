@@ -3,12 +3,11 @@ import numpy as np
 
 class Hernquist(object):
     """
-    class to compute the DUAL PSEUDO ISOTHERMAL ELLIPTICAL MASS DISTRIBUTION
-    based on Eliasdottir (2013)
+    class to compute the Hernquist 1990 model
     """
     _diff = 0.00001
 
-    def density(self, x, y, rho0, Rs,  center_x=0, center_y=0):
+    def density(self, r, rho0, Rs):
         """
         computes the density
         :param x:
@@ -18,13 +17,10 @@ class Hernquist(object):
         :param s:
         :return:
         """
-        x_ = x - center_x
-        y_ = y - center_y
-        r = np.sqrt(x_**2 + y_**2)
-        rho = rho0 / (r/Rs * (1 + (r/s))**3)
+        rho = rho0 / (r/Rs * (1 + (r/Rs))**3)
         return rho
 
-    def density_2d(self, x, y, sigma0, Rs, center_x=0, center_y=0):
+    def density_2d(self, r, rho0, Rs):
         """
         projected density
         :param x:
@@ -36,11 +32,9 @@ class Hernquist(object):
         :param center_y:
         :return:
         """
-        x_ = x - center_x
-        y_ = y - center_y
-        r = np.sqrt(x_**2 + y_**2)
         X = r/Rs
-        sigma = sigma0 / (X**2 -1)**2 * (-3 + (2+X**2)) * self._F(X)
+        sigma0 = self.rho2sigma(rho0, Rs)
+        sigma = sigma0 / (X**2-1)**2 * (-3 + (2+X**2)*self._F(X))
         return sigma
 
     def _F(self, X):
@@ -77,7 +71,7 @@ class Hernquist(object):
             a[X == 0] = 1. / np.sqrt(1 - c ** 2) * np.arctanh(np.sqrt((1 - c ** 2)))
         return a
 
-    def mass_3d(self, r, rho0, a, s):
+    def mass_3d(self, r, rho0, Rs):
         """
         mass enclosed a 3d sphere or radius r
         :param r:
@@ -85,10 +79,10 @@ class Hernquist(object):
         :param s:
         :return:
         """
-        #TODO needs to be done
-        return 0
+        mass_3d = 2*np.pi*Rs**3*rho0 * r**2/(r + Rs)**2
+        return mass_3d
 
-    def mass_2d(self, r, rho0, a, s):
+    def mass_2d(self, r, rho0, Rs):
         """
         mass enclosed projected 2d sphere of radius r
         :param r:
@@ -97,10 +91,13 @@ class Hernquist(object):
         :param s:
         :return:
         """
-        #TODO needs to be done
-        return 0
+        X = r/Rs
+        sigma0 = self.rho2sigma(rho0, Rs)
+        alpha_r = 2*sigma0 * Rs * X * (1-self._F(X)) / (X**2-1)
+        mass_2d = alpha_r * r * np.pi
+        return mass_2d
 
-    def mass_tot(self, rho0, a, s):
+    def mass_tot(self, rho0, Rs):
         """
         total mass within the profile
         :param rho0:
@@ -108,8 +105,7 @@ class Hernquist(object):
         :param s:
         :return:
         """
-        #TODO needs to be done
-        m_tot = 0
+        m_tot = 2*np.pi*rho0*Rs**3
         return m_tot
 
     def grav_pot(self, x, y, rho0, Rs, center_x=0, center_y=0):
@@ -127,9 +123,8 @@ class Hernquist(object):
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
-        X = r/Rs
-        pot = 0
-        #TODO needs to be done
+        M = self.mass_tot(rho0, Rs)
+        pot = M / (r + Rs)
         return pot
 
     def function(self, x, y, sigma0, Rs, center_x=0, center_y=0):
@@ -172,7 +167,7 @@ class Hernquist(object):
         f_y = alpha_r * y_/r
         return f_x, f_y
 
-    def hessian(self, x, y, sigma0, Rs,  center_x=0, center_y=0):
+    def hessian(self, x, y, sigma0, Rs, center_x=0, center_y=0):
         """
 
         :param x:
@@ -205,7 +200,7 @@ class Hernquist(object):
         """
         return r_a/(1+np.sqrt(1 + r_a**2)) - r_s/(1+np.sqrt(1 + r_s**2))
 
-    def rho2sigma(self, rho0, a, s):
+    def rho2sigma(self, rho0, Rs):
         """
         converts 3d density into 2d projected density parameter
         :param rho0:
@@ -213,4 +208,13 @@ class Hernquist(object):
         :param s:
         :return:
         """
-        return np.pi * rho0 * a*s/(s+a)
+        return rho0 * Rs
+
+    def sigma2rho(self, sigma0, Rs):
+        """
+        converts projected density parameter (in units of deflection) into 3d density parameter
+        :param sigma0:
+        :param Rs:
+        :return:
+        """
+        return sigma0 / Rs
