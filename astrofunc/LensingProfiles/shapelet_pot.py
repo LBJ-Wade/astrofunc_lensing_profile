@@ -113,7 +113,6 @@ class PolarShapelets(object):
                 i+=1
         return shapelets
 
-
     def _normFactor(self,coeff):
         """
         returns the normalisation factor sqrt((nl+1)*(nr+1)) for all coefficients for better physical constraints on mass sheet
@@ -144,7 +143,6 @@ class PolarShapelets(object):
             else:
                 i+=1
         return normFactor
-
 
     def _shapeletOutput(self,r, phi, beta, shapelets):
         """

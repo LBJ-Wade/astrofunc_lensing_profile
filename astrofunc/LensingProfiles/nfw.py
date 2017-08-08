@@ -55,7 +55,7 @@ class NFW(object):
         x_ = x - center_x
         y_ = y - center_y
         R = np.sqrt(x_**2 + y_**2)
-        kappa = self.density_2d(R, Rs, rho0_input)
+        kappa = self.density_2d(R, 0, Rs, rho0_input)
         gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, x_, y_)
         f_xx = kappa + gamma1
         f_yy = kappa - gamma1
@@ -74,7 +74,7 @@ class NFW(object):
         R = np.sqrt(x_**2 + y_**2)
         f_ = self.nfwPot(R, Rs, rho0_input)
         f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, x_, y_)
-        kappa = self.density_2d(R, Rs, rho0_input)
+        kappa = self.density_2d(R, 0, Rs, rho0_input)
         gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, x_, y_)
         f_xx = kappa + gamma1
         f_yy = kappa - gamma1
@@ -95,7 +95,7 @@ class NFW(object):
         """
         return rho0/(R/Rs*(1+R/Rs)**2)
 
-    def density_2d(self, R, Rs, rho0):
+    def density_2d(self, x, y, Rs, rho0, center_x=0, center_y=0):
         """
         projected two dimenstional NFW profile (kappa*Sigma_crit)
 
@@ -109,6 +109,9 @@ class NFW(object):
         :type r200: float>0
         :return: Epsilon(R) projected density at radius R
         """
+        x_ = x - center_x
+        y_ = y - center_y
+        R = np.sqrt(x_**2 + y_**2)
         x = R/Rs
         Fx = self._F(x)
         return 2*rho0*Rs*Fx

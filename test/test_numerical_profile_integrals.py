@@ -20,7 +20,7 @@ class TestNumerics(object):
         r = 2.
 
         density2d_num = int_profile.density_2d(r, kwargs)
-        density2d = lensModel.density_2d(r, **kwargs)
+        density2d = lensModel.density_2d(r, 0, **kwargs)
         npt.assert_almost_equal(density2d/density2d_num, 1., decimal=1)
 
         mass_2d_num = int_profile.mass_enclosed_2d(r, kwargs)

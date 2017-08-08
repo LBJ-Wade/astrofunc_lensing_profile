@@ -1,9 +1,8 @@
-from astrofunc.LensingProfiles.shapelets import Shapelets, ShapeletSet
 import astrofunc.util as util
-
+import numpy as np
 import numpy.testing as npt
 import pytest
-import numpy as np
+from astrofunc.LightProfiles.shapelets import Shapelets, ShapeletSet
 
 
 class TestShapelet(object):

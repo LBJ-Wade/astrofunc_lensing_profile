@@ -232,7 +232,7 @@ class SPP(object):
         rho = rho0 / r**gamma
         return rho
 
-    def density_2d(self, r, rho0, gamma):
+    def density_2d(self, x, y, rho0, gamma, center_x=0, center_y=0):
         """
         projected density
         :param x:
@@ -244,5 +244,8 @@ class SPP(object):
         :param center_y:
         :return:
         """
+        x_ = x - center_x
+        y_ = y - center_y
+        r = np.sqrt(x_**2 + y_**2)
         sigma = np.sqrt(np.pi) * special.gamma(1./2*(-1+gamma))/special.gamma(gamma/2.) * r**(1-gamma) * rho0
         return sigma

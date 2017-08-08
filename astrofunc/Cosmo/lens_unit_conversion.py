@@ -5,8 +5,6 @@ from astrofunc.Cosmo.nfw_param import NFWParam
 import numpy as np
 
 
-
-
 class LensUnits(object):
     """
     class to convert various units (angles to mass etc) for a specific lens system and cosmology

@@ -20,7 +20,7 @@ class Hernquist(object):
         rho = rho0 / (r/Rs * (1 + (r/Rs))**3)
         return rho
 
-    def density_2d(self, r, rho0, Rs):
+    def density_2d(self, x, y, rho0, Rs, center_x=0, center_y=0):
         """
         projected density
         :param x:
@@ -32,6 +32,9 @@ class Hernquist(object):
         :param center_y:
         :return:
         """
+        x_ = x - center_x
+        y_ = y - center_y
+        r = np.sqrt(x_**2 + y_**2)
         X = r/Rs
         sigma0 = self.rho2sigma(rho0, Rs)
         sigma = sigma0 / (X**2-1)**2 * (-3 + (2+X**2)*self._F(X))
