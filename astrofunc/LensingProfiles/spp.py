@@ -175,6 +175,17 @@ class SPP(object):
         mass_3d = 4 * np.pi * rho0 /(-gamma + 3) * r ** (-gamma + 3)
         return mass_3d
 
+    def mass_3d_lens(self, r, theta_E, gamma):
+        """
+
+        :param r:
+        :param theta_E:
+        :param gamma:
+        :return:
+        """
+        rho0 = self.theta2rho(theta_E, gamma)
+        return self.mass_3d(r, rho0, gamma)
+
     def mass_2d(self, r, rho0, gamma):
         """
         mass enclosed projected 2d sphere of radius r
@@ -187,6 +198,17 @@ class SPP(object):
         alpha = np.sqrt(np.pi) * special.gamma(1. / 2 * (-1 + gamma)) / special.gamma(gamma / 2.) * r ** (2 - gamma)/(3 - gamma) *np.pi * 2 * rho0
         mass_2d = alpha*r
         return mass_2d
+
+    def mass_2d_lens(self, r, theta_E, gamma):
+        """
+
+        :param r:
+        :param theta_E:
+        :param gamma:
+        :return:
+        """
+        rho0 = self.theta2rho(theta_E, gamma)
+        return self.mass_2d(r, rho0, gamma)
 
     def mass_tot(self, rho0, alpha):
         """

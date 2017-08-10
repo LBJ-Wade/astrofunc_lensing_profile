@@ -22,6 +22,19 @@ class Hernquist(object):
         """
         return self.lens.density_2d(x, y, sigma0, Rs, center_x, center_y)
 
+    def light_3d(self, r, sigma0, Rs, center_x=0, center_y=0):
+        """
+
+        :param y:
+        :param sigma0:
+        :param Rs:
+        :param center_x:
+        :param center_y:
+        :return:
+        """
+        rho0 = self.lens.sigma2rho(sigma0, Rs)
+        return self.lens.density(r, rho0, Rs)
+
 
 class Hernquist_Ellipse(object):
     """

@@ -85,6 +85,16 @@ class Hernquist(object):
         mass_3d = 2*np.pi*Rs**3*rho0 * r**2/(r + Rs)**2
         return mass_3d
 
+    def mass_3d_lens(self, r, sigma0, Rs):
+        """
+        mass enclosed a 3d sphere or radius r for lens parameterisation
+        :param sigma0:
+        :param Rs:
+        :return:
+        """
+        rho0 = self.sigma2rho(sigma0, Rs)
+        return self.mass_3d(r, rho0, Rs)
+
     def mass_2d(self, r, rho0, Rs):
         """
         mass enclosed projected 2d sphere of radius r
@@ -94,8 +104,20 @@ class Hernquist(object):
         :param s:
         :return:
         """
-        X = r/Rs
+
         sigma0 = self.rho2sigma(rho0, Rs)
+        return self.mass_2d_lens(r, sigma0, Rs)
+
+    def mass_2d_lens(self, r, sigma0, Rs):
+        """
+        mass enclosed projected 2d sphere of radius r
+        :param r:
+        :param rho0:
+        :param a:
+        :param s:
+        :return:
+        """
+        X = r/Rs
         alpha_r = 2*sigma0 * Rs * X * (1-self._F(X)) / (X**2-1)
         mass_2d = alpha_r * r * np.pi
         return mass_2d

@@ -21,3 +21,16 @@ arcsec = 2*np.pi/360/3600  # arc second in radian
 
 a_ES = G * M_sun / AU**2  # Earth-Sun acceleration
 F_ES = G * M_sun * M_earth / AU**2
+
+
+def rho_c(h=1):
+    """
+    critical density of the universe
+    :param h: reduced hubble parameter (in 100km/s/Mpc
+    :return: critical density in units of kg/m^3
+    """
+    H = 100 * h  # in units km/s/Mpc
+    H *= 1000  # in units m/s/Mpc
+    H /= Mpc  # in units m/s/m
+    rho = 3. * H**2 / (8 * np.pi * G)
+    return rho
