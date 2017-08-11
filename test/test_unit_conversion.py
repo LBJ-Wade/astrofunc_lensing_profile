@@ -34,7 +34,7 @@ class TestSIS(object):
 
         theta_E = self.spp.rho2theta(self.rho0_kgm3 * arc_sec_m**2/Epsion_crit, self.gamma)
         mass_3d_lens = self.spp.mass_3d_lens(1., theta_E, self.gamma) / arc_sec_m**2 * Epsion_crit * arc_sec_m**3
-        mass_3d_lens_new = self.spp.mass_3d_lens(1., theta_E, self.gamma) * const.arcsec**3 * self.D_d**2 * const.Mpc * const.c**2 * self.D_s / (4*np.pi*const.G * self.D_ds)
+        mass_3d_lens_new = self.spp.mass_3d_lens(1., theta_E, self.gamma) * const.arcsec**3 * self.D_d**2 * self.D_s / self.D_ds * const.Mpc * const.c**2 / (4*np.pi*const.G )
         mass_3d_lens_msol = mass_3d_lens / const.M_sun
         print theta_E, 'theta_E'
         print mass_3d_lens, 'mass_3d_lens'
