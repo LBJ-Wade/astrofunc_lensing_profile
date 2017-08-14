@@ -21,7 +21,7 @@ class PJaffe_Ellipse(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-        e = abs(1 - q)
+        e = np.min(abs(1. - q), 0.99)
         x_ = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
         y_ = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
         f_ = self.spherical.function(x_, y_, sigma0, Ra, Rs)
@@ -35,7 +35,7 @@ class PJaffe_Ellipse(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-        e = abs(1 - q)
+        e = np.min(abs(1. - q), 0.99)
         x_ = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
         y_ = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
 

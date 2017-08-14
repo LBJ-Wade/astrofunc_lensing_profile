@@ -205,7 +205,7 @@ class NFW(object):
         if isinstance(R, int) or isinstance(R, float):
             R = max(R, 0.00001)
         else:
-            R[R==0] = 0.00001
+            R[R <= 0] = 0.00001
         x = R/Rs
         gx = self._g(x)
         a = 4*rho0*Rs*R*gx/x**2/R
@@ -227,10 +227,11 @@ class NFW(object):
         :type axis: same as R
         :return: Epsilon(R) projected density at radius R
         """
+        c = 0.001
         if isinstance(R, int) or isinstance(R, float):
-            R = max(R, 0.001)
+            R = max(R, c)
         else:
-            R[R==0] = 0.001
+            R[R <= c] = c
         x = R/Rs
         gx = self._g(x)
         Fx = self._F(x)
@@ -256,19 +257,19 @@ class NFW(object):
                 a = 1/(-1)*(1-2/np.sqrt(1)*np.arctanh(np.sqrt((1-c)/(1+c))))
 
         else:
-            a=np.empty_like(X)
-            x = X[X<1]
+            a = np.empty_like(X)
+            x = X[X < 1]
             a[X<1] = 1/(x**2-1)*(1-2/np.sqrt(1-x**2)*np.arctanh(np.sqrt((1-x)/(1+x))))
 
-            x = X[X==1]
+            x = X[X == 1]
             a[X==1] = 1./3.
 
-            x = X[X>1]
+            x = X[X > 1]
             a[X>1] = 1/(x**2-1)*(1-2/np.sqrt(x**2-1)*np.arctan(np.sqrt((x-1)/(1+x))))
             # a[X>y] = 0
 
             c = 0.001
-            x = X[X==0]
+            x = X[X == 0]
             a[X==0] = 1/(-1)*(1-2/np.sqrt(1)*np.arctanh(np.sqrt((1-c)/(1+c))))
         return a
 
@@ -279,9 +280,10 @@ class NFW(object):
         :param x: R/Rs
         :type x: float >0
         """
+        c = 0.001
         if isinstance(X, int) or isinstance(X, float):
             if X < 1:
-                x = max(0.001, X)
+                x = max(c, X)
                 a = np.log(x/2.) + 1/np.sqrt(1-x**2)*np.arccosh(1./x)
             elif X == 1:
                 a = 1 + np.log(1./2.)
@@ -289,16 +291,16 @@ class NFW(object):
                 a = np.log(X/2) + 1/np.sqrt(X**2-1)*np.arccos(1./X)
 
         else:
-            a=np.empty_like(X)
-            X[X==0] = 0.001
-            x = X[X<1]
+            a = np.empty_like(X)
+            X[X <= c] = c
+            x = X[X < 1]
 
-            a[X<1] = np.log(x/2.) + 1/np.sqrt(1-x**2)*np.arccosh(1./x)
+            a[X < 1] = np.log(x/2.) + 1/np.sqrt(1-x**2)*np.arccosh(1./x)
 
-            a[X==1] = 1 + np.log(1./2.)
+            a[X == 1] = 1 + np.log(1./2.)
 
-            x = X[X>1]
-            a[X>1] = np.log(x/2) + 1/np.sqrt(x**2-1)*np.arccos(1./x)
+            x = X[X > 1]
+            a[X > 1] = np.log(x/2) + 1/np.sqrt(x**2-1)*np.arccos(1./x)
 
         return a
 
@@ -309,6 +311,7 @@ class NFW(object):
         :param x: R/Rs
         :type x: float >0
         """
+        c = 0.001
         if isinstance(X, int) or isinstance(X, float):
             if X < 1:
                 x = max(0.001, X)
@@ -316,10 +319,10 @@ class NFW(object):
             else:  # X >= 1:
                 a = np.log(X/2.)**2 + np.arccos(1./X)**2
         else:
-            a=np.empty_like(X)
-            X[X==0] = 0.001
-            x = X[(X<1) & (X>0)]
-            a[(X<1) & (X>0)] = np.log(x/2.)**2 - np.arccosh(1./x)**2
+            a = np.empty_like(X)
+            X[X <= c] = 0.001
+            x = X[X < 1]
+            a[X < 1] = np.log(x/2.)**2 - np.arccosh(1./x)**2
             x = X[X >= 1]
             a[X >= 1] = np.log(x/2.)**2 + np.arccos(1./x)**2
         return a

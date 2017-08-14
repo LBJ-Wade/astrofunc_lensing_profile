@@ -25,7 +25,7 @@ class NFW_ELLIPSE(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-        e = abs(1 - q)
+        e = np.min(abs(1. - q), 0.99)
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
         R_ = np.sqrt(xt1**2 + xt2**2)
@@ -43,7 +43,7 @@ class NFW_ELLIPSE(object):
         y_shift = y - center_y
         cos_phi = np.cos(phi_G)
         sin_phi = np.sin(phi_G)
-        e = abs(1 - q)
+        e = np.min(abs(1. - q), 0.99)
         xt1 = (cos_phi*x_shift+sin_phi*y_shift)*np.sqrt(1 - e)
         xt2 = (-sin_phi*x_shift+cos_phi*y_shift)*np.sqrt(1 + e)
         R_ = np.sqrt(xt1**2 + xt2**2)
