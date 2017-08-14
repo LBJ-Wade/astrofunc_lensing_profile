@@ -26,7 +26,6 @@ class TestSIS(object):
         values_spemd = self.spemd.function(x, y, theta_E, gamma, q, phi_G)
         assert values == values_spemd
 
-
     def test_derivatives(self):
         x = np.array([1])
         y = np.array([2])

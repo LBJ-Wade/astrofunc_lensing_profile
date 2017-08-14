@@ -2,6 +2,8 @@ __author__ = 'sibirrer'
 
 import numpy as np
 from fastell4py import fastell4py
+from astrofunc.LensingProfiles.spp import SPP
+
 
 class SPEMD(object):
     """
@@ -9,6 +11,7 @@ class SPEMD(object):
     """
     def __init__(self):
         self.s2 = 0.00000001
+        self.spp = SPP()
 
     def function(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
@@ -141,6 +144,18 @@ class SPEMD(object):
         f_yy = kappa - gamma1
         f_xy = gamma2
         return f_, f_x, f_y, f_xx, f_yy, f_xy
+
+    def mass_3d_lens(self, r, theta_E, gamma, q, phi_G):
+        """
+        computes the spherical power-law mass enclosed (with SPP routiune)
+        :param r:
+        :param theta_E:
+        :param gamma:
+        :param q:
+        :param phi_G:
+        :return:
+        """
+        return self.spp.mass_3d_lens(r, theta_E, gamma)
 
     def convert_params(self, theta_E, gamma, q):
         """
