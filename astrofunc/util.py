@@ -83,7 +83,7 @@ def array2image(array, nx=0, ny=0):
         if n**2 != len(array):
             raise ValueError("lenght of input array given as %s is not square of integer number!" %(len(array)))
         nx, ny = n, n
-    image = array.reshape(nx, ny)
+    image = array.reshape(int(nx), int(ny))
     return image
 
 
