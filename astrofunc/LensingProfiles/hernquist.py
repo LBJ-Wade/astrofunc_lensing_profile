@@ -46,7 +46,7 @@ class Hernquist(object):
         :param X: r/rs
         :return:
         """
-        c = 0.0001
+        c = 0.00001
         if isinstance(X, int) or isinstance(X, float):
             X = max(X, c)
             if X < 1 and X > 0:
