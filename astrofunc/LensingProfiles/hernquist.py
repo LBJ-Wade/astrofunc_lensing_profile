@@ -46,7 +46,9 @@ class Hernquist(object):
         :param X: r/rs
         :return:
         """
+        c = 0.0001
         if isinstance(X, int) or isinstance(X, float):
+            X = max(X, c)
             if X < 1 and X > 0:
                 a = 1. / np.sqrt(1 - X ** 2) * np.arctanh(np.sqrt(1 - X**2))
             elif X == 1:
@@ -59,8 +61,9 @@ class Hernquist(object):
 
         else:
             a = np.empty_like(X)
-            x = X[(X < 1) & (X > 0)]
-            a[(X < 1) & (X > 0)] = 1 / np.sqrt(1 - x ** 2) * np.arctanh(np.sqrt((1 - x**2)))
+            X[X < c] = c
+            x = X[X < 1]
+            a[X < 1] = 1 / np.sqrt(1 - x ** 2) * np.arctanh(np.sqrt((1 - x**2)))
 
             x = X[X == 1]
             a[X == 1] = 1.
@@ -68,10 +71,6 @@ class Hernquist(object):
             x = X[X > 1]
             a[X > 1] = 1 / np.sqrt(x ** 2 - 1) * np.arctan(np.sqrt(x**2 - 1))
             # a[X>y] = 0
-
-            c = 0.0001
-            x = X[X <= 0]
-            a[X <= 0] = 1. / np.sqrt(1 - c ** 2) * np.arctanh(np.sqrt((1 - c ** 2)))
         return a
 
     def mass_3d(self, r, rho0, Rs):
