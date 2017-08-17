@@ -45,6 +45,7 @@ class Hernquist_Ellipse(object):
     def __init__(self):
         from astrofunc.LensingProfiles.hernquist import Hernquist as Hernquist_lens
         self.lens = Hernquist_lens()
+        self.spherical = Hernquist()
 
     def function(self, x, y, sigma0, Rs, q, phi_G, center_x=0, center_y=0):
         """
@@ -59,8 +60,7 @@ class Hernquist_Ellipse(object):
         :return:
         """
         x_ , y_ = self._coord_transf(x, y, q, phi_G, center_x, center_y)
-        f_xx, f_yy, _ = self.lens.hessian(x_, y_, sigma0, Rs)
-        return 1./2. * (f_xx + f_yy)
+        return self.spherical.function(x_, y_, sigma0, Rs)
 
     def light_3d(self, r, sigma0, Rs, q=1, phi_G=0):
         """

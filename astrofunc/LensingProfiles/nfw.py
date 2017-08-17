@@ -127,6 +127,18 @@ class NFW(object):
         m_3d = 4 * np.pi * rho0 * Rs**3 *(np.log((Rs + R)/Rs) - R/(Rs + R))
         return m_3d
 
+    def mass_3d_lens(self, R, Rs, theta_Rs):
+        """
+        mass enclosed a 3d sphere or radius r
+        :param r:
+        :param Ra:
+        :param Rs:
+        :return:
+        """
+        rho0 = self._alpha2rho0(theta_Rs, Rs)
+        m_3d = self.mass_3d(R, Rs, rho0)
+        return m_3d
+
     def mass_2d(self, R, Rs, rho0):
         """
         mass enclosed a 3d sphere or radius r
