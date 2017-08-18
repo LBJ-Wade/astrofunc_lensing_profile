@@ -21,9 +21,10 @@ class PJaffe(object):
         :param center_y:
         :return:
         """
-        return self.lens.density_2d(x, y, sigma0, Ra, Rs, center_x, center_y)
+        rho0 = self.lens.sigma2rho(sigma0, Ra, Rs)
+        return self.lens.density_2d(x, y, rho0, Ra, Rs, center_x, center_y)
 
-    def light_3d(self, r, sigma0, Ra, Rs, q=1, phi_G=0):
+    def light_3d(self, r, sigma0, Ra, Rs):
         """
 
         :param y:
@@ -70,8 +71,7 @@ class PJaffe_Ellipse(object):
         :param center_y:
         :return:
         """
-        rho0 = self.lens.sigma2rho(sigma0, Ra, Rs)
-        return self.lens.density(r, rho0, Ra, Rs)
+        return self.spherical.light_3d(r, sigma0, Ra, Rs)
 
     def _coord_transf(self, x, y, q, phi_G, center_x, center_y):
         """

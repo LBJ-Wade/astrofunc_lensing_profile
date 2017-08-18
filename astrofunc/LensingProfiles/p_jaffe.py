@@ -21,8 +21,8 @@ class PJaffe(object):
             Ra, Rs = Rs, Ra
         if Ra < 0.0001:
             Ra = 0.0001
-        if Rs < 0.0001:
-            Rs = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         rho = rho0 / ((1 + (r / Ra) ** 2) * (1 + (r / Rs) ** 2))
         return rho
 
@@ -42,8 +42,8 @@ class PJaffe(object):
             Ra, Rs = Rs, Ra
         if Ra < 0.0001:
             Ra = 0.0001
-        if Rs < 0.0001:
-            Rs = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
@@ -71,6 +71,12 @@ class PJaffe(object):
         :param Rs:
         :return:
         """
+        if Ra >= Rs:
+            Ra, Rs = Rs, Ra
+        if Ra < 0.0001:
+            Ra = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         sigma0 = self.rho2sigma(rho0, Ra, Rs)
         m_2d = 2 * np.pi * sigma0 * Ra * Rs / (Rs - Ra) * (np.sqrt(Ra ** 2 + r ** 2) - Ra - np.sqrt(Rs ** 2 + r ** 2) + Rs)
         return m_2d
@@ -83,6 +89,12 @@ class PJaffe(object):
         :param Rs:
         :return:
         """
+        if Ra >= Rs:
+            Ra, Rs = Rs, Ra
+        if Ra < 0.0001:
+            Ra = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         sigma0 = self.rho2sigma(rho0, Ra, Rs)
         m_tot = 2 * np.pi * sigma0 * Ra * Rs
         return m_tot
@@ -101,6 +113,10 @@ class PJaffe(object):
         """
         if Ra >= Rs:
             Ra, Rs = Rs, Ra
+        if Ra < 0.0001:
+            Ra = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
@@ -124,8 +140,8 @@ class PJaffe(object):
             Ra, Rs = Rs, Ra
         if Ra < 0.0001:
             Ra = 0.0001
-        if Rs < 0.0001:
-            Rs = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
@@ -146,6 +162,10 @@ class PJaffe(object):
         """
         if Ra >= Rs:
             Ra, Rs = Rs, Ra
+        if Ra < 0.0001:
+            Ra = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
@@ -168,6 +188,10 @@ class PJaffe(object):
         """
         if Ra >= Rs:
             Ra, Rs = Rs, Ra
+        if Ra < 0.0001:
+            Ra = 0.0001
+        if Rs < Ra + 0.0001:
+            Rs += 0.0001
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
