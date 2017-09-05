@@ -6,6 +6,7 @@ class Hernquist(object):
     class to compute the Hernquist 1990 model
     """
     _diff = 0.00001
+    _s = 0.001
 
     def density(self, r, rho0, Rs):
         """
@@ -185,6 +186,10 @@ class Hernquist(object):
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
+        if isinstance(r, int) or isinstance(r, float):
+            r = max(self._s, r)
+        else:
+            r[r < self._s] = self._s
         X = r/Rs
         alpha_r = 2*sigma0 * Rs * X * (1-self._F(X)) / (X**2-1)
         f_x = alpha_r * x_/r

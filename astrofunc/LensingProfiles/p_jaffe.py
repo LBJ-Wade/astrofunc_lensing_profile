@@ -6,6 +6,7 @@ class PJaffe(object):
     class to compute the DUAL PSEUDO ISOTHERMAL ELLIPTICAL MASS DISTRIBUTION
     based on Eliasdottir (2013)
     """
+    _s = 0.0001
 
     def density(self, r, rho0, Ra, Rs):
         """
@@ -169,6 +170,10 @@ class PJaffe(object):
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
+        if isinstance(r, int) or isinstance(r, float):
+            r = max(self._s, r)
+        else:
+            r[r < self._s] = self._s
         alpha_r = 2*sigma0 * Ra * Rs / (Rs - Ra) * self._f_A20(r / Ra, r / Rs)
         f_x = alpha_r * x_/r
         f_y = alpha_r * y_/r
@@ -195,6 +200,10 @@ class PJaffe(object):
         x_ = x - center_x
         y_ = y - center_y
         r = np.sqrt(x_**2 + y_**2)
+        if isinstance(r, int) or isinstance(r, float):
+            r = max(self._s, r)
+        else:
+            r[r < self._s] = self._s
         gamma = sigma0 * Ra * Rs / (Rs - Ra) * (2 * (1. / (Ra + np.sqrt(Ra ** 2 + r ** 2)) - 1. / (Rs + np.sqrt(Rs ** 2 + r ** 2))) -
                                                 (1 / np.sqrt(Ra ** 2 + r ** 2) - 1 / np.sqrt(Rs ** 2 + r ** 2)))
         kappa = sigma0 * Ra * Rs / (Rs - Ra) * (1 / np.sqrt(Ra ** 2 + r ** 2) - 1 / np.sqrt(Rs ** 2 + r ** 2))
