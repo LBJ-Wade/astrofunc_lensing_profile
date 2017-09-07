@@ -36,9 +36,10 @@ class SPEMD(object):
         x2 = -sin_phi*x_shift+cos_phi*y_shift
 
         potential = fastell4py.ellipphi(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
-        if len(potential) == 1:
-            potential = potential[0]
-        return potential
+        #if len(potential) == 1:
+        #    potential = potential[0]
+        return np.array(potential, dtype=type(x))
+        #return potential
 
     def derivatives(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
@@ -66,7 +67,7 @@ class SPEMD(object):
         f_x_prim, f_y_prim = fastell4py.fastelldefl(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
         f_x = cos_phi*f_x_prim - sin_phi*f_y_prim
         f_y = sin_phi*f_x_prim + cos_phi*f_y_prim
-        return f_x, f_y
+        return np.array(f_x, dtype=type(x)), np.array(f_y, dtype=type(x))
 
     def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         if gamma < 1.4:
@@ -92,8 +93,11 @@ class SPEMD(object):
         x2 = -sin_phi*x_shift+cos_phi*y_shift
 
         f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = fastell4py.fastellmag(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
+
+        #if not type(x) == 'numpy.ndarray':
         if len(f_x_prim) == 1:
-            f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = f_x_prim[0], f_y_prim[0], f_xx_prim[0], f_yy_prim[0], f_xy_prim[0]
+            if np.shape(x) == ():
+                f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = f_x_prim[0], f_y_prim[0], f_xx_prim[0], f_yy_prim[0], f_xy_prim[0]
         kappa = (f_xx_prim + f_yy_prim)/2
         gamma1_value = (f_xx_prim - f_yy_prim)/2
         gamma2_value = f_xy_prim

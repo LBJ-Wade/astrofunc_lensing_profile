@@ -15,7 +15,8 @@ class CartShapelets(object):
     def function(self, x, y, coeffs, beta, center_x=0, center_y=0):
         shapelets = self._createShapelet(coeffs)
         n_order = self._get_num_n(len(coeffs))
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1:
             f_ = self._shapeletOutput(x, y, beta, shapelets, precalc=False)
         else:
             H_x, H_y = self.pre_calc(x, y, beta, n_order, center_x, center_y)
@@ -30,7 +31,8 @@ class CartShapelets(object):
         n_order = self._get_num_n(len(coeffs))
         dx_shapelets = self._dx_shapelets(shapelets, beta)
         dy_shapelets = self._dy_shapelets(shapelets, beta)
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1:
             f_x = self._shapeletOutput(x, y, beta, dx_shapelets, precalc=False)
             f_y = self._shapeletOutput(x, y, beta, dy_shapelets, precalc=False)
         else:
@@ -48,7 +50,8 @@ class CartShapelets(object):
         dxx_shapelets = self._dxx_shapelets(shapelets, beta)
         dyy_shapelets = self._dyy_shapelets(shapelets, beta)
         dxy_shapelets = self._dxy_shapelets(shapelets, beta)
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1:
             f_xx = self._shapeletOutput(x, y, beta, dxx_shapelets, precalc=False)
             f_yy = self._shapeletOutput(x, y, beta, dyy_shapelets, precalc=False)
             f_xy = self._shapeletOutput(x, y, beta, dxy_shapelets, precalc=False)
@@ -70,7 +73,9 @@ class CartShapelets(object):
         dxx_shapelets = self._dxx_shapelets(shapelets, beta)
         dyy_shapelets = self._dyy_shapelets(shapelets, beta)
         dxy_shapelets = self._dxy_shapelets(shapelets, beta)
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+
+        n = len(np.atleast_1d(x))
+        if n <= 1:
             f_ = self._shapeletOutput(x, y, beta, shapelets, precalc=False)
             f_x = self._shapeletOutput(x, y, beta, dx_shapelets, precalc=False)
             f_y = self._shapeletOutput(x, y, beta, dy_shapelets, precalc=False)
@@ -121,7 +126,8 @@ class CartShapelets(object):
         :returns:  array of same size with coords [r,phi]
         :raises: AttributeError, KeyError
         """
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1:
             values = 0.
         else:
             values = np.zeros(len(x[0]))
@@ -242,10 +248,8 @@ class CartShapelets(object):
         :param center_y:
         :return: list of H_n(x) and H_n(y)
         """
-        if isinstance(x, int) or isinstance(x, float):
-            n = 1
-        else:
-            n = len(x)
+
+        n = len(np.atleast_1d(x))
         x_ = x - center_x
         y_ = y - center_y
         H_x = np.empty((n_order+1, n))
