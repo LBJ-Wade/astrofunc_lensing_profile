@@ -146,13 +146,13 @@ def make_grid_with_coordtransform(numPix, deltapix, subgrid_res=1, left_lower=Fa
     shift = (subgrid_res-1)/(2.*subgrid_res)*deltapix
     x_grid -= shift
     y_grid -= shift
-    x_0 = x_grid[0]
-    y_0 = y_grid[0]
-    ra_0 = (numPix_eff-1)/2.
-    dec_0 = (numPix_eff - 1) / 2.
+    ra_at_xy_0 = x_grid[0]
+    dec_at_xy_0 = y_grid[0]
+    x_at_radec_0 = (numPix_eff-1)/2.
+    y_at_radec_0 = (numPix_eff - 1) / 2.
     Mpix2coord = np.array([[deltapix_eff, 0],[0, deltapix_eff]])
     Mcoord2pix = np.linalg.inv(Mpix2coord)
-    return x_grid, y_grid, x_0, y_0, ra_0, dec_0, Mpix2coord, Mcoord2pix
+    return x_grid, y_grid, ra_at_xy_0, dec_at_xy_0, x_at_radec_0, y_at_radec_0, Mpix2coord, Mcoord2pix
 
 
 def get_axes(x, y):

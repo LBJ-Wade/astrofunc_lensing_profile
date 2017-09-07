@@ -126,37 +126,40 @@ def test_make_grid():
 def test_grid_with_coords():
     numPix = 11
     deltaPix = 1.
-    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    x_grid, y_grid, ra_at_xy_0, dec_at_xy_0, x_at_radec_0, y_at_radec_0, Mpix2coord, Mcoord2pix = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
     ra = 0
     dec = 0
-    x, y = Util.map_coord2pix(ra, dec, ra_0, dec_0, Matrix)
+    x, y = Util.map_coord2pix(ra, dec, x_at_radec_0, y_at_radec_0, Mcoord2pix)
     assert x == 5
     assert y == 5
 
     numPix = 11
     deltaPix = .1
-    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    x_grid, y_grid, ra_at_xy_0, dec_at_xy_0, x_at_radec_0, y_at_radec_0, Mpix2coord, Mcoord2pix = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
     ra = 0
     dec = 0
-    x, y = Util.map_coord2pix(ra, dec, ra_0, dec_0, Matrix)
+    x, y = Util.map_coord2pix(ra, dec, x_at_radec_0, y_at_radec_0, Mcoord2pix)
     assert x == 5
     assert y == 5
 
     numPix = 11
     deltaPix = 1.
-    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    x_grid, y_grid, ra_at_xy_0, dec_at_xy_0, x_at_radec_0, y_at_radec_0, Mpix2coord, Mcoord2pix = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
     x_, y_ = 0, 0
-    ra, dec = Util.map_coord2pix(x_, y_, x_0, y_0, Matrix_inv)
+    ra, dec = Util.map_coord2pix(x_, y_, ra_at_xy_0, dec_at_xy_0, Mpix2coord)
     assert ra == -5
     assert dec == -5
 
     numPix = 11
     deltaPix = .1
-    x_grid, y_grid, x_0, y_0, ra_0, dec_0, Matrix, Matrix_inv = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
+    x_grid, y_grid, ra_at_xy_0, dec_at_xy_0, x_at_radec_0, y_at_radec_0, Mpix2coord, Mcoord2pix = Util.make_grid_with_coordtransform(numPix, deltaPix, subgrid_res=1, left_lower=False)
     x_, y_ = 0, 0
-    ra, dec = Util.map_coord2pix(x_, y_, x_0, y_0, Matrix_inv)
+    ra, dec = Util.map_coord2pix(x_, y_, ra_at_xy_0, dec_at_xy_0, Mpix2coord)
     assert ra == -.5
     assert dec == -.5
+    x__, y__ = Util.map_coord2pix(ra, dec, x_at_radec_0, y_at_radec_0, Mcoord2pix)
+    assert x__ == x_
+    assert y__ == y_
 
 
 def test_array2image():
