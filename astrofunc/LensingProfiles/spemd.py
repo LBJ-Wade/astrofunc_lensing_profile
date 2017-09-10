@@ -1,8 +1,7 @@
 __author__ = 'sibirrer'
 
-import numpy as np
-from fastell4py import fastell4py
 from astrofunc.LensingProfiles.spp import SPP
+from astrofunc.LensingProfiles.spemd_smooth import SPEMD_SMOOTH
 
 
 class SPEMD(object):
@@ -12,157 +11,19 @@ class SPEMD(object):
     def __init__(self):
         self.s2 = 0.00000001
         self.spp = SPP()
+        self.spemd_smooth = SPEMD_SMOOTH()
 
     def function(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
-        if gamma < 1.4:
-            gamma = 1.4
-            theta_E = 0
-        if gamma > 2.9:
-            gamma = 2.9
-            theta_E = 0
-        if q < 0.5:
-            q = 0.5
-            theta_E = 0
-        if q > 1:
-            q = 1.
-            theta_E = 0
-        x_shift = x - center_x
-        y_shift = y - center_y
-        q_fastell, gam = self.convert_params(theta_E, gamma, q)
-
-        cos_phi = np.cos(phi_G)
-        sin_phi = np.sin(phi_G)
-        x1 = cos_phi*x_shift+sin_phi*y_shift
-        x2 = -sin_phi*x_shift+cos_phi*y_shift
-
-        potential = fastell4py.ellipphi(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
-        n = len(np.atleast_1d(x))
-        if n <= 1:
-            if np.shape(x) == ():
-                return np.array(potential[0])
-        return potential
+        return self.spemd_smooth.function(x, y, theta_E, gamma, q, phi_G, self.s2, center_x, center_y)
 
     def derivatives(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
-        if gamma < 1.4:
-            gamma = 1.4
-            theta_E = 0
-        if gamma > 2.9:
-            gamma = 2.9
-            theta_E = 0
-        if q < 0.5:
-            q = 0.5
-            theta_E = 0
-        if q > 1:
-            q = 1.
-            theta_E = 0
-        x_shift = x - center_x
-        y_shift = y - center_y
-        q_fastell, gam = self.convert_params(theta_E, gamma, q)
-
-        cos_phi = np.cos(phi_G)
-        sin_phi = np.sin(phi_G)
-
-        x1 = cos_phi*x_shift+sin_phi*y_shift
-        x2 = -sin_phi*x_shift+cos_phi*y_shift
-
-        f_x_prim, f_y_prim = fastell4py.fastelldefl(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
-        f_x = cos_phi*f_x_prim - sin_phi*f_y_prim
-        f_y = sin_phi*f_x_prim + cos_phi*f_y_prim
-        n = len(np.atleast_1d(x))
-        #if n <= 1:
-        #    if np.shape(x) == ():
-        #        return np.array(f_x[0]), np.array(f_y[0])
-        return f_x, f_y
+        return self.spemd_smooth.derivatives(x, y, theta_E, gamma, q, phi_G, self.s2, center_x, center_y)
 
     def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
-        x = np.array(x)
-        y = np.array(y)
-        if gamma < 1.4:
-            gamma = 1.4
-            theta_E = 0
-        if gamma > 2.9:
-            gamma = 2.9
-            theta_E = 0
-        if q < 0.5:
-            q = 0.5
-            theta_E = 0
-        if q > 1:
-            q = 1.
-            theta_E = 0
-        x_shift = x - center_x
-        y_shift = y - center_y
-        q_fastell, gam = self.convert_params(theta_E, gamma, q)
-
-        cos_phi = np.cos(phi_G)
-        sin_phi = np.sin(phi_G)
-
-        x1 = cos_phi*x_shift+sin_phi*y_shift
-        x2 = -sin_phi*x_shift+cos_phi*y_shift
-
-        f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = fastell4py.fastellmag(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
-
-        n = len(np.atleast_1d(x))
-        if n <= 1:
-            if np.shape(x) == ():
-                f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = np.array(f_x_prim[0]), np.array(f_y_prim[0]), np.array(f_xx_prim[0]), np.array(f_yy_prim[0]), np.array(f_xy_prim[0])
-        kappa = (f_xx_prim + f_yy_prim)/2
-        gamma1_value = (f_xx_prim - f_yy_prim)/2
-        gamma2_value = f_xy_prim
-
-        gamma1 = np.cos(2*phi_G)*gamma1_value-np.sin(2*phi_G)*gamma2_value
-        gamma2 = +np.sin(2*phi_G)*gamma1_value+np.cos(2*phi_G)*gamma2_value
-
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-        return f_xx, f_yy, f_xy
+        return self.spemd_smooth.hessian(x, y, theta_E, gamma, q, phi_G, self.s2, center_x, center_y)
 
     def all(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
-        if gamma < 1.4:
-            gamma = 1.4
-            theta_E = 0
-        if gamma > 2.9:
-            gamma = 2.9
-            theta_E = 0
-        if q < 0.3:
-            q = 0.3
-            theta_E = 0
-        if q > 1:
-            q = 1.
-            theta_E = 0
-        x_shift = x - center_x
-        y_shift = y - center_y
-        q_fastell, gam = self.convert_params(theta_E, gamma, q)
-
-        cos_phi = np.cos(phi_G)
-        sin_phi = np.sin(phi_G)
-
-        x1 = cos_phi*x_shift+sin_phi*y_shift
-        x2 = -sin_phi*x_shift+cos_phi*y_shift
-        f_ = fastell4py.ellipphi(x1, x2, q_fastell, gam, arat=q, s2=0)
-        n = len(np.atleast_1d(x))
-        if n <= 1:
-            if np.shape(x) == ():
-                f_  = np.array(f_[0])
-        f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = fastell4py.fastellmag(x1, x2, q_fastell, gam, arat=q, s2=self.s2)
-        n = len(np.atleast_1d(x))
-        if n <= 1:
-            if np.shape(x) == ():
-                f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = np.array(f_x_prim[0]), np.array(f_y_prim[0]), np.array(f_xx_prim[0]), np.array(f_yy_prim[0]), np.array(f_xy_prim[0])
-        f_x = cos_phi*f_x_prim - sin_phi*f_y_prim
-        f_y = sin_phi*f_x_prim + cos_phi*f_y_prim
-
-        kappa = (f_xx_prim + f_yy_prim)/2
-        gamma1_value = (f_xx_prim - f_yy_prim)/2
-        gamma2_value = f_xy_prim
-
-        gamma1 = np.cos(2*phi_G)*gamma1_value-np.sin(2*phi_G)*gamma2_value
-        gamma2 = +np.sin(2*phi_G)*gamma1_value+np.cos(2*phi_G)*gamma2_value
-
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
+        return self.spemd_smooth.all(x, y, theta_E, gamma, q, phi_G, self.s2, center_x, center_y)
 
     def mass_3d_lens(self, r, theta_E, gamma, q, phi_G):
         """
@@ -184,7 +45,4 @@ class SPEMD(object):
         :param q: axis ratio
         :return:   prefactor to SPEMP profile for FASTELL
         """
-        gam = (gamma-1)/2.
-        q_fastell = (3-gamma)/2. * (theta_E ** 2 / q) ** gam
-
-        return q_fastell, gam
+        return self.spemd_smooth.convert_params(theta_E, gamma, q)
