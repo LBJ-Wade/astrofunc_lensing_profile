@@ -483,6 +483,22 @@ def get_distance(x_mins, y_mins, x_true, y_true):
     return dist
 
 
+def compare_distance(x_mapped, y_mapped):
+    """
+
+    :param x_mapped: array of x-positions of remapped catalogue image
+    :param y_mapped: array of y-positions of remapped catalogue image
+    :return: sum of distance square of positions
+    """
+    X2 = 0
+    for i in range(0, len(x_mapped)-1):
+        for j in range(i+1, len(x_mapped)):
+            dx = x_mapped[i]-x_mapped[j]
+            dy = y_mapped[i]-y_mapped[j]
+            X2 += dx**2+dy**2
+    return X2
+
+
 def mk_array(input_var):
     """This functions makes sure that the input is a numpy array. If it is
     a recognised format (float, array or list) the output will be a numpy array"""
