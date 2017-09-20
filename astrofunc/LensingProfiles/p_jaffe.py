@@ -63,6 +63,18 @@ class PJaffe(object):
         m_3d = 4 * np.pi * rho0 * Ra ** 2 * Rs ** 2 / (Rs ** 2 - Ra ** 2) * (Rs * np.arctan(r / Rs) - Ra * np.arctan(r / Ra))
         return m_3d
 
+    def mass_3d_lens(self, r, sigma0, Ra, Rs):
+        """
+
+        :param r:
+        :param sigma0:
+        :param Ra:
+        :param Rs:
+        :return:
+        """
+        rho0 = self.sigma2rho(sigma0, Ra, Rs)
+        return self.mass_3d(r, rho0, Ra, Rs)
+
     def mass_2d(self, r, rho0, Ra, Rs):
         """
         mass enclosed projected 2d sphere of radius r

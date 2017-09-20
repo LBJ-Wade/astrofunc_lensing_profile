@@ -81,3 +81,15 @@ class NFW_ELLIPSE(object):
         f_x, f_y = self.derivatives(x, y, Rs, theta_Rs, q, phi_G, center_x, center_y)
         f_xx, f_yy, f_xy = self.hessian(x, y, Rs, theta_Rs, q, phi_G, center_x, center_y)
         return f_, f_x, f_y, f_xx, f_yy, f_xy
+
+    def mass_3d_lens(self, R, Rs, theta_Rs, q=1, phi_G=0):
+        """
+
+        :param R:
+        :param Rs:
+        :param theta_Rs:
+        :param q:
+        :param phi_G:
+        :return:
+        """
+        return self.nfw.mass_3d(R, Rs, theta_Rs)

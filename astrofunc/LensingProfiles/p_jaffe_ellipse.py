@@ -70,3 +70,16 @@ class PJaffe_Ellipse(object):
         f_x, f_y = self.derivatives(x, y, sigma0, Ra, Rs, q, phi_G, center_x, center_y)
         f_xx, f_yy, f_xy = self.hessian(x, y, sigma0, Ra, Rs, q, phi_G, center_x, center_y)
         return f_, f_x, f_y, f_xx, f_yy, f_xy
+
+    def mass_3d_lens(self, r, sigma0, Ra, Rs, q=1, phi_G=0):
+        """
+
+        :param r:
+        :param sigma0:
+        :param Ra:
+        :param Rs:
+        :param q:
+        :param phi_G:
+        :return:
+        """
+        return self.spherical.mass_3d_lens(r, sigma0, Ra, Rs)
