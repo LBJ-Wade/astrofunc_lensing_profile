@@ -131,15 +131,32 @@ class TestNumerics(object):
         alpha_r, _ = lensModel.derivatives(r, 0, **kwargs_lens)
         npt.assert_almost_equal(alpha_mass/np.pi, alpha_r, decimal=5)
 
-    """
-
-
-
     def test_gaussian(self):
-        kwargs = {'amp': 1. / 4., 'sigma_x': 2., 'sigma_y': 2., 'center_x': 0., 'center_y': 0.}
-        from astrofunc.LensingProfiles.gaussian import Gaussian as Model
+        from astrofunc.LensingProfiles.gaussian_kappa import GaussianKappa as Model
+        kwargs = {'amp': 1. / 4., 'sigma_x': 2., 'sigma_y': 2.}
         self.assert_integrals(Model, kwargs)
 
+    def test_gaussian_density_deflection(self):
+        """
+        tests whether the unit conversion between the lensing parameter 'sigma0' and the units in the density profile are ok
+        :return:
+        """
+
+        from astrofunc.LensingProfiles.gaussian_kappa import GaussianKappa as Model
+        lensModel = Model()
+        amp = 1. / 4.
+        sigma_x = 2.
+        sigma_y = 2.
+        amp_lens = lensModel._amp3d_to_2d(amp, sigma_x, sigma_y)
+        kwargs_lens = {'amp': amp_lens, 'sigma_x': sigma_x, 'sigma_y': sigma_y}
+        kwargs_density = {'amp': amp, 'sigma_x': sigma_x, 'sigma_y': sigma_y}
+        r = .5
+        mass_2d = lensModel.mass_2d(r, **kwargs_density)
+        alpha_mass = mass_2d/r
+        alpha_r, _ = lensModel.derivatives(r, 0, **kwargs_lens)
+        npt.assert_almost_equal(alpha_mass/np.pi, alpha_r, decimal=5)
+
+    """
     def test_sis(self):
         kwargs = {'theta_E': 0.5}
         from astrofunc.LensingProfiles.sis import SIS as Model

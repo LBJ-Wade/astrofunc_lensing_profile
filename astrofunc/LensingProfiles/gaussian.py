@@ -2,18 +2,20 @@ __author__ = 'sibirrer'
 #this file contains a class to make a gaussian
 
 import numpy as np
+import scipy.special
 
 class Gaussian(object):
     """
     this class contains functions to evaluate a Gaussian function and calculates its derivative and hessian matrix
     """
-    def function(self, x, y, amp, sigma_x, sigma_y, center_x, center_y):
+    def function(self, x, y, amp, sigma_x, sigma_y, center_x=0, center_y=0):
         """
         returns Gaussian
         """
         c = amp/(2*np.pi*sigma_x*sigma_y)
-        delta_x = x-center_x
-        exponent = -(((delta_x)/sigma_x)**2+((y-center_y)/sigma_y)**2)/2.
+        delta_x = x - center_x
+        delta_y = y - center_y
+        exponent = -((delta_x/sigma_x)**2+(delta_y/sigma_y)**2)/2.
         return c * np.exp(exponent)
 
     def derivatives(self, x, y, amp, sigma_x, sigma_y, center_x=0, center_y=0):
@@ -33,7 +35,7 @@ class Gaussian(object):
         f_xy = f_ * (center_x-x)/sigma_x**2 * (center_y-y)/sigma_y**2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, amp, sigma_x, sigma_y, center_x = 0, center_y = 0):
+    def all(self, x, y, amp, sigma_x, sigma_y, center_x=0, center_y=0):
         """
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
@@ -44,5 +46,3 @@ class Gaussian(object):
         f_yy = f_ * ( (-1./sigma_y**2) + (center_y-y)**2/sigma_y**4 )
         f_xy = f_ * (center_x-x)/sigma_x**2 * (center_y-y)/sigma_y**2
         return f_, f_x, f_y, f_xx, f_yy, f_xy
-
-

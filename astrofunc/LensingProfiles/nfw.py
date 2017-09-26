@@ -217,7 +217,7 @@ class NFW(object):
         if isinstance(R, int) or isinstance(R, float):
             R = max(R, 0.00001)
         else:
-            R[R <= 0] = 0.00001
+            R[R <= 0.00001] = 0.00001
         x = R/Rs
         gx = self._g(x)
         a = 4*rho0*Rs*R*gx/x**2/R

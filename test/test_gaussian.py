@@ -1,8 +1,10 @@
 __author__ = 'sibirrer'
 
 from astrofunc.LensingProfiles.gaussian import Gaussian
+from astrofunc.LensingProfiles.gaussian_kappa import GaussianKappa
 
 import numpy as np
+import numpy.testing as npt
 import pytest
 
 class TestGaussian(object):
@@ -21,11 +23,11 @@ class TestGaussian(object):
         center_y = 1.
         sigma_x = 1.
         sigma_y = 1.
-        values = self.Gaussian.function( x, y, amp, center_x, center_y, sigma_x, sigma_y)
+        values = self.Gaussian.function(x, y, amp, center_x, center_y, sigma_x, sigma_y)
         assert values == np.exp(-1./2)
         x = np.array([2,3,4])
         y = np.array([1,1,1])
-        values = self.Gaussian.function( x, y, amp, center_x, center_y, sigma_x, sigma_y)
+        values = self.Gaussian.function(x, y, amp, center_x, center_y, sigma_x, sigma_y)
         assert values[0] == np.exp(-1./2)
         assert values[1] == np.exp(-2.**2/2)
         assert values[2] == np.exp(-3.**2/2)
@@ -86,6 +88,61 @@ class TestGaussian(object):
         assert f_xx == -np.exp(-1./2)
         assert f_yy == 0.
         assert f_xy == 0.
+
+
+class TestGaussianKappa(object):
+    """
+    test the Gaussian with Gaussian kappa
+    """
+    def setup(self):
+        self.gaussian_kappa = GaussianKappa()
+        self.gaussian = Gaussian()
+
+    def test_kappa(self):
+        x = np.linspace(0, 5, 10)
+        y = np.linspace(0, 5, 10)
+        amp = 1.*2*np.pi
+        center_x = 0.
+        center_y = 0.
+        sigma_x = 1.
+        sigma_y = 1.
+        f_xx, f_yy, f_xy = self.gaussian_kappa.hessian(x, y, amp, sigma_x, sigma_y, center_x, center_y)
+        kappa = 1./2 * (f_xx + f_yy)
+        kappa_true = self.gaussian.function(x, y, amp, sigma_x, sigma_y, center_x, center_y)
+        print(kappa_true)
+        print(kappa)
+        npt.assert_almost_equal(kappa[0], kappa_true[0], decimal=5)
+        npt.assert_almost_equal(kappa[1], kappa_true[1], decimal=5)
+
+    def test_density_2d(self):
+        x = np.linspace(0, 5, 10)
+        y = np.linspace(0, 5, 10)
+        amp = 1.*2*np.pi
+        center_x = 0.
+        center_y = 0.
+        sigma_x = 1.
+        sigma_y = 1.
+        f_xx, f_yy, f_xy = self.gaussian_kappa.hessian(x, y, amp, sigma_x, sigma_y, center_x, center_y)
+        kappa = 1./2 * (f_xx + f_yy)
+        amp_3d = self.gaussian_kappa._amp2d_to_3d(amp, sigma_x, sigma_y)
+        density_2d = self.gaussian_kappa.density_2d(x, y, amp_3d, sigma_x, sigma_y, center_x, center_y)
+        print kappa, density_2d
+        npt.assert_almost_equal(kappa[1], density_2d[1], decimal=5)
+        npt.assert_almost_equal(kappa[2], density_2d[2], decimal=5)
+
+    def test_3d_2d_convention(self):
+        x = np.linspace(0, 5, 10)
+        y = np.linspace(0, 5, 10)
+        amp = 1.*2*np.pi
+        center_x = 0.
+        center_y = 0.
+        sigma_x = 1.
+        sigma_y = 1.
+        amp_3d = self.gaussian_kappa._amp2d_to_3d(amp, sigma_x, sigma_y)
+        density_2d_gauss = self.gaussian_kappa.density_2d(x, y, amp_3d, sigma_x, sigma_y, center_x, center_y)
+        density_2d = self.gaussian.function(x, y, amp, sigma_x, sigma_y, center_x, center_y)
+        print density_2d_gauss, density_2d
+        npt.assert_almost_equal(density_2d_gauss[1], density_2d[1], decimal=5)
 
 if __name__ == '__main__':
     pytest.main()

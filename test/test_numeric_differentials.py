@@ -31,9 +31,33 @@ class TestNumerics(object):
         npt.assert_almost_equal(f_yy, f_yy_num, decimal=3)
         npt.assert_almost_equal(f_xy, f_xy_num, decimal=3)
 
+        x, y = 1., 0.
+        f_x, f_y = lensModel.derivatives(x, y, **kwargs)
+        f_xx, f_yy, f_xy = lensModel.hessian(x, y, **kwargs)
+        f_x_num, f_y_num = lensModelNum.derivatives(x, y, kwargs)
+        f_xx_num, f_yy_num, f_xy_num = lensModelNum.hessian(x, y, kwargs)
+        print(f_xx_num, f_xx)
+        print(f_yy_num, f_yy)
+        print(f_xy_num, f_xy)
+        print((f_xx - f_yy)**2/4 + f_xy**2, (f_xx_num - f_yy_num)**2/4 + f_xy_num**2)
+        npt.assert_almost_equal(f_x, f_x_num, decimal=5)
+        npt.assert_almost_equal(f_y, f_y_num, decimal=5)
+        npt.assert_almost_equal(f_xx, f_xx_num, decimal=3)
+        npt.assert_almost_equal(f_yy, f_yy_num, decimal=3)
+        npt.assert_almost_equal(f_xy, f_xy_num, decimal=3)
+
     def test_gaussian(self):
-        kwargs = {'amp': 1. / 4., 'sigma_x': 2., 'sigma_y': 2., 'center_x': 0., 'center_y': 0.}
         from astrofunc.LensingProfiles.gaussian import Gaussian as Model
+        kwargs = {'amp': 1. / 4., 'sigma_x': 2., 'sigma_y': 2., 'center_x': 0., 'center_y': 0.}
+        self.assert_differentials(Model, kwargs)
+        kwargs = {'amp': 1. / 4., 'sigma_x': 20., 'sigma_y': 20., 'center_x': 0., 'center_y': 0.}
+        self.assert_differentials(Model, kwargs)
+        kwargs = {'amp': 1. / 4., 'sigma_x': 2., 'sigma_y': 2., 'center_x': 2., 'center_y': 2.}
+        self.assert_differentials(Model, kwargs)
+
+    def test_gausian_kappa(self):
+        kwargs = {'amp': 1. / 4., 'sigma_x': 2., 'sigma_y': 2., 'center_x': 0., 'center_y': 0.}
+        from astrofunc.LensingProfiles.gaussian_kappa import GaussianKappa as Model
         self.assert_differentials(Model, kwargs)
 
     def test_external_shear(self):
