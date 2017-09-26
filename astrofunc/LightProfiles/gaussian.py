@@ -63,6 +63,12 @@ class MultiGaussian(object):
             f_ += self.gaussian.function(x, y, amp[i], sigma[i], center_x, center_y)
         return f_
 
+    def function_split(self, x, y, amp, sigma, center_x=0, center_y=0):
+        f_list = []
+        for i in range(len(amp)):
+            f_list.append(self.gaussian.function(x, y, amp[i], sigma[i], center_x, center_y))
+        return f_list
+
     def light_3d(self, r, amp, sigma):
         """
 
