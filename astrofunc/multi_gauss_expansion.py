@@ -15,6 +15,7 @@ def gaussian(R, sigma, amp):
     :param amp: normalization
     :return: Gaussian function
     """
+    c = amp / (2 * np.pi * sigma**2)
     return amp*np.exp(-(R/float(sigma))**2/2.)
 
 

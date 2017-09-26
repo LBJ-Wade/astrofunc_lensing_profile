@@ -187,3 +187,5 @@ class GaussianKappa(object):
         :return:
         """
         return amp / (np.sqrt(np.pi) * np.sqrt(sigma_x * sigma_y * 2))
+
+

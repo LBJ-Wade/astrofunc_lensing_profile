@@ -20,8 +20,9 @@ class Gaussian(object):
         :param center_y:
         :return:
         """
+        c = amp / (2 * np.pi * sigma**2)
         R2 = (x - center_x) ** 2 + (y - center_y) ** 2
-        return amp * np.exp(-(R2 / float(sigma)**2)/ 2.)
+        return c * np.exp(-(R2 / float(sigma)**2)/ 2.)
 
     def light_3d(self, r, amp, sigma):
         """
