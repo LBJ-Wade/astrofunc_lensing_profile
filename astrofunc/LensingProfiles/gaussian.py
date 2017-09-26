@@ -2,7 +2,7 @@ __author__ = 'sibirrer'
 #this file contains a class to make a gaussian
 
 import numpy as np
-import scipy.special
+
 
 class Gaussian(object):
     """

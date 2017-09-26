@@ -57,10 +57,12 @@ class MultiGaussian(object):
         :param center_y:
         :return:
         """
-        x_ , y_ = self._coord_transf(x, y, q, phi_G, center_x, center_y)
-        return self.spherical.function(x_, y_, sigma0, Rs)
+        f_ = np.zeros_like(x)
+        for i in range(len(amp)):
+            f_ += self.gaussian.function(x, y, amp[i], sigma[i], center_x, center_y)
+        return f_
 
-    def light_3d(self, r, sigma0, Rs, q=1, phi_G=0):
+    def light_3d(self, r, amp, sigma):
         """
 
         :param y:
@@ -70,5 +72,7 @@ class MultiGaussian(object):
         :param center_y:
         :return:
         """
-        rho0 = self.lens.sigma2rho(sigma0, Rs)
-        return self.lens.density(r, rho0, Rs)
+        f_ = np.zeros_like(r)
+        for i in range(len(amp)):
+            f_ += self.gaussian.light_3d(r, amp[i], sigma[i])
+        return f_
