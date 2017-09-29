@@ -17,7 +17,7 @@ class NFWParam(object):
         :type Rs: float
         :param rho0: density normalization (characteristic density)
         :type rho0: float
-        :param c: consentration
+        :param c: concentration
         :type c: float [4,40]
         :return: M(R_200) density
         """

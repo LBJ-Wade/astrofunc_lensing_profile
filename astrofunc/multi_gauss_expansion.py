@@ -5,6 +5,8 @@ Multi-Gaussian expansion fitting, based on Capellari 2002, http://adsabs.harvard
 
 import numpy as np
 from scipy.optimize import nnls
+from LightProfiles.gaussian import Gaussian
+gaussian_func = Gaussian()
 
 
 def gaussian(R, sigma, amp):
@@ -16,7 +18,7 @@ def gaussian(R, sigma, amp):
     :return: Gaussian function
     """
     c = amp / (2 * np.pi * sigma**2)
-    return amp*np.exp(-(R/float(sigma))**2/2.)
+    return c * np.exp(-(R/float(sigma))**2/2.)
 
 
 def mge_1d(r_array, flux_r, N=20):
@@ -28,6 +30,7 @@ def mge_1d(r_array, flux_r, N=20):
     :return: amplitudes and Gaussian sigmas for the best 1d flux profile
     """
     sigmas = np.logspace(np.log10(r_array[0]), np.log10(r_array[-1] / 2.), N + 2)[1:-1]
+    #sigmas = np.linspace(r_array[0], r_array[-1]/2, N + 2)[1:-1]
 
     A = np.zeros((len(flux_r), N))
     for j in np.arange(A.shape[1]):

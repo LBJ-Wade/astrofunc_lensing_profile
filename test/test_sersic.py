@@ -39,6 +39,21 @@ class TestSersic(object):
         npt.assert_almost_equal(values[1], 0.026902273598180083, decimal=6)
         npt.assert_almost_equal(values[2], 0.0053957432862338055, decimal=6)
 
+    def test_symmetry_r_sersic(self):
+        x = np.array([2,3,4])
+        y = np.array([1,1,1])
+        I0_sersic = 1
+        R_sersic1 = 1
+        R_sersic2 = 0.1
+        n_sersic = 1
+        center_x = 0
+        center_y = 0
+        values1 = self.sersic.function(x*R_sersic1, y*R_sersic1, I0_sersic, R_sersic1, n_sersic, center_x, center_y)
+        values2 = self.sersic.function(x*R_sersic2, y*R_sersic2, I0_sersic, R_sersic2, n_sersic, center_x, center_y)
+        npt.assert_almost_equal(values1[0], values2[0], decimal=6)
+        npt.assert_almost_equal(values1[1], values2[1], decimal=6)
+        npt.assert_almost_equal(values1[2], values2[2], decimal=6)
+
     def test_sersic_center(self):
         x = 0.01
         y = 0.
