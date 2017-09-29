@@ -122,3 +122,16 @@ class MultiGaussian_kappa(object):
         for i in range(len(amp)):
             d_3d += self.gaussian_kappa.density_2d(x, y, amp[i], sigma[i], sigma[i], center_x, center_y)
         return d_3d
+
+    def mass_3d_lens(self, R, amp, sigma):
+        """
+
+        :param R:
+        :param amp:
+        :param sigma:
+        :return:
+        """
+        mass_3d = np.zeros_like(R)
+        for i in range(len(amp)):
+            mass_3d += self.gaussian_kappa.mass_3d_lens(R, amp[i], sigma[i], sigma[i])
+        return mass_3d
