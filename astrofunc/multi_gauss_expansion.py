@@ -47,5 +47,5 @@ def de_projection_3d(amplitudes, sigmas):
     :param sigmas:
     :return:
     """
-    amplitudes_3d = amplitudes / sigmas * np.sqrt(np.pi/2)
+    amplitudes_3d = amplitudes / sigmas / np.sqrt(2*np.pi)
     return amplitudes_3d, sigmas

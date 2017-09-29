@@ -34,7 +34,7 @@ class Gaussian(object):
         :param center_y:
         :return:
         """
-        amp3d = amp / np.sqrt(sigma_x * sigma_y) * np.sqrt(np.pi/2)
+        amp3d = amp / np.sqrt(2* sigma_x * sigma_y) / np.sqrt(np.pi)
         sigma3d_x = sigma_x
         sigma3d_y = sigma_y
         return self.function(r, 0, amp3d, sigma3d_x, sigma3d_y)
