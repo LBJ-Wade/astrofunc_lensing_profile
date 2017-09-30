@@ -9,6 +9,14 @@ class NFWParam(object):
 
     rhoc = 2.77536627e11  # critical density [h^2 M_sun Mpc^-3]
 
+    def rhoc_z(self, z):
+        """
+
+        :param z:
+        :return:
+        """
+        return self.rhoc*(1+z)**3
+
     def M200(self, Rs, rho0, c):
         """
         M(R_200) calculation for NFW profile
@@ -81,6 +89,10 @@ class NFWParam(object):
     def profileMain(self, M, z):
         """
         returns all needed parameter (in comoving units modulo h) to draw the profile of the main halo
+        r200 in co-moving Mpc/h
+        rho_s in  h^2/Mpc^3 (co-moving)
+        Rs in Mpc/h co-moving
+        c unit less
         """
         c = self.c_M_z(M,z)
         r200 = self.r200_M(M)

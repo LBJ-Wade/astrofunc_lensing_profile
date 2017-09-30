@@ -62,6 +62,18 @@ class TestMGE(object):
         for i in range(10, len(ss)-10):
             npt.assert_almost_equal((ss_mge[i]-ss[i])/(ss[i]+ss_mge[i]), 0, decimal=1)
 
+        n_comp = 20
+        r_sersic = 1.5
+        n_sersic =3.5
+        I0_sersic = 1.
+        rs = np.logspace(-2., 1., 50) * r_sersic
+        ss = self.sersic.function(rs, np.zeros_like(rs), I0_sersic=I0_sersic, n_sersic=n_sersic, R_sersic=r_sersic)
+
+        amplitudes, sigmas, norm = mge.mge_1d(rs, ss, N=n_comp)
+        ss_mge = self.multiGaussian.function(rs, np.zeros_like(rs), amp=amplitudes, sigma=sigmas)
+        for i in range(10, len(ss)-10):
+            npt.assert_almost_equal((ss_mge[i]-ss[i])/(ss[i]+ss_mge[i]), 0, decimal=1)
+
     def test_hernquist(self):
         hernquist = Hernquist()
         n_comp = 20

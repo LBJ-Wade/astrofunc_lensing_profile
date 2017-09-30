@@ -57,7 +57,6 @@ class Hernquist(object):
             elif X > 1:
                 a = 1. / np.sqrt(X ** 2 - 1) * np.arctan(np.sqrt(X**2 - 1))
             else:  # X == 0:
-                c = 0.0001
                 a = 1. / np.sqrt(1 - c ** 2) * np.arctanh(np.sqrt((1 - c ** 2)))
 
         else:
