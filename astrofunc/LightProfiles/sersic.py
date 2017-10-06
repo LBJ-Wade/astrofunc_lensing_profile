@@ -130,12 +130,12 @@ class DoubleSersic(object):
         self.sersic = Sersic_elliptic()
         self.sersic_ellipse = Sersic_elliptic()
 
-    def function(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2, smoothing=0.01):
+    def function(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x=0, center_y=0, smoothing=0.01):
         ellipse = self.sersic_ellipse.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, smoothing)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y, smoothing)
         return ellipse + spherical
 
-    def function_split(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, I0_2, R_2, n_2, smoothing=0.01):
+    def function_split(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x=0, center_y=0, smoothing=0.01):
         ellipse = self.sersic_ellipse.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y, smoothing)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y, smoothing)
         return ellipse, spherical
@@ -149,12 +149,12 @@ class DoubleCoreSersic(object):
         self.sersic = Sersic_elliptic()
         self.sersic_core = CoreSersic()
 
-    def function(self, x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, I0_2, R_2, n_2, smoothing=0.01):
+    def function(self, x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, I0_2, R_2, n_2, center_x=0, center_y=0, smoothing=0.01):
         core_ellipse = self.sersic_core.function(x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, smoothing)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y, smoothing)
         return core_ellipse + spherical
 
-    def function_split(self, x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, I0_2, R_2, n_2, smoothing=0.01):
+    def function_split(self, x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, I0_2, R_2, n_2, center_x=0, center_y=0, smoothing=0.01):
         core_ellipse = self.sersic_core.function(x, y, I0_sersic, Re, R_sersic, n_sersic, gamma, phi_G, q, center_x, center_y, smoothing)
         spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y, smoothing)
         return core_ellipse, spherical
@@ -169,12 +169,12 @@ class BuldgeDisk(object):
         self.n_buldge = 4
         self.n_disk = 1
 
-    def function(self, x, y, I0_b, R_b, phi_G_b, q_b, I0_d, R_d, phi_G_d, q_d, center_x, center_y, smoothing=0.01):
+    def function(self, x, y, I0_b, R_b, phi_G_b, q_b, I0_d, R_d, phi_G_d, q_d, center_x=0, center_y=0, smoothing=0.01):
         buldge = self.sersic.function(x, y, I0_b, R_b, self.n_buldge, phi_G_b, q_b, center_x, center_y, smoothing)
         disk = self.sersic.function(x, y, I0_d, R_d, self.n_disk, phi_G_d, q_d, center_x, center_y, smoothing)
         return buldge + disk
 
-    def function_split(self, x, y, I0_b, R_b, phi_G_b, q_b, I0_d, R_d, phi_G_d, q_d, center_x, center_y, smoothing=0.01):
+    def function_split(self, x, y, I0_b, R_b, phi_G_b, q_b, I0_d, R_d, phi_G_d, q_d, center_x=0, center_y=0, smoothing=0.01):
         buldge = self.sersic.function(x, y, I0_b, R_b, self.n_buldge, phi_G_b, q_b, center_x, center_y, smoothing)
         disk = self.sersic.function(x, y, I0_d, R_d, self.n_disk, phi_G_d, q_d, center_x, center_y, smoothing)
         return buldge, disk
