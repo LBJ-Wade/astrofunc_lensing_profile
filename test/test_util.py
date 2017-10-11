@@ -263,7 +263,7 @@ def test_add_layer2image_odd_odd():
     x_pos = 20
     y_pos = 100
     added = Util.add_layer2image(grid2d, x_pos, y_pos, kernel, order=0)
-    assert added[100,20] == 1
+    assert added[100, 20] == 1
 
 
 def test_cutout_source():
