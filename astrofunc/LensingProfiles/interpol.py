@@ -141,17 +141,17 @@ class Interpol_func(object):
         :param f_xy:
         :return:
         """
-        if f_ is not None and hasattr(self, 'f_interp') or force is True:
+        if f_ is not None and not hasattr(self, 'f_interp') or force is True:
             self.f_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_, kx=1, ky=1, s=0)
-        if f_x is not None and hasattr(self, 'f_x_interp') or force is True:
+        if f_x is not None and not hasattr(self, 'f_x_interp') or force is True:
             self.f_x_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_x, kx=1, ky=1, s=0)
-        if f_y is not None and hasattr(self, 'f_y_interp') or force is True:
+        if f_y is not None and not hasattr(self, 'f_y_interp') or force is True:
             self.f_y_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_y, kx=1, ky=1, s=0)
-        if f_xx is not None and hasattr(self, 'f_xx_interp') or force is True:
+        if f_xx is not None and not hasattr(self, 'f_xx_interp') or force is True:
             self.f_xx_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_xx, kx=1, ky=1, s=0)
-        if f_yy is not None and hasattr(self, 'f_yy_interp') or force is True:
+        if f_yy is not None and not hasattr(self, 'f_yy_interp') or force is True:
             self.f_yy_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_yy, kx=1, ky=1, s=0)
-        if f_xy is not None and hasattr(self, 'f_xy_interp') or force is True:
+        if f_xy is not None and not hasattr(self, 'f_xy_interp') or force is True:
             self.f_xy_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_xy, kx=1, ky=1, s=0)
 
 

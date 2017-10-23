@@ -67,5 +67,20 @@ class TestInterpol(object):
         alpha_x, alpha_y = interp_func.derivatives(x, y, **{})
         assert alpha_x == 0.31622776601683794
 
+    def test_kwargs_interpolation(self):
+        numPix = 101
+        deltaPix = 0.1
+        x_grid_interp, y_grid_interp = util.make_grid(numPix,deltaPix)
+        sis = SIS()
+        kwargs_SIS = {'theta_E':1., 'center_x': 0.5, 'center_y': -0.5}
+        f_sis, f_x_sis, f_y_sis, f_xx_sis, f_yy_sis, f_xy_sis = sis.all(x_grid_interp, y_grid_interp, **kwargs_SIS)
+        x_axes, y_axes = util.get_axes(x_grid_interp, y_grid_interp)
+        interp_func = Interpol_func()
+        kwargs_interp = {'grid_interp_x': x_axes, 'grid_interp_y': y_axes, 'f_': util.array2image(f_sis), 'f_x': util.array2image(f_x_sis), 'f_y': util.array2image(f_y_sis), 'f_xx': util.array2image(f_xx_sis), 'f_yy': util.array2image(f_yy_sis), 'f_xy': util.array2image(f_xy_sis)}
+        x, y = 1., 1.
+        alpha_x, alpha_y = interp_func.derivatives(x, y, **kwargs_interp)
+        assert alpha_x == 0.31622776601683794
+
+
 if __name__ == '__main__':
     pytest.main("-k TestSourceModel")
