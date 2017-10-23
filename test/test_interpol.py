@@ -53,6 +53,19 @@ class TestInterpol(object):
         assert f_xy_interp[0] == f_xy_true[0]
         assert f_xy_interp[1] == f_xy_true[1]
 
+    def test_call(self):
+        numPix = 101
+        deltaPix = 0.1
+        x_grid_interp, y_grid_interp = util.make_grid(numPix,deltaPix)
+        sis = SIS()
+        kwargs_SIS = {'theta_E':1., 'center_x': 0.5, 'center_y': -0.5}
+        f_sis, f_x_sis, f_y_sis, f_xx_sis, f_yy_sis, f_xy_sis = sis.all(x_grid_interp, y_grid_interp, **kwargs_SIS)
+        x_axes, y_axes = util.get_axes(x_grid_interp, y_grid_interp)
+        interp_func = Interpol_func()
+        interp_func.do_interp(x_axes, y_axes, util.array2image(f_sis), util.array2image(f_x_sis), util.array2image(f_y_sis), util.array2image(f_xx_sis), util.array2image(f_yy_sis), util.array2image(f_xy_sis))
+        x, y = 1., 1.
+        alpha_x, alpha_y = interp_func.derivatives(x, y, **{})
+        assert alpha_x == 0.31622776601683794
 
 if __name__ == '__main__':
     pytest.main("-k TestSourceModel")
