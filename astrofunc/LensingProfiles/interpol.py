@@ -14,7 +14,9 @@ class Interpol_func(object):
 
     def function(self, x, y, grid_interp_x=None, grid_interp_y=None, f_=None, f_x=None, f_y=None, f_xx=None, f_yy=None, f_xy=None):
         self._check_interp(grid_interp_x, grid_interp_y, f_, f_x, f_y, f_xx, f_yy, f_xy)
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1 and np.shape(x) == ():
+        #if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
             f_ = self.f_interp(y, x)
             return f_[0][0]
         else:
@@ -34,7 +36,9 @@ class Interpol_func(object):
         returns df/dx and df/dy of the function
         """
         self._check_interp(grid_interp_x, grid_interp_y, f_, f_x, f_y, f_xx, f_yy, f_xy)
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1 and np.shape(x) == ():
+        #if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
             f_x = self.f_x_interp(y, x)
             f_y = self.f_y_interp(y, x)
             return f_x[0][0], f_y[0][0]
@@ -58,7 +62,9 @@ class Interpol_func(object):
         returns Hessian matrix of function d^2f/dx^2, d^f/dy^2, d^2/dxdy
         """
         self._check_interp(grid_interp_x, grid_interp_y, f_, f_x, f_y, f_xx, f_yy, f_xy)
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1 and np.shape(x) == ():
+        #if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
             f_xx = self.f_xx_interp(y, x)
             f_yy = self.f_yy_interp(y, x)
             f_xy = self.f_xy_interp(y, x)
@@ -86,7 +92,9 @@ class Interpol_func(object):
         returns f,f_x,f_y,f_xx, f_yy, f_xy
         """
         self._check_interp(grid_interp_x, grid_interp_y, f_, f_x, f_y, f_xx, f_yy, f_xy)
-        if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
+        n = len(np.atleast_1d(x))
+        if n <= 1 and np.shape(x) == ():
+        #if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
             f_ = self.f_interp(y, x)
             f_x = self.f_x_interp(y, x)
             f_y = self.f_y_interp(y, x)
