@@ -81,8 +81,8 @@ class TestNumerics(object):
         npt.assert_almost_equal(alpha_mass/np.pi, alpha_r, decimal=5)
 
     def test_hernquist(self):
-        kwargs = {'rho0': 1.,  'Rs': 5.}
         from astrofunc.LensingProfiles.hernquist import Hernquist as Model
+        kwargs = {'rho0': 1., 'Rs': 5.}
         self.assert_integrals(Model, kwargs)
 
     def test_hernquist_density_deflection(self):
