@@ -29,13 +29,28 @@ def mge_1d(r_array, flux_r, N=20):
     :param N: number of Gaussians
     :return: amplitudes and Gaussian sigmas for the best 1d flux profile
     """
+    try:
+        amplitudes, sigmas, norm= _mge_1d(r_array, flux_r, N)
+    except:
+        N_new = N - 1
+        amplitudes, sigmas, norm = mge_1d(r_array, flux_r, N=N_new)
+    return amplitudes, sigmas, norm
+
+
+def _mge_1d(r_array, flux_r, N=20):
+    """
+
+    :param r_array:
+    :param flux_r:
+    :param N:
+    :return:
+    """
     sigmas = np.logspace(np.log10(r_array[0]), np.log10(r_array[-1] / 2.), N + 2)[1:-1]
-    #sigmas = np.linspace(r_array[0], r_array[-1]/2, N + 2)[1:-1]
+    # sigmas = np.linspace(r_array[0], r_array[-1]/2, N + 2)[1:-1]
 
     A = np.zeros((len(flux_r), N))
     for j in np.arange(A.shape[1]):
         A[:, j] = gaussian(r_array, sigmas[j], 1.)
-
     amplitudes, norm = nnls(A, flux_r)
     return amplitudes, sigmas, norm
 
