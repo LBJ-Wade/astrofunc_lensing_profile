@@ -33,6 +33,8 @@ def mge_1d(r_array, flux_r, N=20):
         amplitudes, sigmas, norm= _mge_1d(r_array, flux_r, N)
     except:
         N_new = N - 1
+        if N_new == 0:
+            raise ValueError("Number of MGE went down to zero! This should not happen!")
         amplitudes, sigmas, norm = mge_1d(r_array, flux_r, N=N_new)
     return amplitudes, sigmas, norm
 

@@ -180,5 +180,34 @@ class TestMGE(object):
          0.19506006,   0.18649562,   0.17830721,   0.17047832,
          0.16299318,   0.15583668,   0.14899441,   0.14245255])
         amplitudes, sigmas, norm = mge.mge_1d(rs, kappa, N=n_comp)
+
+    def test_nfw_sersic(self):
+        kwargs_lens_nfw = {'theta_Rs': 1.4129647849966354, 'Rs': 7.0991113634274736}
+        kwargs_lens_sersic = {'k_eff': 0.24100561407593576, 'n_sersic': 1.8058507329346063, 'r_eff': 1.0371803141813705}
+        from astrofunc.LensingProfiles.nfw import NFW
+        from astrofunc.LensingProfiles.sersic import Sersic
+        nfw = NFW()
+        sersic = Sersic()
+        theta_E = 1.5
+        n_comp = 10
+        rs = np.logspace(-2., 1., 100) * theta_E
+        f_xx_nfw, f_yy_nfw, f_xy_nfw = nfw.hessian(rs, 0, **kwargs_lens_nfw)
+        f_xx_s, f_yy_s, f_xy_s = sersic.hessian(rs, 0, **kwargs_lens_sersic)
+        kappa = 1 / 2. * (f_xx_nfw + f_xx_s + f_yy_nfw + f_yy_s)
+        amplitudes, sigmas, norm = mge.mge_1d(rs, kappa, N=n_comp)
+        kappa_mge = self.multiGaussian.function(rs, np.zeros_like(rs), amp=amplitudes, sigma=sigmas)
+        from astrofunc.LensingProfiles.multi_gaussian_kappa import MultiGaussian_kappa
+        mge_kappa = MultiGaussian_kappa()
+        f_xx_mge, f_yy_mge, f_xy_mge = mge_kappa.hessian(rs, np.zeros_like(rs), amp=amplitudes, sigma=sigmas)
+        for i in range(0, 80):
+            npt.assert_almost_equal(kappa_mge[i], 1. / 2 * (f_xx_mge[i] + f_yy_mge[i]), decimal=1)
+            npt.assert_almost_equal((kappa[i] - kappa_mge[i]) / kappa[i], 0, decimal=1)
+
+        f_nfw = nfw.function(theta_E, 0, **kwargs_lens_nfw)
+        f_s = sersic.function(theta_E, 0, **kwargs_lens_sersic)
+        f_mge = mge_kappa.function(theta_E, 0, sigma=sigmas, amp=amplitudes)
+        print f_mge, f_nfw + f_s
+        npt.assert_almost_equal(f_mge / (f_nfw + f_s), 1, decimal=2)
+
 if __name__ == '__main__':
     pytest.main()
