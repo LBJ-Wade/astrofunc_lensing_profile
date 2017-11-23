@@ -12,10 +12,10 @@ class TestSersic(object):
     tests the Gaussian methods
     """
     def setup(self):
-        self.sersic = Sersic()
-        self.sersic_elliptic = Sersic_elliptic()
-        self.double_sersic = DoubleSersic()
-        self.core_sersic = CoreSersic()
+        self.sersic = Sersic(smoothing=0.02)
+        self.sersic_elliptic = Sersic_elliptic(smoothing=0.02)
+        self.double_sersic = DoubleSersic(smoothing=0.02)
+        self.core_sersic = CoreSersic(smoothing=0.02)
 
     def test_sersic(self):
         x = np.array([1])
@@ -102,16 +102,16 @@ class TestSersic(object):
         center_x = 0
         center_y = 0
         smoothing = 0.02
-        values = self.core_sersic.function(x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y, smoothing=smoothing)
+        values = self.core_sersic.function(x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y)
         npt.assert_almost_equal(values[0], 0.84489101, decimal=8)
         x = np.array([0])
         y = np.array([0])
-        values = self.core_sersic.function(x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y, smoothing=smoothing)
+        values = self.core_sersic.function(x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y)
         npt.assert_almost_equal(values[0], 288406.09, decimal=0)
 
         x = np.array([2,3,4])
         y = np.array([1,1,1])
-        values = self.core_sersic.function(x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y, smoothing=smoothing)
+        values = self.core_sersic.function(x, y, I0, Rb, Re, n, gamma, phi_G, q, center_x, center_y)
         npt.assert_almost_equal(values[0], 0.79749529635325933, decimal=6)
         npt.assert_almost_equal(values[1], 0.33653478121594838, decimal=6)
         npt.assert_almost_equal(values[2], 0.14050402887681532, decimal=6)
@@ -130,16 +130,16 @@ class TestSersic(object):
         center_x = 0
         center_y = 0
         smoothing = 0.02
-        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x, center_y, smoothing=smoothing)
+        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x, center_y)
         assert values[0] == 0.20675084739923477
         x = np.array([0])
         y = np.array([0])
-        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x, center_y, smoothing=smoothing)
+        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x, center_y)
         assert values[0] == 7.8708484172821045
 
         x = np.array([2,3,4])
         y = np.array([1,1,1])
-        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x, center_y, smoothing=smoothing)
+        values = self.double_sersic.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x, center_y)
         npt.assert_almost_equal(values[0], 0.18951603025197983, decimal=8)
         npt.assert_almost_equal(values[1], 0.056245995685458183, decimal=8)
         npt.assert_almost_equal(values[2], 0.021287990035489202, decimal=8)

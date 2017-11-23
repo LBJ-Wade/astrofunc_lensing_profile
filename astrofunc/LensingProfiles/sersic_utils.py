@@ -5,6 +5,10 @@ import numpy as np
 class SersicUtil(object):
 
     _s = 0.000001
+    _smoothing = 0.01
+
+    def __init__(self, smoothing=0.01):
+        self._smoothing = smoothing
 
     def k_bn(self, n, Re):
         """
