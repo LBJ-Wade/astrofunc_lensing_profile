@@ -38,6 +38,11 @@ class Hernquist(object):
         r = np.sqrt(x_**2 + y_**2)
         X = r/Rs
         sigma0 = self.rho2sigma(rho0, Rs)
+        if isinstance(X, int) or isinstance(X, float):
+            if X == 1:
+                X = 1.000001
+        else:
+            X[X == 1] = 1.000001
         sigma = sigma0 / (X**2-1)**2 * (-3 + (2+X**2)*self._F(X))
         return sigma
 

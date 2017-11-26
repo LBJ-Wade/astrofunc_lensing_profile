@@ -2,6 +2,7 @@ import copy
 import scipy.integrate as integrate
 import numpy as np
 import scipy.signal as scp
+import util
 
 
 class ProfileIntegrals(object):
@@ -65,7 +66,12 @@ class ProfileIntegrals(object):
         out = integrate.quad(lambda x: self.density_2d(x, kwargs)*2*np.pi*x, 0, r)
         return out[0]
 
-    def potential_from_kappa(self, kappa, x_coords, y_coords):
+
+class ConvergenceIntegrals(object):
+    """
+    class to compute lensing potentials and deflection angles provided a convergence map
+    """
+    def potential_from_kappa(self, kappa, x_grid, y_grid, deltaPix):
         """
 
         :param kappa:
@@ -73,6 +79,60 @@ class ProfileIntegrals(object):
         :param y_coords:
         :return:
         """
+        kernel = self._potential_kernel(x_grid, y_grid)
+        f_ = scp.fftconvolve(kernel, util.array2image(kappa), mode='same') / np.pi * deltaPix**2
+        return f_
+
+    def deflection_from_kappa(self, kappa, x_grid, y_grid, deltaPix):
+        """
+
+        :param kappa:
+        :param x_grid:
+        :param y_grid:
+        :param deltaPix:
+        :return:
+        """
+        kernel_x, kernel_y = self._deflection_kernel(x_grid, y_grid)
+        f_x = scp.fftconvolve(kernel_x, util.array2image(kappa), mode='same') / np.pi * deltaPix**2
+        f_y = scp.fftconvolve(kernel_y, util.array2image(kappa), mode='same') / np.pi * deltaPix ** 2
+        return f_x, f_y
+
+    def _potential_kernel(self, x_grid, y_grid):
+        """
+
+        :param numPix:
+        :param deltaPix:
+        :return:
+        """
+        x_mean = np.mean(x_grid)
+        y_mean = np.mean(y_grid)
+        r2 = (x_grid - x_mean)**2 + (y_grid - y_mean)**2
+        r2_max = np.max(r2)
+        lnr = np.log(r2/r2_max) / 2.
+        lnr[r2 == 0] = 0
+        kernel = util.array2image(lnr)
+        return kernel
+
+    def _deflection_kernel(self, x_grid, y_grid):
+        """
+
+        :param numPix:
+        :param deltaPix:
+        :return:
+        """
+        x_mean = np.mean(x_grid)
+        y_mean = np.mean(y_grid)
+        r2 = (x_grid - x_mean)**2 + (y_grid - y_mean)**2
+        l0 = np.where(r2 == 0)
+
+        kernel_x = util.array2image(x_grid / r2)
+        kernel_y = util.array2image(y_grid / r2)
+        kernel_x[l0] = 0
+        kernel_y[l0] = 0
+        return kernel_x, kernel_y
+"""
+
+
 
 
         def alpha_def(kappa, n1, n2, x0, y0, extra):
@@ -108,3 +168,5 @@ class ProfileIntegrals(object):
 
             intex = scp.fftconvolve(tabx, (kappa), mode='same') / np.pi
             intey = scp.fftconvolve(taby, (kappa), mode='same') / np.pi
+
+"""
