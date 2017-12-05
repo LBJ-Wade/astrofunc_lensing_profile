@@ -420,7 +420,7 @@ def add_layer2image(grid2d, x_pos, y_pos, kernel, order=1):
     return new
 
 
-def cutout_source(x_pos, y_pos, image, kernelsize, order=5):
+def cutout_source(x_pos, y_pos, image, kernelsize, order=5, shift=True):
     """
     cuts out point source (e.g. PSF estimate) out of image and shift it to the center of a pixel
     :param x_pos:
@@ -442,8 +442,11 @@ def cutout_source(x_pos, y_pos, image, kernelsize, order=5):
     image_cut = image[y_min:y_max, x_min:x_max]
     shift_x = x_int - x_pos
     shift_y = y_int - y_pos
-    kernel_shifted = interp.shift(image_cut, [shift_y, shift_x], order=order)
-    return kernel_shifted
+    if shift is True:
+        kernel_shifted = interp.shift(image_cut, [shift_y, shift_x], order=order)
+    else:
+        kernel_shifted = image_cut
+    return copy.deepcopy(kernel_shifted)
 
 
 def kernel_norm(kernel):
