@@ -794,7 +794,27 @@ def half_light_radius(lens_light, x_grid, y_grid, center_x=0, center_y=0):
     return -1
 
 
-def radial_profile(light_grid, x_grid, y_grid, center_x=0, center_y=0, n=20):
+def fwhm_kernel(kernel):
+    """
+    computes the full width at half maximum of a (PSF) kernel
+    :param kernel: (psf) kernel, 2d numpy array
+    :return: fwhm in units of pixels
+    """
+    n = len(kernel)
+    if n % 2 == 0:
+        raise ValueError('only works with odd number of pixels in kernel!')
+    max_flux = kernel[(n-1)/2, (n-1)/2]
+    I_2 = max_flux/2.
+    I_r = kernel[(n-1)/2, (n-1)/2:]
+    r = np.linspace(0, (n-1)/2, (n+1)/2)
+    for i in range(1, len(r)):
+        if I_r[i] < I_2:
+            fwhm_2 = (I_2 - I_r[i-1])/(I_r[i] - I_r[i-1]) + r[i-1]
+            return fwhm_2 * 2
+    raise ValueError('The kernel did not drop to half the max value - fwhm not determined!')
+
+
+def radial_profile(light_grid, x_grid, y_grid, center_x=0, center_y=0, n=None):
     """
 
     :param light_grid: array of surface brightness
@@ -807,6 +827,8 @@ def radial_profile(light_grid, x_grid, y_grid, center_x=0, center_y=0, n=20):
     """
     light_img = array2image(light_grid)
     r_max = np.max(np.sqrt(x_grid**2 + y_grid**2))
+    if n is None:
+        n = int(np.sqrt(len(x_grid)))
     I_r = np.zeros(n)
     I_enclosed = 0
     r = np.linspace(1./n*r_max, r_max, n)
@@ -840,8 +862,18 @@ def fwhm2sigma(fwhm):
     :param fwhm: full-widt-half-max value
     :return: gaussian sigma (sqrt(var))
     """
-    sigma = fwhm/ (2 * np.sqrt(2 * np.log(2)))
+    sigma = fwhm / (2 * np.sqrt(2 * np.log(2)))
     return sigma
+
+
+def sigma2fwhm(sigma):
+    """
+
+    :param sigma:
+    :return:
+    """
+    fwhm = sigma * (2 * np.sqrt(2 * np.log(2)))
+    return fwhm
 
 
 def hyper2F2_array(a, b, c, d, x):

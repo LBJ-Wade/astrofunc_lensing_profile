@@ -453,6 +453,18 @@ class Test_Util(object):
         sigma = Util.fwhm2sigma(fwhm)
         assert sigma == fwhm/ (2 * np.sqrt(2 * np.log(2)))
 
+    def test_fwhm_kerne(self):
+        x_grid, y_gird = Util.make_grid(101, 1)
+        sigma = 20
+        from astrofunc.LightProfiles.gaussian import Gaussian
+        gaussian = Gaussian()
+        flux = gaussian.function(x_grid, y_gird, amp=1, sigma_x=sigma, sigma_y=sigma)
+        kernel = Util.array2image(flux)
+        kernel = Util.kernel_norm(kernel)
+        fwhm_kernel = Util.fwhm_kernel(kernel)
+        fwhm = Util.sigma2fwhm(sigma)
+        npt.assert_almost_equal(fwhm/fwhm_kernel, 1, 2)
+
 
 if __name__ == '__main__':
     pytest.main()
