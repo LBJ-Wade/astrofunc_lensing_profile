@@ -502,6 +502,21 @@ def compare_distance(x_mapped, y_mapped):
     return X2
 
 
+def min_square_dist(x_1, y_1, x_2, y_2):
+    """
+    return minimum of quadratic distance of pairs (x1, y1) to pairs (x2, y2)
+    :param x_1:
+    :param y_1:
+    :param x_2:
+    :param y_2:
+    :return:
+    """
+    dist = np.zeros_like(x_1)
+    for i in range(len(x_1)):
+        dist[i] = np.min((x_1[i] - x_2)**2 + (y_1[i] - y_2)**2)
+    return dist
+
+
 def mk_array(input_var):
     """This functions makes sure that the input is a numpy array. If it is
     a recognised format (float, array or list) the output will be a numpy array"""
@@ -769,7 +784,7 @@ def neighborSelect(a, x, y):
                         x_mins.append(x[i])
                         y_mins.append(y[i])
                         values.append(a[i])
-    return x_mins, y_mins, values
+    return np.array(x_mins), np.array(y_mins), np.array(values)
 
 
 def half_light_radius(lens_light, x_grid, y_grid, center_x=0, center_y=0):
