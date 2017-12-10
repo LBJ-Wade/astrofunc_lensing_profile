@@ -797,6 +797,7 @@ def half_light_radius(lens_light, x_grid, y_grid, center_x=0, center_y=0):
     :param center_y: center of light
     :return:
     """
+    lens_light[lens_light < 0] = 0
     total_flux_2 = np.sum(lens_light)/2.
     lens_light_img = array2image(lens_light)
     r_max = np.max(np.sqrt(x_grid**2 + y_grid**2))
