@@ -462,12 +462,17 @@ def de_shift_kernel(kernel, shift_x, shift_y, iterations=20):
     :param shift_y:
     :return:
     """
+    int_shift_x = int(round(shift_x))
+    frac_x_shift = shift_x - int_shift_x
+    int_shift_y = int(round(shift_y))
+    frac_y_shift = shift_y - int_shift_y
     kernel_init = copy.deepcopy(kernel)
+    kernel_init_shifted = copy.deepcopy(interp.shift(kernel_init, [int_shift_y, int_shift_x], order=1))
+    kernel = interp.shift(kernel, [int_shift_y, int_shift_x], order=1)
     norm = np.sum(kernel)
-    kernel = interp.shift(kernel, [shift_y, shift_x], order=1)
     for i in range(iterations):
-        kernel_shifted_inv = interp.shift(kernel, [-shift_y, -shift_x], order=1)
-        delta = kernel_init - kernel_norm(kernel_shifted_inv) * norm
+        kernel_shifted_inv = interp.shift(kernel, [-frac_y_shift, -frac_x_shift], order=1)
+        delta = kernel_init_shifted - kernel_norm(kernel_shifted_inv) * norm
         kernel += delta
         kernel = kernel_norm(kernel) * norm
     return kernel
