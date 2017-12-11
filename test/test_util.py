@@ -2,6 +2,7 @@ __author__ = 'sibirrer'
 
 import astrofunc.util as Util
 from astrofunc.util import Util_class
+import scipy.ndimage.interpolation as interp
 import numpy as np
 import pytest
 import numpy.testing as npt
@@ -268,10 +269,47 @@ def test_add_layer2image_odd_odd():
 
 def test_cutout_source():
     grid2d = np.zeros((20, 20))
-    grid2d[7:9,7:9] = 1
-    kernel = Util.cutout_source(x_pos=7.5, y_pos=7.5, image=grid2d, kernelsize=5, order=1)
+    grid2d[7:9, 7:9] = 1
+    kernel = Util.cutout_source(x_pos=7.5, y_pos=7.5, image=grid2d, kernelsize=5, shift=False)
     print kernel
     assert kernel[2, 2] == 1
+
+
+def test_cutout_psf():
+    """
+    test whether a shifted psf can be reproduced sufficiently well
+    :return:
+    """
+    kernel_size = 5
+    image = np.zeros((10, 10))
+    kernel = np.zeros((kernel_size, kernel_size))
+    kernel[2, 2] = 1
+    shift_x = 0.5
+    shift_y = 0
+    x_c, y_c = 5, 5
+    x_pos = x_c + shift_x
+    y_pos = y_c + shift_y
+    #kernel_shifted = interp.shift(kernel, [shift_y, shift_x], order=1)
+    image = Util.add_layer2image(image, x_pos, y_pos, kernel, order=1)
+    print(image)
+    kernel_new = Util.cutout_source(x_pos=x_pos, y_pos=y_pos, image=image, kernelsize=kernel_size)
+    print kernel_new, kernel
+    npt.assert_almost_equal(kernel_new[2, 2], kernel[2, 2], decimal=2)
+
+
+def test_de_shift():
+    kernel_size = 5
+    kernel = np.zeros((kernel_size, kernel_size))
+    kernel[2, 2] = 2
+    shift_x = 0.48
+    shift_y = 0.2
+    kernel_shifted = interp.shift(kernel, [-shift_y, -shift_x], order=1)
+    kernel_de_shifted = Util.de_shift_kernel(kernel_shifted, shift_x, shift_y, iterations=50)
+    delta_max = np.max(kernel- kernel_de_shifted)
+    print kernel_de_shifted
+    assert delta_max < 0.01
+
+    npt.assert_almost_equal(kernel_de_shifted[2, 2], kernel[2, 2], decimal=2)
 
 
 def test_mk_array():

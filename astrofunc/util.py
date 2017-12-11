@@ -420,7 +420,7 @@ def add_layer2image(grid2d, x_pos, y_pos, kernel, order=1):
     return new
 
 
-def cutout_source(x_pos, y_pos, image, kernelsize, order=5, shift=True):
+def cutout_source(x_pos, y_pos, image, kernelsize, shift=True):
     """
     cuts out point source (e.g. PSF estimate) out of image and shift it to the center of a pixel
     :param x_pos:
@@ -439,14 +439,38 @@ def cutout_source(x_pos, y_pos, image, kernelsize, order=5, shift=True):
     x_min = np.maximum(x_int - d, 0)
     y_max = np.minimum(y_int + d + 1, n)
     y_min = np.maximum(y_int - d, 0)
-    image_cut = image[y_min:y_max, x_min:x_max]
+    image_cut = copy.deepcopy(image[y_min:y_max, x_min:x_max])
     shift_x = x_int - x_pos
     shift_y = y_int - y_pos
     if shift is True:
-        kernel_shifted = interp.shift(image_cut, [shift_y, shift_x], order=order)
+        kernel_final = de_shift_kernel(image_cut, shift_x, shift_y)
+        #kernel_shifted = interp.shift(image_cut, [shift_y, shift_x], order=order)
+        #print(kernel_shifted, 'kernel_shifted')
+        #kernel_inv_shifted = interp.shift(copy.deepcopy(kernel_shifted), [-shift_y, -shift_x], order=order)
+        #print(kernel_inv_shifted, 'kernel_inv_shifted')
+        #kernel_final = kernel_shifted + image_cut - kernel_inv_shifted
     else:
-        kernel_shifted = image_cut
-    return copy.deepcopy(kernel_shifted)
+        kernel_final = image_cut
+    return kernel_final
+
+
+def de_shift_kernel(kernel, shift_x, shift_y, iterations=20):
+    """
+
+    :param kernel:
+    :param shift_x:
+    :param shift_y:
+    :return:
+    """
+    kernel_init = copy.deepcopy(kernel)
+    norm = np.sum(kernel)
+    kernel = interp.shift(kernel, [shift_y, shift_x], order=1)
+    for i in range(iterations):
+        kernel_shifted_inv = interp.shift(kernel, [-shift_y, -shift_x], order=1)
+        delta = kernel_init - kernel_norm(kernel_shifted_inv) * norm
+        kernel += delta
+        kernel = kernel_norm(kernel) * norm
+    return kernel
 
 
 def kernel_norm(kernel):
