@@ -1,7 +1,6 @@
 __author__ = 'sibirrer'
 
 import astrofunc.util as Util
-from astrofunc.util import Util_class
 import scipy.ndimage.interpolation as interp
 import numpy as np
 import pytest
@@ -492,58 +491,58 @@ def test_re_size_array():
     assert kernel_out[(numPix*subgrid_res-1)/2, (numPix*subgrid_res-1)/2] == 0.58477508650519028
 
 
-class Test_Util(object):
+def test_make_subgrid():
+    numPix = 101
+    deltapix = 1
+    x_grid, y_grid = Util.make_grid(numPix, deltapix, subgrid_res=1)
+    x_sub_grid, y_sub_grid = Util.make_subgrid(x_grid, y_grid, subgrid_res=2)
+    assert np.sum(x_grid) == 0
+    assert x_sub_grid[0] == -50.25
+    assert y_sub_grid[17] == -50.25
 
-    def setup(self):
-        self.util_class = Util_class()
+    x_sub_grid_new, y_sub_grid_new = Util.make_subgrid(x_grid, y_grid, subgrid_res=4)
+    assert x_sub_grid_new[0] == -50.375
 
-    def test_make_subgrid(self):
-        numPix = 101
-        deltapix = 1
-        x_grid, y_grid = Util.make_grid(numPix, deltapix, subgrid_res=1)
-        x_sub_grid, y_sub_grid = self.util_class.make_subgrid(x_grid, y_grid, subgrid_res=2)
-        assert np.sum(x_grid) == 0
-        assert x_sub_grid[0] == -50.25
-        assert y_sub_grid[17] == -50.25
 
-        x_sub_grid_new, y_sub_grid_new = self.util_class.make_subgrid(x_grid, y_grid, subgrid_res=4)
-        assert x_sub_grid_new[0] == -50.375
+def test_re_size2():
+    kwargs = {'numPix': 50}
+    grid = np.ones((100, 100))
+    grid_smoothed = Util.re_size_grid(grid, **kwargs)
+    assert grid_smoothed[0][0] == 1
 
-    def test_re_size2(self):
-        kwargs = {'numPix': 50}
-        grid = np.ones((100, 100))
-        grid_smoothed = self.util_class.re_size_grid(grid, **kwargs)
-        assert grid_smoothed[0][0] == 1
 
-    def test_re_size(self):
-        grid = np.zeros((200, 100))
-        grid[100, 50] = 4
-        grid_small = self.util_class.re_size(grid, factor=2)
-        assert grid_small[50][25] == 1
+def test_re_size():
+    grid = np.zeros((200, 100))
+    grid[100, 50] = 4
+    grid_small = Util.re_size(grid, factor=2)
+    assert grid_small[50][25] == 1
 
-    def test_symmetry_average(self):
-        image = np.zeros((5,5))
-        image[2, 3] = 1
-        symmetry = 2
-        img_sym = self.util_class.symmetry_average(image, symmetry)
-        npt.assert_almost_equal(img_sym[2, 1], 0.5, decimal=10)
 
-    def test_fwhm2sigma(self):
-        fwhm = 0.5
-        sigma = Util.fwhm2sigma(fwhm)
-        assert sigma == fwhm/ (2 * np.sqrt(2 * np.log(2)))
+def test_symmetry_average():
+    image = np.zeros((5,5))
+    image[2, 3] = 1
+    symmetry = 2
+    img_sym = Util.symmetry_average(image, symmetry)
+    npt.assert_almost_equal(img_sym[2, 1], 0.5, decimal=10)
 
-    def test_fwhm_kerne(self):
-        x_grid, y_gird = Util.make_grid(101, 1)
-        sigma = 20
-        from astrofunc.LightProfiles.gaussian import Gaussian
-        gaussian = Gaussian()
-        flux = gaussian.function(x_grid, y_gird, amp=1, sigma_x=sigma, sigma_y=sigma)
-        kernel = Util.array2image(flux)
-        kernel = Util.kernel_norm(kernel)
-        fwhm_kernel = Util.fwhm_kernel(kernel)
-        fwhm = Util.sigma2fwhm(sigma)
-        npt.assert_almost_equal(fwhm/fwhm_kernel, 1, 2)
+
+def test_fwhm2sigma():
+    fwhm = 0.5
+    sigma = Util.fwhm2sigma(fwhm)
+    assert sigma == fwhm/ (2 * np.sqrt(2 * np.log(2)))
+
+
+def test_fwhm_kerne():
+    x_grid, y_gird = Util.make_grid(101, 1)
+    sigma = 20
+    from astrofunc.LightProfiles.gaussian import Gaussian
+    gaussian = Gaussian()
+    flux = gaussian.function(x_grid, y_gird, amp=1, sigma_x=sigma, sigma_y=sigma)
+    kernel = Util.array2image(flux)
+    kernel = Util.kernel_norm(kernel)
+    fwhm_kernel = Util.fwhm_kernel(kernel)
+    fwhm = Util.sigma2fwhm(sigma)
+    npt.assert_almost_equal(fwhm/fwhm_kernel, 1, 2)
 
 
 if __name__ == '__main__':

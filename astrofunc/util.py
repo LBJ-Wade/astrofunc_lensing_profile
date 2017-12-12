@@ -979,96 +979,99 @@ def hyper2F2_array(a, b, c, d, x):
     return out
 
 
-class Util_class(object):
+def make_subgrid(ra_coord, dec_coord, subgrid_res=2):
     """
-    util class which relies on util functions
+    return a grid with subgrid resolution
+    :param ra_coord:
+    :param dec_coord:
+    :param subgrid_res:
+    :return:
     """
-    def __init__(self):
-        pass
+    ra_array = array2image(ra_coord)
+    dec_array = array2image(dec_coord)
+    n = len(ra_array)
+    d_ra_x = ra_array[0][1] - ra_array[0][0]
+    d_ra_y = ra_array[1][0] - ra_array[0][0]
+    d_dec_x = dec_array[0][1] - dec_array[0][0]
+    d_dec_y = dec_array[1][0] - dec_array[0][0]
 
-    def make_subgrid(self, ra_coord, dec_coord, subgrid_res=2):
-        """
-        return a grid with subgrid resolution
-        :param ra_coord:
-        :param dec_coord:
-        :param subgrid_res:
-        :return:
-        """
-        ra_array = array2image(ra_coord)
-        dec_array = array2image(dec_coord)
-        n = len(ra_array)
-        d_ra_x = ra_array[0][1] - ra_array[0][0]
-        d_ra_y = ra_array[1][0] - ra_array[0][0]
-        d_dec_x = dec_array[0][1] - dec_array[0][0]
-        d_dec_y = dec_array[1][0] - dec_array[0][0]
+    ra_array_new = np.zeros((n*subgrid_res, n*subgrid_res))
+    dec_array_new = np.zeros((n*subgrid_res, n*subgrid_res))
+    for i in range(0, subgrid_res):
+        for j in range(0, subgrid_res):
+            ra_array_new[i::subgrid_res, j::subgrid_res] = ra_array + d_ra_x * (-1/2. + 1/(2.*subgrid_res) + j/float(subgrid_res)) + d_ra_y * (-1/2. + 1/(2.*subgrid_res) + i/float(subgrid_res))
+            dec_array_new[i::subgrid_res, j::subgrid_res] = dec_array + d_dec_x * (-1/2. + 1/(2.*subgrid_res) + j/float(subgrid_res)) + d_dec_y * (-1/2. + 1/(2.*subgrid_res) + i/float(subgrid_res))
 
-        ra_array_new = np.zeros((n*subgrid_res, n*subgrid_res))
-        dec_array_new = np.zeros((n*subgrid_res, n*subgrid_res))
-        for i in range(0, subgrid_res):
-            for j in range(0, subgrid_res):
-                ra_array_new[i::subgrid_res, j::subgrid_res] = ra_array + d_ra_x * (-1/2. + 1/(2.*subgrid_res) + j/float(subgrid_res)) + d_ra_y * (-1/2. + 1/(2.*subgrid_res) + i/float(subgrid_res))
-                dec_array_new[i::subgrid_res, j::subgrid_res] = dec_array + d_dec_x * (-1/2. + 1/(2.*subgrid_res) + j/float(subgrid_res)) + d_dec_y * (-1/2. + 1/(2.*subgrid_res) + i/float(subgrid_res))
+    ra_coords_sub = image2array(ra_array_new)
+    dec_coords_sub = image2array(dec_array_new)
+    return ra_coords_sub, dec_coords_sub
 
-        ra_coords_sub = image2array(ra_array_new)
-        dec_coords_sub = image2array(dec_array_new)
-        return ra_coords_sub, dec_coords_sub
 
-    def re_size_grid(self, grid, numPix):
-        """
-        smooths a given grid to larger pixels
-        """
-        numGrid = len(grid)
+def re_size_grid(grid, numPix):
+    """
+    smooths a given grid to larger pixels
+    """
+    numGrid = len(grid)
 
-        if numGrid == numPix: #if the grid has the same size as the pixelized image
-            return grid
+    if numGrid == numPix: #if the grid has the same size as the pixelized image
+        return grid
+    else:
+        numAverage = numGrid/numPix
+        if int(numAverage) == numAverage:
+            return averaging(grid, numGrid, numPix)
         else:
-            numAverage = numGrid/numPix
-            if int(numAverage) == numAverage:
-                return averaging(grid, numGrid, numPix)
-            else:
-                raise ValueError("grid size = %f is not a integer factor of pixel size = %f " % (numGrid, numPix))
+            raise ValueError("grid size = %f is not a integer factor of pixel size = %f " % (numGrid, numPix))
 
-    def re_size(self, image, factor=1):
-        """
-        resizes image with nx x ny to nx/factor x ny/factor
-        :param image: 2d image with shape (nx,ny)
-        :param factor: integer >=1
-        :return:
-        """
-        if factor < 1:
-            raise ValueError('scaling factor in re-sizing %s < 1' %factor)
-        f = int(factor)
-        nx, ny = np.shape(image)
-        if int(nx/f) == nx/f and int(ny/f) == ny/f:
-            small = image.reshape([nx/f, f, ny/f, f]).mean(3).mean(1)
-            return small
-        else:
-            raise ValueError("scaling with factor %s is not possible with grid size %s, %s" %(f, nx, ny))
 
-    def cut_psf(self, psf_data, psf_size):
-        """
-        cut the psf properly
-        :param psf_data: image of PSF
-        :param psf_size: size of psf
-        :return: re-sized and re-normalized PSF
-        """
-        kernel = cut_edges(psf_data, psf_size)
-        kernel = kernel_norm(kernel)
-        return kernel
+def re_size(image, factor=1):
+    """
+    resizes image with nx x ny to nx/factor x ny/factor
+    :param image: 2d image with shape (nx,ny)
+    :param factor: integer >=1
+    :return:
+    """
+    if factor < 1:
+        raise ValueError('scaling factor in re-sizing %s < 1' %factor)
+    f = int(factor)
+    nx, ny = np.shape(image)
+    if int(nx/f) == nx/f and int(ny/f) == ny/f:
+        small = image.reshape([nx/f, f, ny/f, f]).mean(3).mean(1)
+        return small
+    else:
+        raise ValueError("scaling with factor %s is not possible with grid size %s, %s" %(f, nx, ny))
 
-    def symmetry_average(self, image, symmetry):
-        """
-        symmetry averaged image
-        :param image:
-        :param symmetry:
-        :return:
-        """
-        img_sym = np.zeros_like(image)
-        angle = 360./symmetry
-        for i in range(symmetry):
-            img_sym += rotateImage(image, angle*i)
-        img_sym /= symmetry
-        return img_sym
+
+def cut_psf(psf_data, psf_size):
+    """
+    cut the psf properly
+    :param psf_data: image of PSF
+    :param psf_size: size of psf
+    :return: re-sized and re-normalized PSF
+    """
+    kernel = cut_edges(psf_data, psf_size)
+    kernel = kernel_norm(kernel)
+    return kernel
+
+
+def symmetry_average(image, symmetry):
+    """
+    symmetry averaged image
+    :param image:
+    :param symmetry:
+    :return:
+    """
+    img_sym = np.zeros_like(image)
+    angle = 360./symmetry
+    for i in range(symmetry):
+        img_sym += rotateImage(image, angle*i)
+    img_sym /= symmetry
+    return img_sym
+
+
+class FFTConvolve(object):
+    """
+    fft convolution routines optimized for different scipy versions
+    """
 
     def fftconvolve(self, in1, in2, int2_fft, mode="same"):
         """
