@@ -462,20 +462,23 @@ def de_shift_kernel(kernel, shift_x, shift_y, iterations=20):
     :param shift_y:
     :return:
     """
+    n = len(kernel)
+    kernel_new = np.zeros((n+2, n+2))
+    kernel_new[1:-1, 1:-1] = kernel
     int_shift_x = int(round(shift_x))
     frac_x_shift = shift_x - int_shift_x
     int_shift_y = int(round(shift_y))
     frac_y_shift = shift_y - int_shift_y
-    kernel_init = copy.deepcopy(kernel)
+    kernel_init = copy.deepcopy(kernel_new)
     kernel_init_shifted = copy.deepcopy(interp.shift(kernel_init, [int_shift_y, int_shift_x], order=1))
-    kernel = interp.shift(kernel, [int_shift_y, int_shift_x], order=1)
-    norm = np.sum(kernel)
+    kernel_new = interp.shift(kernel_new, [int_shift_y, int_shift_x], order=1)
+    norm = np.sum(kernel_new)
     for i in range(iterations):
-        kernel_shifted_inv = interp.shift(kernel, [-frac_y_shift, -frac_x_shift], order=1)
+        kernel_shifted_inv = interp.shift(kernel_new, [-frac_y_shift, -frac_x_shift], order=1)
         delta = kernel_init_shifted - kernel_norm(kernel_shifted_inv) * norm
-        kernel += delta
-        kernel = kernel_norm(kernel) * norm
-    return kernel
+        kernel_new += delta
+        kernel_new = kernel_norm(kernel_new) * norm
+    return kernel_new[1:-1, 1:-1]
 
 
 def kernel_norm(kernel):
@@ -487,6 +490,41 @@ def kernel_norm(kernel):
     norm = np.sum(np.array(kernel))
     kernel /= norm
     return kernel
+
+
+def subgrid_kernel(kernel, subgrid_res):
+    """
+    creates a higher resolution kernel with subgrid resolution as an interpolation of the original kernel
+    :param kernel: initial kernel
+    :param subgrid_res: subgrid resolution required
+    :return: kernel with higher resolution (larger)
+        """
+    numPix = len(kernel)
+    x_in = np.linspace(0, 1, numPix)
+    x_out = np.linspace(0, 1, numPix * subgrid_res)
+    out_values = re_size_array(x_in, x_in, kernel, x_out, x_out)
+    kernel_subgrid = out_values
+    kernel_subgrid = kernel_norm(kernel_subgrid)
+    return kernel_subgrid
+
+
+def pixel_kernel(point_source_kernel, subgrid_res=7):
+    """
+    converts a pixelised kernel of a point source to a kernel representing a uniform extended pixel
+    :param point_source_kernel:
+    :param subgrid_res:
+    :return: convolution kernel for an extended pixel
+    """
+    kernel_subgrid = subgrid_kernel(point_source_kernel, subgrid_res)
+    kernel_size = len(point_source_kernel)
+    kernel_pixel = np.zeros((kernel_size*subgrid_res, kernel_size*subgrid_res))
+    for i in range(subgrid_res):
+        k_x = int((kernel_size-1) / 2 * subgrid_res + i)
+        for j in range(subgrid_res):
+            k_y = int((kernel_size-1) / 2 * subgrid_res + j)
+            kernel_pixel = add_layer2image(kernel_pixel, k_x, k_y, kernel_subgrid)
+    kernel_pixel = averaging(kernel_pixel, numGrid=kernel_size*subgrid_res, numPix=kernel_size)
+    return kernel_norm(kernel_pixel)
 
 
 def get_distance(x_mins, y_mins, x_true, y_true):

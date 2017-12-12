@@ -341,6 +341,19 @@ def test_shift_long_dist():
     assert np.max(old_style_kernel - shifted_new) < 0.01
 
 
+def test_pixel_kernel():
+    # point source kernel
+    kernel_size = 9
+    kernel = np.zeros((kernel_size, kernel_size))
+    kernel[4, 4] = 1.
+    pixel_kernel = Util.pixel_kernel(point_source_kernel=kernel, subgrid_res=1)
+    assert pixel_kernel[4, 4] == kernel[4, 4]
+
+    pixel_kernel = Util.pixel_kernel(point_source_kernel=kernel, subgrid_res=11)
+    print pixel_kernel
+    npt.assert_almost_equal(pixel_kernel[4, 4], 0.3976, decimal=3)
+
+
 def test_mk_array():
     variable = 1.
     output = Util.mk_array(variable)
