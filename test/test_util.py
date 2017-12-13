@@ -315,8 +315,7 @@ def test_de_shift():
     shift_y = 0.2
     kernel_shifted = interp.shift(kernel, [-shift_y, -shift_x], order=1)
     kernel_de_shifted = Util.de_shift_kernel(kernel_shifted, shift_x, shift_y, iterations=50)
-    delta_max = np.max(kernel- kernel_de_shifted)
-    print kernel_de_shifted - kernel
+    delta_max = np.max(kernel - kernel_de_shifted)
     assert delta_max < 0.01
     npt.assert_almost_equal(kernel_de_shifted[2, 2], kernel[2, 2], decimal=2)
 

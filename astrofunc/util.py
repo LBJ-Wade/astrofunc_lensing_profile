@@ -355,9 +355,9 @@ def cut_edges(image, numPix):
         print('WARNING: image can not be resized.')
         return image
     if nx % 2 == 0 or ny % 2 == 0 or numPix % 2 == 0:
-        pass
-        #print("WARNING: image or cutout side are even number. This routine only works for odd numbers %s %s %s"
-        #                 % (nx, ny, numPix))
+        #pass
+        print("WARNING: image or cutout side are even number. This routine only works for odd numbers %s %s %s"
+                         % (nx, ny, numPix))
     cx = int((nx-1)/2)
     cy = int((ny-1)/2)
     d = int((numPix-1)/2)
@@ -464,7 +464,7 @@ def de_shift_kernel(kernel, shift_x, shift_y, iterations=20):
     :return:
     """
     n = len(kernel)
-    kernel_new = np.zeros((n+2, n+2))
+    kernel_new = np.zeros((n+2, n+2)) + (kernel[0, 0] + kernel[0, -1] + kernel[-1, 0] + kernel[-1, -1]) / 4.
     kernel_new[1:-1, 1:-1] = kernel
     int_shift_x = int(round(shift_x))
     frac_x_shift = shift_x - int_shift_x
