@@ -103,42 +103,6 @@ class SPP(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, theta_E, gamma, center_x=0., center_y=0.):
-        if gamma < 1.6:
-            gamma = 1.6
-        if gamma > 2.9:
-            gamma = 2.9
-
-        xt1 = x - center_x
-        xt2 = y - center_y
-        E = theta_E / ((3 - gamma) / 2.) ** (1. / (1 - gamma))
-        # E = phi_E_spp
-        eta = -gamma + 3
-        P2 = xt1**2+xt2**2
-
-        if isinstance(P2, int) or isinstance(P2, float):
-            p2 = max(0.000001,P2)
-        else:
-            p2 = np.empty_like(P2)
-            p = P2[P2>0]  #in the SIS regime
-            p2[P2==0] = 0.000001
-            p2[P2>0] = p
-        s2 = 0. # softening
-        f_ = 2 * E**2/eta**2 * ((p2 +s2)/E**2)**(eta/2)
-
-        f_x = 1./eta*((p2)/E**2)**(eta/2-1)*2*xt1
-        f_y = 1./eta*((p2)/E**2)**(eta/2-1)*2*xt2
-
-        kappa = 1./eta*(p2/E**2)**(eta/2-1)*((eta-2)*(xt1**2+xt2**2)/p2+(1+1))
-        gamma1 = 1./eta*(p2/E**2)**(eta/2-1)*((eta/2-1)*(2*xt1**2-2*xt2**2)/p2)
-        gamma2 = 4*xt1*xt2*(1./2-1/eta)*(p2/E**2)**(eta/2-2)/E**2
-
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def rho2theta(self, rho0, gamma):
         """
         converts 3d density into 2d projected density parameter

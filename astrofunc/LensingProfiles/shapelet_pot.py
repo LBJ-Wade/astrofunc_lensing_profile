@@ -52,31 +52,6 @@ class PolarShapelets(object):
         f_yy = kappa_value - gamma1_value
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, coeffs, beta, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        shapelets = self._createShapelet(coeffs)
-        r, phi = util.cart2polar(x, y, center=np.array([center_x, center_y]))
-        alpha1_shapelets, alpha2_shapelets = self._alphaShapelets(shapelets, beta)
-        kappa_shapelets=self._kappaShapelets(shapelets, beta)
-        gamma1_shapelets, gamma2_shapelets=self._gammaShapelets(shapelets, beta)
-
-        f_ = self._shapeletOutput(r, phi, beta, shapelets)
-        alpha1_value = self._shapeletOutput(r, phi, beta, alpha1_shapelets)
-        alpha2_value = self._shapeletOutput(r, phi, beta, alpha2_shapelets)
-        kappa_value=self._shapeletOutput(r, phi, beta, kappa_shapelets)
-        gamma1_value=self._shapeletOutput(r, phi, beta, gamma1_shapelets)
-        gamma2_value=self._shapeletOutput(r, phi, beta, gamma2_shapelets)
-
-        f_x = alpha1_value
-        f_y = alpha2_value
-        f_xx = kappa_value + gamma1_value
-        f_xy = gamma2_value
-        f_yy = kappa_value - gamma1_value
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
-
     def _createShapelet(self,coeff):
         """
         returns a shapelet array out of the coefficients *a, up to order l

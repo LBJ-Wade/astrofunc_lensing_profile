@@ -62,36 +62,6 @@ class CartShapelets(object):
             f_xy = self._shapeletOutput(H_x, H_y, beta, dxy_shapelets)
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, coeffs, beta, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        shapelets = self._createShapelet(coeffs)
-        n_order = self._get_num_n(len(coeffs))
-        dx_shapelets = self._dx_shapelets(shapelets, beta)
-        dy_shapelets = self._dy_shapelets(shapelets, beta)
-        dxx_shapelets = self._dxx_shapelets(shapelets, beta)
-        dyy_shapelets = self._dyy_shapelets(shapelets, beta)
-        dxy_shapelets = self._dxy_shapelets(shapelets, beta)
-
-        n = len(np.atleast_1d(x))
-        if n <= 1:
-            f_ = self._shapeletOutput(x, y, beta, shapelets, precalc=False)
-            f_x = self._shapeletOutput(x, y, beta, dx_shapelets, precalc=False)
-            f_y = self._shapeletOutput(x, y, beta, dy_shapelets, precalc=False)
-            f_xx = self._shapeletOutput(x, y, beta, dxx_shapelets, precalc=False)
-            f_yy = self._shapeletOutput(x, y, beta, dyy_shapelets, precalc=False)
-            f_xy = self._shapeletOutput(x, y, beta, dxy_shapelets, precalc=False)
-        else:
-            H_x, H_y = self.pre_calc(x, y, beta, n_order+2, center_x, center_y)
-            f_ = self._shapeletOutput(H_x, H_y, beta, shapelets)
-            f_x = self._shapeletOutput(H_x, H_y, beta, dx_shapelets)
-            f_y = self._shapeletOutput(H_x, H_y, beta, dy_shapelets)
-            f_xx = self._shapeletOutput(H_x, H_y, beta, dxx_shapelets)
-            f_yy = self._shapeletOutput(H_x, H_y, beta, dyy_shapelets)
-            f_xy = self._shapeletOutput(H_x, H_y, beta, dxy_shapelets)
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def _createShapelet(self, coeffs):
         """
         returns a shapelet array out of the coefficients *a, up to order l

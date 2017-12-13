@@ -71,17 +71,6 @@ class TestSIS(object):
         assert values[1][1] == 0.080000000000000002
         assert values[2][1] == -0.059999999999999998
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([0])
-        theta_E = 1.
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.pointmass.all(x, y, theta_E)
-        assert f_[0] == 0
-        assert f_x[0] == 1
-        assert f_y[0] == 0
-        assert f_xx[0] == -1
-        assert f_yy[0] == 1
-        assert f_xy[0] == -0
 
 if __name__ == '__main__':
     pytest.main()

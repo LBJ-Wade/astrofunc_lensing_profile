@@ -72,17 +72,6 @@ class TestSIS(object):
         assert values[1][1] == 0.28460498941515411
         assert values[2][1] == -0.094868329805051374
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        phi_E = 1.
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.SIS.all( x, y, phi_E)
-        assert f_[0] == 2.2360679774997898
-        assert f_x[0] == 0.44721359549995793
-        assert f_y[0] == 0.89442719099991586
-        assert f_xx[0] == 0.35777087639996635
-        assert f_yy[0] == 0.089442719099991588
-        assert f_xy[0] == -0.17888543819998318
 
 if __name__ == '__main__':
     pytest.main()

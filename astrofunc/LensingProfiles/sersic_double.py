@@ -39,12 +39,3 @@ class SersicDouble(object):
         f_xx1, f_yy1, f_xy1 = self.sersic.hessian(x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x, center_y)
         f_xx2, f_yy2, f_xy2 = self.sersic.hessian(x, y, n_2, R_2, k_eff2, q, phi_G, center_x, center_y)
         return f_xx1 + f_xx2, f_yy1 + f_yy2, f_xy1 + f_xy2
-
-    def all(self, x, y, k_eff, flux_ratio, r_eff, n_sersic, phi_G, q, R_2, n_2, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        f_ = self.function(x, y, k_eff, flux_ratio, r_eff, n_sersic, phi_G, q, R_2, n_2, center_x, center_y)
-        f_x, f_y = self.derivatives(x, y, k_eff, flux_ratio, r_eff, n_sersic, phi_G, q, R_2, n_2, center_x, center_y)
-        f_xx, f_yy, f_xy = self.hessian(x, y, k_eff, flux_ratio, r_eff, n_sersic, phi_G, q, R_2, n_2, center_x, center_y)
-        return f_, f_x, f_y, f_xx, f_yy, f_xy

@@ -60,17 +60,6 @@ class TestSIS(object):
         assert values[1][1] == 0
         assert values[2][1] == 0
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        phi_E = 1.
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.noLens.all(x, y, **{})
-        assert f_[0] == 0
-        assert f_x[0] == 0
-        assert f_y[0] == 0
-        assert f_xx[0] == 0
-        assert f_yy[0] == 0
-        assert f_xy[0] == 0
 
 if __name__ == '__main__':
     pytest.main()

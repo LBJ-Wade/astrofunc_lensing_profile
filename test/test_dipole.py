@@ -92,24 +92,6 @@ class TestDipole(object):
         npt.assert_almost_equal(values[1][1], 0.22621162133932399, decimal=5)
         npt.assert_almost_equal(values[2][1], -0.16965871600449295, decimal=5)
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        center1_x = 0
-        center1_y = 0
-        center2_x = 1
-        center2_y = -1
-        c = 1.
-        Fm = 0.5
-        com_x, com_y = self.dipole_util.com(center1_x, center1_y, center2_x, center2_y, Fm)
-        phi_dipole = self.dipole_util.angle(center1_x, center1_y, center2_x, center2_y)
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.dipole.all(x, y, com_x, com_y, phi_dipole, c)
-        npt.assert_almost_equal(f_[0], 0, decimal=5)
-        npt.assert_almost_equal(f_x[0], -0.43412157106222954, decimal=5)
-        npt.assert_almost_equal(f_y[0], 0.43412157106222948, decimal=5)
-        npt.assert_almost_equal(f_xx[0], 0.29625219299960942, decimal=5)
-        npt.assert_almost_equal(f_yy[0],  -0.064402650652089, decimal=5)
-        npt.assert_almost_equal(f_xy[0], -0.1159247711737602, decimal=5)
 
 if __name__ == '__main__':
     pytest.main()

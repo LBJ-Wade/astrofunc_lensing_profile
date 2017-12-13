@@ -61,12 +61,3 @@ class Hernquist_Ellipse(object):
         f_yy = (alpha_dec_dy - alpha_dec)/diff
 
         return f_xx, f_yy, f_xy
-
-    def all(self, x, y, sigma0, Rs, q, phi_G, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        f_ = self.function(x, y, sigma0, Rs, q, phi_G, center_x, center_y)
-        f_x, f_y = self.derivatives(x, y, sigma0, Rs, q, phi_G, center_x, center_y)
-        f_xx, f_yy, f_xy = self.hessian(x, y, sigma0, Rs, q, phi_G, center_x, center_y)
-        return f_, f_x, f_y, f_xx, f_yy, f_xy

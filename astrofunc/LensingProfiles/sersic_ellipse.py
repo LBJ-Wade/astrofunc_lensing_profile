@@ -52,15 +52,6 @@ class SersicEllipse(object):
 
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        f_ = self.function(x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x, center_y)
-        f_x, f_y = self.derivatives(x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x, center_y)
-        f_xx, f_yy, f_xy = self.hessian(x, y, n_sersic, r_eff, k_eff, q, phi_G, center_x, center_y)
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def _coord_transf(self, x, y, q, phi_G, center_x, center_y):
         """
 

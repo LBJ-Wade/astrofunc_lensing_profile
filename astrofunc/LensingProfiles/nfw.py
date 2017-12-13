@@ -62,25 +62,6 @@ class NFW(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, Rs, theta_Rs, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        rho0_input = self._alpha2rho0(theta_Rs=theta_Rs, Rs=Rs)
-        if Rs < 0.0001:
-            Rs = 0.0001
-        x_ = x - center_x
-        y_ = y - center_y
-        R = np.sqrt(x_**2 + y_**2)
-        f_ = self.nfwPot(R, Rs, rho0_input)
-        f_x, f_y = self.nfwAlpha(R, Rs, rho0_input, x_, y_)
-        kappa = self.density_2d(R, 0, Rs, rho0_input)
-        gamma1, gamma2 = self.nfwGamma(R, Rs, rho0_input, x_, y_)
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def density(self, R, Rs, rho0):
         """
         three dimenstional NFW profile

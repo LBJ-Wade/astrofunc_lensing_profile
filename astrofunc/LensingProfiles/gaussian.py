@@ -34,15 +34,3 @@ class Gaussian(object):
         f_yy = f_ * ( (-1./sigma_y**2) + (center_y-y)**2/sigma_y**4 )
         f_xy = f_ * (center_x-x)/sigma_x**2 * (center_y-y)/sigma_y**2
         return f_xx, f_yy, f_xy
-
-    def all(self, x, y, amp, sigma_x, sigma_y, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        f_ = self.function(x, y, amp, sigma_x, sigma_y, center_x, center_y)
-        f_x = f_ * (center_x-x)/sigma_x**2
-        f_y = f_ * (center_y-y)/sigma_y**2
-        f_xx = f_ * ( (-1./sigma_x**2) + (center_x-x)**2/sigma_x**4 )
-        f_yy = f_ * ( (-1./sigma_y**2) + (center_y-y)**2/sigma_y**4 )
-        f_xy = f_ * (center_x-x)/sigma_x**2 * (center_y-y)/sigma_y**2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy

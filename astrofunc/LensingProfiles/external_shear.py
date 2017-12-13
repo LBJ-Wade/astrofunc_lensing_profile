@@ -48,34 +48,6 @@ class ExternalShear_old(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, gamma_ext, psi_ext):
-        # rotation angle
-        sin_phi = np.sin(psi_ext)
-        cos_phi = np.cos(psi_ext)
-        x_ = cos_phi*x + sin_phi*y
-        y_ = -sin_phi*x + cos_phi*y
-        theta, phi = util.cart2polar(x, y)
-        f_ = 1./2 * gamma_ext * theta * np.cos(2*(phi - psi_ext))
-        f_x_prim = gamma_ext * y_
-        f_y_prim = gamma_ext * x_
-        f_x = cos_phi*f_x_prim-sin_phi*f_y_prim
-        f_y = sin_phi*f_x_prim+cos_phi*f_y_prim
-
-        f_xx_prim = np.zeros_like(x_)
-        f_yy_prim = np.zeros_like(x_)
-        f_xy_prim = gamma_ext * np.ones_like(x_)
-        kappa = 1./2 * (f_xx_prim + f_yy_prim)
-        gamma1_value = 1./2 * (f_xx_prim -f_yy_prim)
-        gamma2_value = f_xy_prim
-        # rotate back
-        gamma1 = np.cos(2*psi_ext)*gamma1_value-np.sin(2*psi_ext)*gamma2_value
-        gamma2 = +np.sin(2*psi_ext)*gamma1_value+np.cos(2*psi_ext)*gamma2_value
-
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
 
 class ExternalShear(object):
     """
@@ -103,17 +75,3 @@ class ExternalShear(object):
         f_yy = kappa - gamma1
         f_xy = gamma2
         return f_xx, f_yy, f_xy
-
-    def all(self, x, y, e1, e2):
-        psi_ext, gamma_ext = util.ellipticity2phi_gamma(e1, e2)
-        theta, phi = util.cart2polar(x, y)
-        f_ = 1./2 * gamma_ext * theta * np.cos(2*(phi - psi_ext))
-        f_x = e1*x + e2*y
-        f_y = e2*x - e1*y
-        gamma1 = e1
-        gamma2 = e2
-        kappa = 0
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy

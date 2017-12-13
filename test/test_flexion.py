@@ -62,15 +62,6 @@ class TestExternalShear(object):
         npt.assert_almost_equal(values[1][0], 0.023333333333333334, decimal=5)
         npt.assert_almost_equal(values[2][0], 0.01, decimal=5)
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.flex.all(x, y, **self.kwargs_lens)
-        npt.assert_almost_equal(f_[0], 0.025, decimal=5)
-        npt.assert_almost_equal(f_x[0], 0.018333333333333333, decimal=5)
-        npt.assert_almost_equal(f_y[0], 0.028333333333333335, decimal=5)
-        npt.assert_almost_equal(f_xx[0], 0.016666666666666666, decimal=5)
 
 if __name__ == '__main__':
     pytest.main()

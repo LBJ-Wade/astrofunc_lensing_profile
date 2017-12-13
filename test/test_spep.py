@@ -96,20 +96,6 @@ class TestSPEP(object):
         npt.assert_almost_equal(values[1][1], 0.33245358685908111, decimal=7)
         npt.assert_almost_equal(values[2][1], -0.10270375656049677, decimal=7)
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        phi_E = 1.
-        gamma = 1.9
-        q = 0.9
-        phi_G = 1.
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.SPEP.all(x, y, phi_E, gamma, q, phi_G)
-        npt.assert_almost_equal(f_[0], 2.104213947346917, decimal=7)
-        npt.assert_almost_equal(f_x[0], 0.43989645846696634, decimal=7)
-        npt.assert_almost_equal(f_y[0], 0.93736944180732129, decimal=7)
-        npt.assert_almost_equal(f_xx[0], 0.46312881977317422, decimal=7)
-        npt.assert_almost_equal(f_yy[0], 0.15165326557198552, decimal=7)
-        npt.assert_almost_equal(f_xy[0], -0.20956958696323871, decimal=7)
 
 if __name__ == '__main__':
    pytest.main()

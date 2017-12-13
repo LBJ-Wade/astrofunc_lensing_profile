@@ -96,23 +96,6 @@ class TestNFWELLIPSE(object):
         npt.assert_almost_equal(values[1][1], 0.31399726446723619, decimal=5)
         npt.assert_almost_equal(values[2][1], -0.13449884961325154, decimal=5)
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        Rs = 1.
-        theta_Rs = 1.
-        q = 0.8
-        phi_G = 1.
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.nfw_e.all(x, y, Rs, theta_Rs, q, phi_G)
-        f_e = self.nfw_e.function(x, y, Rs, theta_Rs, q, phi_G)
-        f_x_e, f_y_e = self.nfw_e.derivatives(x, y, Rs, theta_Rs, q, phi_G)
-        f_xx_e, f_yy_e, f_xy_e = self.nfw_e.hessian(x, y, Rs, theta_Rs, q, phi_G)
-        npt.assert_almost_equal(f_[0], f_e[0], decimal=5)
-        npt.assert_almost_equal(f_x[0], f_x_e[0], decimal=5)
-        npt.assert_almost_equal(f_y[0], f_y_e[0], decimal=5)
-        npt.assert_almost_equal(f_xx[0], f_xx_e[0], decimal=5)
-        npt.assert_almost_equal(f_yy[0], f_yy_e[0], decimal=5)
-        npt.assert_almost_equal(f_xy[0], f_xy_e[0], decimal=5)
 
 if __name__ == '__main__':
     pytest.main()

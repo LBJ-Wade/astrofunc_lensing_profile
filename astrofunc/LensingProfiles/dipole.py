@@ -73,43 +73,6 @@ class Dipole(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, com_x, com_y, phi_dipole, coupling):
-
-        # coordinate shift
-        x_shift = x - com_x
-        y_shift = y - com_y
-
-        # rotation angle
-        sin_phi = np.sin(phi_dipole)
-        cos_phi = np.cos(phi_dipole)
-        x_ = cos_phi*x_shift + sin_phi*y_shift
-        y_ = -sin_phi*x_shift + cos_phi*y_shift
-
-        f_ = np.zeros_like(x)
-
-        f_x_prim = coupling * x_/np.sqrt(x_**2 + y_**2)
-        f_y_prim = np.zeros_like(x_)
-        # rotate back
-        f_x = cos_phi*f_x_prim-sin_phi*f_y_prim
-        f_y = sin_phi*f_x_prim+cos_phi*f_y_prim
-
-        r = np.sqrt(x_**2 + y_**2)
-        f_xx_prim = coupling*y_**2/r**3
-        f_xy_prim = -coupling * x_ * y_ / r**3
-        f_yy_prim = np.zeros_like(x_)
-
-        kappa = 1./2 * (f_xx_prim + f_yy_prim)
-        gamma1_value = 1./2 * (f_xx_prim - f_yy_prim)
-        gamma2_value = f_xy_prim
-        # rotate back
-        gamma1 = np.cos(2*phi_dipole)*gamma1_value-np.sin(2*phi_dipole)*gamma2_value
-        gamma2 = +np.sin(2*phi_dipole)*gamma1_value+np.cos(2*phi_dipole)*gamma2_value
-
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
 
 class Dipole_util(object):
     """

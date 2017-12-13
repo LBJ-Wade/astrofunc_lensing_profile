@@ -52,18 +52,3 @@ class SIE(object):
         """
         gamma = 2
         return self.spemd.hessian(x, y, theta_E, gamma, q, phi_G, center_x, center_y)
-
-    def all(self, x, y, theta_E, q, phi_G, center_x=0, center_y=0):
-        """
-
-        :param x:
-        :param y:
-        :param theta_E:
-        :param q:
-        :param phi_G:
-        :param center_x:
-        :param center_y:
-        :return:
-        """
-        gamma = 2
-        return self.spemd.all(x, y, theta_E, gamma, q, phi_G, center_x, center_y)

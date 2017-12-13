@@ -48,16 +48,6 @@ class TestSIS(object):
         values_spemd = self.spemd.hessian(x, y, theta_E, gamma, q, phi_G)
         assert values[0] == values_spemd[0]
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        theta_E = 1.
-        q = 0.9
-        phi_G = 1.
-        values = self.sie.all(x, y, theta_E, q, phi_G)
-        gamma = 2
-        values_spemd = self.spemd.all(x, y, theta_E, gamma, q, phi_G)
-        assert values[0] == values_spemd[0]
 
 if __name__ == '__main__':
     pytest.main()

@@ -72,15 +72,6 @@ class GaussianKappa(object):
         f_xy = -(d_alpha_dr/r + alpha/r**2) * x_*y_/r
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, amp, sigma_x, sigma_y, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        f_ = self.function(x, y, amp, sigma_x, sigma_y, center_x, center_y)
-        f_x, f_y = self.derivatives(x, y, amp, sigma_x, sigma_y, center_x, center_y)
-        f_xx, f_yy, f_xy = self.hessian(x, y, amp, sigma_x, sigma_y, center_x, center_y)
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def density(self, r, amp, sigma_x, sigma_y):
         """
 

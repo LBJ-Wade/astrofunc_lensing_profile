@@ -87,48 +87,6 @@ class Interpol_func(object):
                     f_xy[i] = self.f_xy_interp(y[i], x[i])
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, grid_interp_x=None, grid_interp_y=None, f_=None, f_x=None, f_y=None, f_xx=None, f_yy=None, f_xy=None):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        self._check_interp(grid_interp_x, grid_interp_y, f_, f_x, f_y, f_xx, f_yy, f_xy)
-        n = len(np.atleast_1d(x))
-        if n <= 1 and np.shape(x) == ():
-        #if type(x) == float or type(x) == int or type(x) == type(np.float64(1)) or len(x) <= 1:
-            f_ = self.f_interp(y, x)
-            f_x = self.f_x_interp(y, x)
-            f_y = self.f_y_interp(y, x)
-            f_xx = self.f_xx_interp(y, x)
-            f_yy = self.f_yy_interp(y, x)
-            f_xy = self.f_xy_interp(y, x)
-            return f_[0][0], f_x[0][0], f_y[0][0], f_xx[0][0], f_yy[0][0], f_xy[0][0]
-        else:
-            if self._grid:
-                x_, y_ = util.get_axes(x, y)
-                f_ = self.f_interp(y_, x_)
-                f_x = self.f_x_interp(y_, x_)
-                f_y = self.f_y_interp(y_, x_)
-                f_xx = self.f_xx_interp(y_, x_)
-                f_yy = self.f_yy_interp(y_, x_)
-                f_xy = self.f_xy_interp(y_, x_)
-                f_ = util.image2array(f_)
-                f_x = util.image2array(f_x)
-                f_y = util.image2array(f_y)
-                f_xx = util.image2array(f_xx)
-                f_yy = util.image2array(f_yy)
-                f_xy = util.image2array(f_xy)
-            else:
-                n = len(x)
-                f_, f_x, f_y, f_xx, f_yy, f_xy = np.zeros(n), np.zeros(n), np.zeros(n), np.zeros(n), np.zeros(n), np.zeros(n)
-                for i in range(n):
-                    f_[i] = self.f_interp(y[i], x[i])
-                    f_x[i] = self.f_x_interp(y[i], x[i])
-                    f_y[i] = self.f_y_interp(y[i], x[i])
-                    f_xx[i] = self.f_xx_interp(y[i], x[i])
-                    f_yy[i] = self.f_yy_interp(y[i], x[i])
-                    f_xy[i] = self.f_xy_interp(y[i], x[i])
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def do_interp(self, x_grid, y_grid, f_, f_x, f_y, f_xx, f_yy, f_xy):
         self.f_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_, kx=1, ky=1, s=0)
         self.f_x_interp = scipy.interpolate.RectBivariateSpline(x_grid, y_grid, f_x, kx=1, ky=1, s=0)
@@ -188,13 +146,3 @@ class Interpol_func_scaled(object):
         f_yy_out *= scale_factor
         f_xy_out *= scale_factor
         return f_xx_out, f_yy_out, f_xy_out
-
-    def all(self, x, y, scale_factor=1 ,grid_interp_x=None, grid_interp_y=None, f_=None, f_x=None, f_y=None, f_xx=None, f_yy=None, f_xy=None):
-        f_out, f_x_out, f_y_out, f_xx_out, f_yy_out, f_xy_out = self.interp_func.hessian(x, y, grid_interp_x, grid_interp_y, f_, f_x, f_y, f_xx, f_yy, f_xy)
-        f_out *= scale_factor
-        f_x_out *= scale_factor
-        f_y_out *= scale_factor
-        f_xx_out *= scale_factor
-        f_yy_out *= scale_factor
-        f_xy_out *= scale_factor
-        return f_out, f_x_out, f_y_out, f_xx_out, f_yy_out, f_xy_out

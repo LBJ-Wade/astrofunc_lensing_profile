@@ -111,42 +111,6 @@ class SPEMD_SMOOTH(object):
         f_xy = gamma2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, theta_E, gamma, q, phi_G, s_scale, center_x=0, center_y=0):
-        theta_E, gamma, q, phi_G, s_scale = self._parameter_constraints(theta_E, gamma, q, phi_G, s_scale)
-        x_shift = x - center_x
-        y_shift = y - center_y
-        q_fastell, gam = self.convert_params(theta_E, gamma, q)
-
-        cos_phi = np.cos(phi_G)
-        sin_phi = np.sin(phi_G)
-
-        x1 = cos_phi*x_shift+sin_phi*y_shift
-        x2 = -sin_phi*x_shift+cos_phi*y_shift
-        f_ = fastell4py.ellipphi(x1, x2, q_fastell, gam, arat=q, s2=0)
-        n = len(np.atleast_1d(x))
-        if n <= 1:
-            if np.shape(x) == ():
-                f_ = np.array(f_[0])
-        f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = fastell4py.fastellmag(x1, x2, q_fastell, gam, arat=q, s2=s_scale)
-        n = len(np.atleast_1d(x))
-        if n <= 1:
-            if np.shape(x) == ():
-                f_x_prim, f_y_prim, f_xx_prim, f_yy_prim, f_xy_prim = np.array(f_x_prim[0]), np.array(f_y_prim[0]), np.array(f_xx_prim[0]), np.array(f_yy_prim[0]), np.array(f_xy_prim[0])
-        f_x = cos_phi*f_x_prim - sin_phi*f_y_prim
-        f_y = sin_phi*f_x_prim + cos_phi*f_y_prim
-
-        kappa = (f_xx_prim + f_yy_prim)/2
-        gamma1_value = (f_xx_prim - f_yy_prim)/2
-        gamma2_value = f_xy_prim
-
-        gamma1 = np.cos(2*phi_G)*gamma1_value-np.sin(2*phi_G)*gamma2_value
-        gamma2 = +np.sin(2*phi_G)*gamma1_value+np.cos(2*phi_G)*gamma2_value
-
-        f_xx = kappa + gamma1
-        f_yy = kappa - gamma1
-        f_xy = gamma2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def convert_params(self, theta_E, gamma, q):
         """
 

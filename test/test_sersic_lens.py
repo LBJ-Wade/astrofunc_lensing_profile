@@ -102,20 +102,6 @@ class TestSersic(object):
         npt.assert_almost_equal(values[1][1], 0.076243427402007985, decimal=10)
         npt.assert_almost_equal(values[2][1], -0.048568955656349749, decimal=10)
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        n_sersic = 2.
-        r_eff = 1.
-        k_eff = 0.2
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.sersic.all(x, y, n_sersic, r_eff, k_eff)
-        npt.assert_almost_equal(f_[0], 1.0272982586319199, decimal=10)
-        assert f_x[0] == 0.16556078301997193
-        assert f_y[0] == 0.33112156603994386
-        assert f_xx[0] == 0.1123170666045793
-        npt.assert_almost_equal(f_yy[0], -0.047414082641598576, decimal=10)
-        npt.assert_almost_equal(f_xy[0], -0.10648743283078525, decimal=10)
-
     def test_alpha_abs(self):
         x = 1.
         dr = 0.0000001
@@ -156,8 +142,8 @@ class TestSersic(object):
         n_sersic = 4.5
         r_eff = 2.5
         k_eff = 0.8
-        f_1, f_x1, f_y1, f_xx1, f_yy1, f_xy1 = self.sersic.all(x1, y1, n_sersic, r_eff, k_eff)
-        f_2, f_x2, f_y2, f_xx2, f_yy2, f_xy2 = self.sersic.all(x2, y2, n_sersic, r_eff, k_eff)
+        f_xx1, f_yy1, f_xy1 = self.sersic.hessian(x1, y1, n_sersic, r_eff, k_eff)
+        f_xx2, f_yy2, f_xy2 = self.sersic.hessian(x2, y2, n_sersic, r_eff, k_eff)
         kappa_1 = (f_xx1 + f_yy1) / 2
         kappa_2 = (f_xx2 + f_yy2) / 2
         npt.assert_almost_equal(kappa_1, kappa_2, decimal=10)
@@ -175,7 +161,7 @@ class TestSersic(object):
         n_sersic = 4.5
         r_eff = 2.5
         k_eff = 0.2
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.sersic.all(x, y, n_sersic, r_eff, k_eff)
+        f_xx, f_yy, f_xy = self.sersic.hessian(x, y, n_sersic, r_eff, k_eff)
         kappa = (f_xx + f_yy) / 2.
         assert kappa[0] > 0
         flux = self.sersic_light.function(x, y, I0_sersic=1., R_sersic=r_eff, n_sersic=n_sersic)

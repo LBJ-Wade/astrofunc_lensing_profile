@@ -73,22 +73,6 @@ class TestGaussian(object):
         assert values[1][1] == -0.1353352832366127
         assert values[2][1] == 0.
 
-    def test_all(self):
-        x = 1
-        y = 2
-        amp = 1.*2*np.pi
-        center_x = 1.
-        center_y = 1.
-        sigma_x = 1.
-        sigma_y = 1.
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.Gaussian.all(x, y, amp, center_x, center_y, sigma_x, sigma_y)
-        assert f_ == np.exp(-1./2)
-        assert f_x == 0.
-        assert f_y == -np.exp(-1./2)
-        assert f_xx == -np.exp(-1./2)
-        assert f_yy == 0.
-        assert f_xy == 0.
-
 
 class TestGaussianKappa(object):
     """

@@ -87,20 +87,6 @@ class TestNFW(object):
         npt.assert_almost_equal(values[1][1], 0.30577812878681554, decimal=5)
         npt.assert_almost_equal(values[2][1], -0.13205836172334798, decimal=5)
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        Rs = 1.
-        rho0 = 1
-        theta_Rs = self.nfw._rho02alpha(rho0, Rs)
-        f_, f_x, f_y, f_xx, f_yy, f_xy = self.nfw.all(x, y, Rs, theta_Rs)
-        npt.assert_almost_equal(f_[0], 2.4764530888727556, decimal=5)
-        npt.assert_almost_equal(f_x[0], 0.53211690764331998, decimal=5)
-        npt.assert_almost_equal(f_y[0], 1.06423381528664, decimal=5)
-        npt.assert_almost_equal(f_xx[0], 0.40855527280658294, decimal=5)
-        npt.assert_almost_equal(f_yy[0], 0.037870368296371637, decimal=5)
-        npt.assert_almost_equal(f_xy[0], -0.2471232696734742, decimal=5)
-
 
 class TestMassAngleConversion(object):
     """

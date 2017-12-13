@@ -68,25 +68,6 @@ class CompositeSersicNFW(object):
         f_xx_nfw, f_yy_nfw, f_xy_nfw = self.nfw.hessian(x, y, Rs, theta_Rs, q, phi_G, center_x, center_y)
         return f_xx_s + f_xx_nfw, f_yy_s + f_yy_nfw, f_xy_s + f_xy_nfw
 
-    def all(self, x, y, theta_E, mass_light, Rs, q, phi_G, n_sersic, r_eff, q_s, phi_G_s, center_x=0, center_y=0):
-        """
-
-        :param theta_E:
-        :param mass_light:
-        :param Rs:
-        :param q:
-        :param phi_G:
-        :param n_sersic:
-        :param r_eff:
-        :param center_x:
-        :param center_y:
-        :return:
-        """
-        theta_Rs, k_eff = self.convert_mass(theta_E, mass_light, Rs, n_sersic, r_eff)
-        f_s, f_x_s, f_y_s, f_xx_s, f_yy_s, f_xy_s = self.sersic.all(x, y, n_sersic, r_eff, k_eff, q_s, phi_G_s, center_x, center_y)
-        f_nfw, f_x_nfw, f_y_nfw, f_xx_nfw, f_yy_nfw, f_xy_nfw = self.nfw.all(x, y, Rs, theta_Rs, q, phi_G, center_x, center_y)
-        return f_s + f_nfw, f_x_s + f_x_nfw, f_y_s + f_y_nfw, f_xx_s + f_xx_nfw, f_yy_s + f_yy_nfw, f_xy_s + f_xy_nfw
-
     def convert_mass(self, theta_E, mass_light, Rs, n_sersic, r_eff):
         """
         convert global parameters theta_E and mass_light to specific ones theta_Rs and k_eff

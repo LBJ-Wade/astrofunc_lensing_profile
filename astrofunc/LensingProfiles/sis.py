@@ -49,36 +49,3 @@ class SIS(object):
         f_yy = x_shift*x_shift * prefac
         f_xy = -x_shift*y_shift * prefac
         return f_xx, f_yy, f_xy
-
-    def all(self, x, y, theta_E, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        x_shift = x - center_x
-        y_shift = y - center_y
-        R = np.sqrt(x_shift*x_shift + y_shift*y_shift)
-        if isinstance(R, int) or isinstance(R, float):
-            a = theta_E / max(0.000001, R)
-        else:
-            a=np.empty_like(R)
-            r = R[R>0]  #in the SIS regime
-            a[R==0] = 0.
-            a[R>0] = theta_E / r
-
-
-        f_ = theta_E * np.sqrt(x_shift * x_shift + y_shift * y_shift)
-        f_x = a * x_shift
-        f_y = a * y_shift
-        R = (x_shift*x_shift + y_shift*y_shift)**(3./2)
-        if isinstance(R, int) or isinstance(R, float):
-            prefac = theta_E / max(0.000001, R)
-        else:
-            prefac = np.empty_like(R)
-            r = R[R>0]  #in the SIS regime
-            prefac[R==0] = 0.
-            prefac[R>0] = theta_E / r
-
-        f_xx = y_shift*y_shift * prefac
-        f_yy = x_shift*x_shift * prefac
-        f_xy = -x_shift*y_shift * prefac
-        return f_, f_x, f_y, f_xx, f_yy, f_xy

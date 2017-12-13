@@ -101,30 +101,17 @@ class TestSPEP(object):
         assert f_yy_spep[2] == f_yy_spp[2]
         assert f_xy_spep[2] == f_xy_spp[2]
 
-    def test_all(self):
-        x = np.array([1])
-        y = np.array([2])
-        phi_E = 1.
-        gamma = 1.9
-        q = 1
-        phi_G = 0
-        E = phi_E / (((3-gamma)/2.)**(1./(1-gamma))*np.sqrt(q))
-        f_spep, f_x_spep, f_y_spep, f_xx_spep, f_yy_spep, f_xy_spep = self.SPEP.all( x, y, E,gamma,q,phi_G)
-        f_spp, f_x_spp, f_y_spp, f_xx_spp, f_yy_spp, f_xy_spp = self.SPP.all( x, y, E,gamma)
-        assert f_spep[0] == f_spp[0]
-        assert f_x_spep[0] == f_x_spp[0]
-        assert f_y_spep[0] == f_y_spp[0]
-        assert f_xx_spep[0] == f_xx_spp[0]
-        assert f_yy_spep[0] == f_yy_spp[0]
-        assert f_xy_spep[0] == f_xy_spp[0]
-
     def test_compare_sis(self):
         x = np.array([1])
         y = np.array([2])
         theta_E = 1.
         gamma = 2.
-        f_sis, f_x_sis, f_y_sis, f_xx_sis, f_yy_sis, f_xy_sis = self.SIS.all( x, y, theta_E)
-        f_spp, f_x_spp, f_y_spp, f_xx_spp, f_yy_spp, f_xy_spp = self.SPP.all(x, y, theta_E, gamma)
+        f_sis = self.SIS.function( x, y, theta_E)
+        f_spp = self.SPP.function(x, y, theta_E, gamma)
+        f_x_sis, f_y_sis = self.SIS.derivatives( x, y, theta_E)
+        f_x_spp, f_y_spp = self.SPP.derivatives(x, y, theta_E, gamma)
+        f_xx_sis, f_yy_sis, f_xy_sis = self.SIS.hessian( x, y, theta_E)
+        f_xx_spp, f_yy_spp, f_xy_spp = self.SPP.hessian(x, y, theta_E, gamma)
         npt.assert_almost_equal(f_sis[0],f_spp[0], decimal=7)
         npt.assert_almost_equal(f_x_sis[0], f_x_spp[0], decimal=7)
         npt.assert_almost_equal(f_y_sis[0], f_y_spp[0], decimal=7)

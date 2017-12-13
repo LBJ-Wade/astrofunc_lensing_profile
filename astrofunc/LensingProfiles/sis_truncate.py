@@ -53,39 +53,6 @@ class SIS_truncate(object):
         f_xy = d2r_dxy*dphi_dr + dr_dx*dr_dy*d2phi_dr2
         return f_xx, f_yy, f_xy
 
-    def all(self, x, y, theta_E, r_trunc, center_x=0, center_y=0):
-        """
-        returns f,f_x,f_y,f_xx, f_yy, f_xy
-        """
-        x_shift = x - center_x
-        y_shift = y - center_y
-        r = np.sqrt(x_shift*x_shift + y_shift*y_shift)
-        if isinstance(r, int) or isinstance(r, float):
-            if r < r_trunc:
-                f_ = theta_E * r
-            elif r < 2*r_trunc:
-                f_ = theta_E * r_trunc + 1. / 2 * theta_E * (3 - r / r_trunc) * (r - r_trunc)
-            else:
-                f_ = 3./2 * theta_E * r_trunc
-        else:
-            f_ = np.zeros_like(r)
-            f_[r < r_trunc] = theta_E * r[r < r_trunc]
-            r_ = r[(r < 2*r_trunc) & (r >= r_trunc)]
-            f_[(r < 2*r_trunc) & (r >= r_trunc)] = theta_E * r_trunc + 1. / 2 * theta_E * (3 - r_ / r_trunc) * (r_ - r_trunc)
-            f_[r >= 2*r_trunc] = 3./2 * theta_E * r_trunc
-
-        dphi_dr = self._dphi_dr(x_shift, y_shift, theta_E, r_trunc)
-        d2phi_dr2 = self._d2phi_dr2(x_shift, y_shift, theta_E, r_trunc)
-        dr_dx, dr_dy = self._dr_dx(x, y)
-        d2r_dx2, d2r_dy2, d2r_dxy = self._d2r_dx2(x_shift, y_shift)
-
-        f_x = dphi_dr * dr_dx
-        f_y = dphi_dr * dr_dy
-        f_xx = d2r_dx2*dphi_dr + dr_dx**2*d2phi_dr2
-        f_yy = d2r_dy2*dphi_dr + dr_dy**2*d2phi_dr2
-        f_xy = d2r_dxy*dphi_dr + dr_dx*dr_dy*d2phi_dr2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
-
     def _dphi_dr(self, x, y, theta_E, r_trunc):
         """
 

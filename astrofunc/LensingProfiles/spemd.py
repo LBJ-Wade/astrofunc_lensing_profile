@@ -22,9 +22,6 @@ class SPEMD(object):
     def hessian(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
         return self.spemd_smooth.hessian(x, y, theta_E, gamma, q, phi_G, self.s2, center_x, center_y)
 
-    def all(self, x, y, theta_E, gamma, q, phi_G, center_x=0, center_y=0):
-        return self.spemd_smooth.all(x, y, theta_E, gamma, q, phi_G, self.s2, center_x, center_y)
-
     def mass_3d_lens(self, r, theta_E, gamma, q, phi_G):
         """
         computes the spherical power-law mass enclosed (with SPP routiune)

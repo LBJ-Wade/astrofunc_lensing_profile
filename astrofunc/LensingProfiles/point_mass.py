@@ -74,31 +74,3 @@ class PointMass(object):
         f_yy = C * (x_**2-y_**2)/r2**2
         f_xy = -C * 2*x_*y_/r2**2
         return f_xx, f_yy, f_xy
-
-    def all(self, x, y, theta_E, center_x=0, center_y=0):
-        """
-
-        :param x: x-coord (in angles)
-        :param y: y-coord (in angles)
-        :param theta_E: Einstein radius (in angles)
-        :return: returns all (in radian)
-        """
-        x_ = x - center_x
-        y_ = y - center_y
-        C = theta_E
-        a = np.sqrt(x_**2 + y_**2)
-        if isinstance(a, int) or isinstance(a, float):
-            r = max(self.r_min, a)
-        else:
-            r = np.empty_like(a)
-            r[a > self.r_min] = a[a > self.r_min]  #in the SIS regime
-            r[a <= self.r_min] = self.r_min
-        r2 = r**2
-        f_ = C * np.log(r)
-        alpha = C/r
-        f_x = alpha*x_/r
-        f_y = alpha*y_/r
-        f_xx = C * (y_**2-x_**2)/r2**2
-        f_yy = C * (x_**2-y_**2)/r2**2
-        f_xy = -C * 2*x_*y_/r2**2
-        return f_, f_x, f_y, f_xx, f_yy, f_xy
