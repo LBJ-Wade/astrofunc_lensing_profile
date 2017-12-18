@@ -123,6 +123,18 @@ def test_make_grid():
     assert x_grid[0] == -5.5
 
 
+def test_make_grid_transform():
+    numPix = 11
+    theta = np.pi / 2
+    deltaPix = 0.05
+    Mpix2coord = np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]) * deltaPix
+    ra_coord, dec_coord = Util.make_grid_transformed(numPix, Mpix2coord)
+    ra2d = Util.array2image(ra_coord)
+    assert ra2d[5, 5] == 0
+    assert ra2d[4, 5] == deltaPix
+    npt.assert_almost_equal(ra2d[5, 4], 0, decimal=10)
+
+
 def test_grid_with_coords():
     numPix = 11
     deltaPix = 1.
@@ -515,6 +527,16 @@ def test_re_size():
     grid[100, 50] = 4
     grid_small = Util.re_size(grid, factor=2)
     assert grid_small[50][25] == 1
+
+
+def test_pixelsize_change():
+    kernel = np.zeros((7, 7))
+    kernel[3, 3] = 1
+    deltaPix_in = 0.1
+    deltaPix_out = 0.2
+    kernel_new = Util.kernel_pixelsize_change(kernel, deltaPix_in, deltaPix_out)
+    assert len(kernel_new) == 3
+    assert kernel_new[1, 1] == 1
 
 
 def test_symmetry_average():

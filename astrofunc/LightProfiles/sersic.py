@@ -127,18 +127,18 @@ class DoubleSersic(object):
     """
     this class contains functions to evaluate an elliptical and a spherical sersic function at once
     """
-    def __init__(self, smoothing=0.01):
-        self.sersic = Sersic_elliptic(smoothing)
+    def __init__(self, smoothing=0.001):
+        self.sersic = Sersic(smoothing)
         self.sersic_ellipse = Sersic_elliptic(smoothing)
 
     def function(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x=0, center_y=0):
         ellipse = self.sersic_ellipse.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y)
-        spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y,)
+        spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x, center_y,)
         return ellipse + spherical
 
     def function_split(self, x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, I0_2, R_2, n_2, center_x=0, center_y=0):
         ellipse = self.sersic_ellipse.function(x, y, I0_sersic, R_sersic, n_sersic, phi_G, q, center_x, center_y)
-        spherical = self.sersic.function(x, y, I0_2, R_2, n_2, phi_G, q, center_x, center_y)
+        spherical = self.sersic.function(x, y, I0_2, R_2, n_2, center_x, center_y)
         return ellipse, spherical
 
 
@@ -146,7 +146,7 @@ class DoubleCoreSersic(object):
     """
     this class contains functions to evaluate an elliptical core sersic and a spherical sersic function at once
     """
-    def __init__(self, smoothing=0.01):
+    def __init__(self, smoothing=0.001):
         self.sersic = Sersic_elliptic(smoothing)
         self.sersic_core = CoreSersic(smoothing)
 
@@ -165,7 +165,7 @@ class BuldgeDisk(object):
     """
     this class handles a buldge-to-disk decomposition model
     """
-    def __init__(self, smoothing=0.01):
+    def __init__(self, smoothing=0.001):
         self.sersic = Sersic_elliptic(smoothing)
         self.n_buldge = 4
         self.n_disk = 1

@@ -124,6 +124,18 @@ def make_grid(numPix, deltapix, subgrid_res=1, left_lower=False):
     return x_grid - shift, y_grid - shift
 
 
+def make_grid_transformed(numPix, Mpix2Angle):
+    """
+    returns grid with linear transformation (deltaPix and rotation)
+    :param numPix: number of Pixels
+    :param Mpix2Angle: 2-by-2 matrix to mat a pixel to a coordinate
+    :return: coordinate grid
+    """
+    x_grid, y_grid = make_grid(numPix, deltapix=1)
+    ra_grid, dec_grid = map_coord2pix(x_grid, y_grid, 0, 0, Mpix2Angle)
+    return ra_grid, dec_grid
+
+
 def make_grid_with_coordtransform(numPix, deltapix, subgrid_res=1, left_lower=False):
     """
     same as make_grid routine, but returns the transformaton matrix and shift between coordinates and pixel
@@ -150,7 +162,7 @@ def make_grid_with_coordtransform(numPix, deltapix, subgrid_res=1, left_lower=Fa
     dec_at_xy_0 = y_grid[0]
     x_at_radec_0 = (numPix_eff-1)/2.
     y_at_radec_0 = (numPix_eff - 1) / 2.
-    Mpix2coord = np.array([[deltapix_eff, 0],[0, deltapix_eff]])
+    Mpix2coord = np.array([[deltapix_eff, 0], [0, deltapix_eff]])
     Mcoord2pix = np.linalg.inv(Mpix2coord)
     return x_grid, y_grid, ra_at_xy_0, dec_at_xy_0, x_at_radec_0, y_at_radec_0, Mpix2coord, Mcoord2pix
 
@@ -507,6 +519,25 @@ def subgrid_kernel(kernel, subgrid_res):
     kernel_subgrid = out_values
     kernel_subgrid = kernel_norm(kernel_subgrid)
     return kernel_subgrid
+
+
+def kernel_pixelsize_change(kernel, deltaPix_in, deltaPix_out):
+    """
+    change the pixel size of a given kernel
+    :param kernel:
+    :param deltaPix_in:
+    :param deltaPix_out:
+    :return:
+    """
+    numPix = len(kernel)
+    numPix_new = int(round(numPix * deltaPix_in/deltaPix_out))
+    if numPix_new % 2 == 0:
+        numPix_new -= 1
+    x_in = np.linspace(-(numPix-1)/2*deltaPix_in, (numPix-1)/2*deltaPix_in, numPix)
+    x_out = np.linspace(-(numPix_new-1)/2*deltaPix_out, (numPix_new-1)/2*deltaPix_out, numPix_new)
+    kernel_out = re_size_array(x_in, x_in, kernel, x_out, x_out)
+    kernel_out = kernel_norm(kernel_out)
+    return kernel_out
 
 
 def pixel_kernel(point_source_kernel, subgrid_res=7):
