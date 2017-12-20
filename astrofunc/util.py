@@ -505,7 +505,7 @@ def kernel_norm(kernel):
     return kernel
 
 
-def subgrid_kernel(kernel, subgrid_res):
+def subgrid_kernel(kernel, subgrid_res, odd=False):
     """
     creates a higher resolution kernel with subgrid resolution as an interpolation of the original kernel
     :param kernel: initial kernel
@@ -514,7 +514,11 @@ def subgrid_kernel(kernel, subgrid_res):
         """
     numPix = len(kernel)
     x_in = np.linspace(0, 1, numPix)
-    x_out = np.linspace(0, 1, numPix * subgrid_res)
+    numPix_new = numPix * subgrid_res
+    if odd is True:
+        if numPix_new % 2 == 0:
+            numPix_new -= 1
+    x_out = np.linspace(0, 1, numPix_new)
     out_values = re_size_array(x_in, x_in, kernel, x_out, x_out)
     kernel_subgrid = out_values
     kernel_subgrid = kernel_norm(kernel_subgrid)
