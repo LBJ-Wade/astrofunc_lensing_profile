@@ -2,7 +2,6 @@ __author__ = 'sibirrer'
 
 from astrofunc.LensingProfiles.shapelet_pot import PolarShapelets
 from astrofunc.LensingProfiles.shapelet_pot_2 import CartShapelets
-import astrofunc.util as util
 
 import numpy as np
 import numpy.testing as npt

@@ -5,8 +5,6 @@ import numpy.testing as npt
 import numpy as np
 import scipy.integrate as integrate
 
-from astrofunc.numerical_profile_integrals import ProfileIntegrals
-
 
 class TestNumerics(object):
     """

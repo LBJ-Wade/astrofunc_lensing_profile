@@ -2,6 +2,7 @@ from astrofunc.LensingProfiles.composite_sersic_nfw import CompositeSersicNFW
 from astrofunc.LensingProfiles.sersic import Sersic
 from astrofunc.LensingProfiles.nfw_ellipse import NFW_ELLIPSE
 import numpy.testing as npt
+import pytest
 
 
 class TestMassAngleConversion(object):
@@ -27,9 +28,6 @@ class TestMassAngleConversion(object):
         b = theta_Rs * alpha_E_nfw / (k_eff * alpha_E_sersic)
         npt.assert_almost_equal(a, theta_E, decimal=10)
         npt.assert_almost_equal(b, mass_light, decimal=10)
-
-
-
 
 
 if __name__ == '__main__':
